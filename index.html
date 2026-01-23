@@ -17,74 +17,70 @@
             overflow: hidden;
         }
 
-        /* KHUNG CHÍNH SẢNH GAME */
+        /* KHUNG CHÍNH */
         #lobby-container {
             width: 100%;
             height: 100%;
             position: relative;
-            /* Lấy đúng ảnh ngôi nhà gỗ Pixel bạn đang xem */
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+            /* Sử dụng link ảnh ngôi nhà gỗ bạn đã chọn */
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), 
                         url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/05/pixels-game-1.jpg');
             background-size: cover;
             background-position: center;
-            image-rendering: pixelated; /* Giữ độ nét cho ảnh pixel */
+            image-rendering: pixelated;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* KHUNG NỘI DUNG TRUNG TÂM */
+        /* KHUNG NỘI DUNG */
         .content-box {
             width: 900px;
             height: 600px;
             position: relative;
-            border: 4px solid #3d251e;
-            background: rgba(0, 0, 0, 0.4); /* Làm mờ nền một chút để nổi bật chữ */
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
         /* TIÊU ĐỀ GÓC TRÁI */
         .header {
             position: absolute;
-            top: 30px;
-            left: 30px;
+            top: 20px;
+            left: 20px;
             color: #fff;
             text-shadow: 3px 3px 0px #000;
         }
         .header h1 { font-size: 3.5rem; letter-spacing: 2px; }
-        .header p { font-size: 1.8rem; color: #f4e4bc; }
+        .header p { font-size: 1.8rem; color: #f4e4bc; margin-top: -5px; }
 
-        /* BẢNG CHỈ SỐ GÓC PHẢI - RESET VỀ 0 */
-        .stats-area {
+        /* CHỈ SỐ GÓC PHẢI - RESET VỀ 0 */
+        .stats-group {
             position: absolute;
-            top: 30px;
-            right: 30px;
+            top: 20px;
+            right: 20px;
             display: flex;
             gap: 15px;
         }
-        .stat-plate {
-            background: #5d4037;
+        .stat-box {
+            background: rgba(93, 64, 55, 0.9);
             border: 3px solid #3d251e;
             padding: 5px 15px;
             color: #f4e4bc;
             font-size: 1.8rem;
-            box-shadow: 3px 3px 0px #000;
+            box-shadow: 4px 4px 0px #000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-        .diamond-plate { border-color: #1a237e; background: #283593; }
 
-        /* NHÓM NÚT BẤM GỖ BÊN PHẢI */
+        /* MENU NÚT GỖ BÊN PHẢI */
         .menu-options {
             position: absolute;
             bottom: 40px;
-            right: 30px;
+            right: 20px;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        .wood-button {
+        .wood-btn {
             width: 180px;
             height: 55px;
             background: #8d6e63;
@@ -100,11 +96,11 @@
             align-items: center;
             transition: 0.1s;
         }
-        .wood-button:hover {
+        .wood-btn:hover {
             background: #a1887f;
             transform: translateY(-2px);
         }
-        .wood-button:active {
+        .wood-btn:active {
             transform: translateY(4px);
             border-bottom: 2px solid #2d1b16;
         }
@@ -119,16 +115,16 @@
                 <p>by HoangKun</p>
             </div>
 
-            <div class="stats-area">
-                <div class="stat-plate">GOLD: <span>0</span></div>
-                <div class="stat-plate diamond-plate">💎: <span>0</span></div>
+            <div class="stats-group">
+                <div class="stat-box">GOLD: <span>0</span></div>
+                <div class="stat-box" style="border-color: #1a237e;">💎: <span>0</span></div>
             </div>
 
             <div class="menu-options">
-                <div class="wood-button" onclick="alert('Vào game thôi!')">CHƠI MỚI</div>
-                <div class="wood-button">TIẾP TỤC</div>
-                <div class="wood-button">CÀI ĐẶT</div>
-                <div class="wood-button" onclick="window.close()">THOÁT</div>
+                <div class="wood-btn" onclick="alert('Đang tải thế giới...')">CHƠI MỚI</div>
+                <div class="wood-btn">TIẾP TỤC</div>
+                <div class="wood-btn">CÀI ĐẶT</div>
+                <div class="wood-btn" onclick="window.close()">THOÁT</div>
             </div>
         </div>
     </div>

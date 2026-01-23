@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web của HoangKun</title>
+    <title>HoangKun - Pro Gamer</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; text-align: center; padding: 20px; margin: 0; }
-        .card { background: white; max-width: 450px; margin: 20px auto; padding: 30px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); position: relative; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-align: center; padding: 20px; margin: 0; min-height: 100vh; }
+        .card { background: white; max-width: 450px; margin: 20px auto; padding: 30px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
         
-        .avatar { width: 150px; height: 150px; object-fit: cover; border-radius: 25px; border: 4px solid #ffcc00; margin-bottom: 15px; transition: 0.4s; }
-        .avatar:hover { transform: scale(1.05); }
+        .avatar { width: 140px; height: 140px; object-fit: cover; border-radius: 25px; border: 4px solid #ffcc00; transition: 0.4s; }
+        .avatar:hover { transform: scale(1.1) rotate(5deg); }
 
         .btn-social {
             display: flex; align-items: center; justify-content: center;
@@ -18,52 +18,62 @@
             transition: 0.3s; width: 85%;
         }
         .facebook { background: #1877F2; } .zalo { background: #0068FF; } .tiktok { background: #000000; }
+        .btn-social:hover { transform: scale(1.05); filter: brightness(1.2); }
 
         /* Style Game */
-        #gameWrapper { position: relative; width: 100%; max-width: 350px; margin: auto; overflow: hidden; border-radius: 15px; border: 3px solid #333; }
-        #gameCanvas { background: #87CEEB; display: block; width: 100%; cursor: crosshair; touch-action: none; }
+        #gameWrapper { position: relative; width: 100%; max-width: 350px; margin: auto; overflow: hidden; border-radius: 20px; border: 4px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        #gameCanvas { background: #1a1a2e; display: block; width: 100%; cursor: none; touch-action: none; }
         
-        /* Overlay thông báo Game */
         #gameOverlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: flex; flex-direction: column;
+            background: rgba(0,0,0,0.85); display: flex; flex-direction: column;
             align-items: center; justify-content: center; color: white; z-index: 10;
         }
         
         .btn-game {
-            background: #ffcc00; border: none; padding: 10px 25px; 
-            border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px;
-            margin-top: 10px; transition: 0.2s;
+            background: #ffcc00; border: none; padding: 12px 30px; 
+            border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 18px;
+            margin-top: 15px; box-shadow: 0 5px 0 #cca300; transition: 0.1s;
         }
-        .btn-game:hover { background: #ffdb4d; transform: scale(1.1); }
+        .btn-game:active { transform: translateY(4px); box-shadow: none; }
 
-        .score-board { display: flex; justify-content: space-around; font-weight: bold; margin: 10px 0; color: #e67e22; }
+        .score-board { display: flex; justify-content: space-around; font-weight: bold; margin: 15px 0; }
+        .rank-tag { color: #ffcc00; font-size: 14px; margin-top: 5px; font-style: italic; }
+
+        /* Hiệu ứng rung màn hình */
+        .shake { animation: shake 0.2s; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px); }
+            20% { transform: translate(-2px, 0px); }
+            40% { transform: translate(2px, -1px); }
+            60% { transform: translate(-1px, 2px); }
+            100% { transform: translate(0, 0); }
+        }
     </style>
 </head>
 <body>
     <div class="card">
         <img src="g2.jpg.webp" class="avatar" alt="G2 Esports">
-        <h1>HoangKun 👑</h1>
+        <h1 style="margin: 10px 0 5px;">HoangKun 👑</h1>
+        <div id="rankDisplay" class="rank-tag">Danh hiệu: Gà Mới Nhú 🥚</div>
         
-        <a href="https://www.tiktok.com/@hpdbox" target="_blank" class="btn-social tiktok">🎵 TikTok @hpdbox</a>
-        <a href="https://facebook.com/nvh12072006" target="_blank" class="btn-social facebook">🔵 Facebook cá nhân</a>
-        <a href="https://zalo.me/84788265513" target="_blank" class="btn-social zalo">📱 Chat qua Zalo</a>
+        <div style="margin: 15px 0;">
+            <a href="https://www.tiktok.com/@hpdbox" target="_blank" class="btn-social tiktok">🎵 TikTok @hpdbox</a>
+            <a href="https://facebook.com/nvh12072006" target="_blank" class="btn-social facebook">🔵 Facebook</a>
+            <a href="https://zalo.me/84788265513" target="_blank" class="btn-social zalo">📱 Zalo</a>
+        </div>
 
-        <hr style="border: 0; height: 1px; background: #eee; margin: 20px 0;">
-        
-        <h3>Game Hứng Táo 🍎</h3>
         <div class="score-board">
-            <div>Điểm: <span id="scoreVal">0</span></div>
+            <div style="color: #e67e22;">Điểm: <span id="scoreVal">0</span></div>
             <div style="color: #27ae60;">Kỷ lục: <span id="highScoreVal">0</span></div>
         </div>
 
         <div id="gameWrapper">
             <canvas id="gameCanvas" width="350" height="300"></canvas>
-            
             <div id="gameOverlay">
-                <h2 id="statusText">Hứng Táo Không?</h2>
-                <p id="finalScore" style="display:none;"></p>
-                <button id="startBtn" class="btn-game">BẮT ĐẦU</button>
+                <h2 id="statusText" style="color: #ffcc00; margin-bottom: 5px;">SẴN SÀNG CHƯA?</h2>
+                <p id="finalScore" style="margin: 5px 0;"></p>
+                <button id="startBtn" class="btn-game">CHƠI LUÔN!</button>
             </div>
         </div>
     </div>
@@ -71,80 +81,85 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('gameWrapper');
         const overlay = document.getElementById('gameOverlay');
         const startBtn = document.getElementById('startBtn');
-        const statusText = document.getElementById('statusText');
-        const finalScore = document.getElementById('finalScore');
         const scoreEl = document.getElementById('scoreVal');
         const highScoreEl = document.getElementById('highScoreVal');
+        const rankEl = document.getElementById('rankDisplay');
 
-        let score = 0;
-        let highScore = localStorage.getItem('appleHighScore') || 0;
-        let gameRunning = false;
-        let animationId;
-        
+        let score = 0, highScore = localStorage.getItem('appleHighScore') || 0;
+        let gameRunning = false, appleColor = '#ff4d4d';
         highScoreEl.innerText = highScore;
 
-        let basket = { x: 140, y: 260, w: 70, h: 20 };
-        let apple = { x: Math.random() * 300, y: 0, r: 10, speed: 3 };
+        let basket = { x: 140, y: 260, w: 80, h: 15 };
+        let apple = { x: 175, y: 0, r: 12, speed: 3 };
+
+        const ranks = [
+            { score: 0, name: "Gà Mới Nhú 🥚" },
+            { score: 5, name: "Tập Sự Hứng Táo 🍎" },
+            { score: 15, name: "Tay Nhặt Nhanh Nhẹn ⚡" },
+            { score: 30, name: "Cao Thủ Hái Quả 🏆" },
+            { score: 50, name: "Thánh Hứng Táo 👑" }
+        ];
+
+        function updateRank(s) {
+            let currentRank = ranks[0].name;
+            ranks.forEach(r => { if(s >= r.score) currentRank = r.name; });
+            rankEl.innerText = "Danh hiệu: " + currentRank;
+        }
 
         function draw() {
             if (!gameRunning) return;
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Giỏ
-            ctx.fillStyle = '#8B4513';
-            ctx.beginPath(); ctx.roundRect(basket.x, basket.y, basket.w, basket.h, 5); ctx.fill();
+            // Vẽ giỏ (Neon)
+            ctx.fillStyle = '#00d2ff';
+            ctx.shadowBlur = 15; ctx.shadowColor = '#00d2ff';
+            ctx.beginPath(); ctx.roundRect(basket.x, basket.y, basket.w, basket.h, 10); ctx.fill();
+            ctx.shadowBlur = 0;
 
-            // Táo
-            ctx.fillStyle = '#ff4d4d';
+            // Vẽ táo
+            ctx.fillStyle = appleColor;
             ctx.beginPath(); ctx.arc(apple.x, apple.y, apple.r, 0, Math.PI * 2); ctx.fill();
             
             apple.y += apple.speed;
 
-            // Thua cuộc
-            if (apple.y > canvas.height) {
-                gameOver();
-                return;
-            }
+            if (apple.y > canvas.height) { gameOver(); return; }
 
-            // Trúng táo
             if (apple.y + apple.r > basket.y && apple.x > basket.x && apple.x < basket.x + basket.w) {
                 score++;
                 scoreEl.innerText = score;
+                updateRank(score);
                 apple.y = 0;
-                apple.x = Math.random() * (canvas.width - 20);
-                apple.speed += 0.2;
+                apple.x = 20 + Math.random() * (canvas.width - 40);
+                apple.speed += 0.25;
+                appleColor = `hsl(${Math.random() * 360}, 70%, 60%)`; // Đổi màu táo ngẫu nhiên
+                
+                // Hiệu ứng rung màn hình khi trúng
+                wrapper.classList.add('shake');
+                setTimeout(() => wrapper.classList.remove('shake'), 200);
             }
-
-            animationId = requestAnimationFrame(draw);
+            requestAnimationFrame(draw);
         }
 
         function startGame() {
-            score = 0;
-            apple.speed = 3;
-            apple.y = 0;
-            scoreEl.innerText = score;
-            gameRunning = true;
-            overlay.style.display = 'none';
+            score = 0; apple.speed = 3.5; apple.y = 0;
+            scoreEl.innerText = "0"; updateRank(0);
+            gameRunning = true; overlay.style.display = 'none';
             draw();
         }
 
         function gameOver() {
             gameRunning = false;
-            cancelAnimationFrame(animationId);
-            
             if (score > highScore) {
                 highScore = score;
                 localStorage.setItem('appleHighScore', highScore);
                 highScoreEl.innerText = highScore;
             }
-
-            statusText.innerText = "GAME OVER!";
-            finalScore.innerText = "Bạn đạt được: " + score + " điểm";
-            finalScore.style.display = 'block';
-            startBtn.innerText = "CHƠI LẠI";
+            document.getElementById('statusText').innerText = "THUA RỒI CƯNG!";
+            document.getElementById('finalScore').innerText = "Điểm của bạn: " + score;
+            startBtn.innerText = "PHỤC THÙ";
             overlay.style.display = 'flex';
         }
 

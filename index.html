@@ -60,6 +60,15 @@
     </style>
 </head>
 <body onclick="initAudio()">
+<div id="pause-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="background: #5d4037; border: 6px solid #3d251e; padding: 30px; text-align: center; color: #f4e4bc; box-shadow: 10px 10px 0px #000;">
+        <h2 style="font-size: 3rem; margin: 0 0 20px 0;">TẠM DỪNG</h2>
+        <div class="wood-button" onclick="togglePause()" style="width: 200px; padding: 10px; background: #8d6e63; margin-bottom: 10px; cursor: pointer;">TIẾP TỤC</div>
+        <div class="wood-button" onclick="location.reload()" style="width: 200px; padding: 10px; background: #e74c3c; cursor: pointer;">VỀ SẢNH</div>
+    </div>
+</div>
+
+<div onclick="togglePause()" style="position: fixed; top: 20px; right: 20px; z-index: 999; width: 45px; height: 45px; background: #8d6e63; border: 3px solid #3d251e; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold;">||</div>
 
     <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
     <audio id="clickSound"><source src="https://www.fesliyanstudios.com/play-mp3/6" type="audio/mpeg"></audio>
@@ -94,9 +103,38 @@
     <div id="ui-controls">
         <div class="joystick-base" id="joyBase"><div class="joystick-knob" id="joyKnob"></div></div>
         <div class="action-btn" onmousedown="doAction()" ontouchstart="doAction()">HIT</div>
+    </div> 
+    <div id="pause-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="background: #5d4037; border: 6px solid #3d251e; padding: 30px; text-align: center; color: #f4e4bc; box-shadow: 10px 10px 0px #000; font-family: 'VT323', monospace;">
+        <h2 style="font-size: 3rem; margin: 0 0 20px 0;">TẠM DỪNG</h2>
+        <div class="wood-button" onclick="togglePause()" style="width: 200px; padding: 15px; background: #8d6e63; margin-bottom: 15px; cursor: pointer; border: 3px solid #3d251e;">TIẾP TỤC</div>
+        <div class="wood-button" onclick="location.reload()" style="width: 200px; padding: 15px; background: #e74c3c; cursor: pointer; border: 3px solid #3d251e;">VỀ SẢNH</div>
     </div>
+</div>
+
+<div onclick="togglePause()" style="position: fixed; top: 20px; right: 20px; z-index: 999; width: 45px; height: 45px; background: #8d6e63; border: 3px solid #3d251e; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; font-family: Arial;">||</div>
 
     <script>
+    let isPaused = false;
+
+function togglePause() {
+    isPaused = !isPaused;
+    const modal = document.getElementById('pause-modal');
+    if (isPaused) {
+        modal.style.display = 'flex';
+        if(bgMusic) bgMusic.pause(); // Tạm dừng nhạc
+    } else {
+        modal.style.display = 'none';
+        if(bgMusic) bgMusic.play(); // Chơi tiếp nhạc
+        gameLoop(); // Chạy lại vòng lặp game
+    }
+}
+
+// Bấm phím ESC để tạm dừng
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape') togglePause();
+});
+
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
         const clickSound = document.getElementById('clickSound');

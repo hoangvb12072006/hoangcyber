@@ -134,6 +134,13 @@ body, html {
 
     <script>
     
+    document.addEventListener("touchstart", function (e) {
+  const t = e.target;
+  if (t && typeof t.onclick === "function") {
+    t.onclick();
+  }
+});
+    
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 

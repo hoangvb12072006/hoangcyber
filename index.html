@@ -3,104 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Phi Thuyền - Gemini Code</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
+    <title>Trang Chủ | My Website</title>
     <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
-        canvas { box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid #444; }
+        /* CSS Reset cơ bản */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+
+        /* Navigation */
+        nav {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav .logo { font-size: 1.5rem; font-weight: bold; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 20px; }
+        nav ul li a { color: white; text-decoration: none; transition: 0.3s; }
+        nav ul li a:hover { color: #3498db; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; }
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #2980b9; }
+
+        /* Services Section */
+        .services { padding: 4rem 5%; text-align: center; }
+        .services h2 { margin-bottom: 2rem; font-size: 2rem; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* Footer */
+        footer { background: #2c3e50; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
     </style>
 </head>
 <body>
 
-<script>
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: { gravity: { y: 0 }, debug: false }
-    },
-    scene: { preload: preload, create: create, update: update }
-};
+    <nav>
+        <div class="logo">GEMINI CODE</div>
+        <ul>
+            <li><a href="#">Trang chủ</a></li>
+            <li><a href="#">Dịch vụ</a></li>
+            <li><a href="#">Sản phẩm</a></li>
+            <li><a href="#">Liên hệ</a></li>
+        </ul>
+    </nav>
 
-const game = new Phaser.Game(config);
-let player, cursors, bullets, enemies, score = 0, scoreText, lastFired = 0;
+    <header class="hero">
+        <h1>Sáng tạo không giới hạn</h1>
+        <p>Chào mừng bạn đến với trang chủ của tôi. Nơi chia sẻ những giải pháp lập trình hiện đại và tối ưu nhất.</p>
+        <a href="#" class="btn">Khám phá ngay</a>
+    </header>
 
-function preload() {
-    // Sử dụng các placeholder graphics đơn giản
-    this.load.image('ship', 'https://labs.phaser.io/assets/sprites/shmup-ship.png');
-    this.load.image('bullet', 'https://labs.phaser.io/assets/sprites/bullets/bullet1.png');
-    this.load.image('enemy', 'https://labs.phaser.io/assets/sprites/asplode1.png');
-}
+    <section class="services">
+        <h2>Dịch vụ của chúng tôi</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Thiết kế Web</h3>
+                <p>Giao diện đẹp, mượt mà và tương thích với mọi thiết bị di động.</p>
+            </div>
+            <div class="card">
+                <h3>Lập trình App</h3>
+                <p>Xây dựng ứng dụng mạnh mẽ trên nền tảng iOS và Android.</p>
+            </div>
+            <div class="card">
+                <h3>Tối ưu SEO</h3>
+                <p>Đưa trang web của bạn lên top đầu công cụ tìm kiếm một cách tự nhiên.</p>
+            </div>
+        </div>
+    </section>
 
-function create() {
-    // 1. Tạo người chơi
-    player = this.physics.add.sprite(400, 500, 'ship').setCollideWorldBounds(true);
-    
-    // 2. Điều khiển
-    cursors = this.input.keyboard.createCursorKeys();
-    this.input.keyboard.on('keydown-SPACE', shootBullet, this);
-
-    // 3. Nhóm đạn và kẻ địch
-    bullets = this.physics.add.group({ classType: Phaser.Physics.Arcade.Image, maxSize: 20, runChildUpdate: true });
-    enemies = this.physics.add.group();
-
-    // 4. Tạo kẻ địch định kỳ
-    this.time.addEvent({ delay: 1000, callback: spawnEnemy, callbackScope: this, loop: true });
-
-    // 5. Va chạm
-    this.physics.add.overlap(bullets, enemies, hitEnemy, null, this);
-    this.physics.add.overlap(player, enemies, gameOver, null, this);
-
-    // 6. Hiển thị điểm
-    scoreText = this.add.text(16, 16, 'Điểm: 0', { fontSize: '32px', fill: '#fff' });
-}
-
-function update() {
-    // Di chuyển phi thuyền
-    if (cursors.left.isDown) player.setVelocityX(-300);
-    else if (cursors.right.isDown) player.setVelocityX(300);
-    else player.setVelocityX(0);
-
-    if (cursors.up.isDown) player.setVelocityY(-300);
-    else if (cursors.down.isDown) player.setVelocityY(300);
-    else player.setVelocityY(0);
-
-    // Xóa đạn bay ra ngoài màn hình
-    bullets.children.each(function(b) {
-        if (b.active && b.y < 0) b.destroy();
-    }, this);
-}
-
-function shootBullet() {
-    let bullet = bullets.get(player.x, player.y - 20, 'bullet');
-    if (bullet) {
-        bullet.setActive(true).setVisible(true);
-        bullet.body.velocity.y = -500;
-    }
-}
-
-function spawnEnemy() {
-    let x = Phaser.Math.Between(50, 750);
-    let enemy = enemies.create(x, -50, 'enemy');
-    enemy.setVelocityY(Phaser.Math.Between(150, 300));
-}
-
-function hitEnemy(bullet, enemy) {
-    bullet.destroy();
-    enemy.destroy();
-    score += 10;
-    scoreText.setText('Điểm: ' + score);
-}
-
-function gameOver() {
-    this.physics.pause();
-    player.setTint(0xff0000);
-    this.add.text(300, 250, 'GAME OVER', { fontSize: '64px', fill: '#ff0000' });
-    this.add.text(320, 320, 'F5 để chơi lại', { fontSize: '24px', fill: '#fff' });
-}
-</script>
+    <footer>
+        <p>&copy; 2024 Bản quyền thuộc về Gemini Code. All rights reserved.</p>
+    </footer>
 
 </body>
 </html>

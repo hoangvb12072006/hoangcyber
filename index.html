@@ -4,148 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NecesseGame Sinhton by HoangKun</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-blue: #00f2ff;
-            --neon-green: #39ff14;
             --neon-gold: #ffcf00;
-            --dark-bg: #1a2a3a; /* Nền tối hơn chút cho pixel art */
-            --button-bg: #2d455c;
-            --text-color: #e0e0e0;
-            --pixel-font: 'Press Start 2P', cursive;
-            --modern-font: 'Orbitron', sans-serif;
+            --dark-overlay: rgba(0, 0, 0, 0.6);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: var(--pixel-font);
-            background: linear-gradient(to bottom, #101820 0%, #203040 100%); /* Nền chuyển màu đậm chất game */
-            color: var(--text-color);
+            background-color: #050505;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             overflow: hidden;
-            position: relative;
+            font-family: 'VT323', monospace; /* Font kiểu pixel */
         }
 
-        .game-lobby-container {
-            width: 1000px; /* Chiều rộng lớn hơn để giống hình */
-            height: 700px; /* Chiều cao */
-            background: url('https://i.imgur.com/uR1jWqT.png') no-repeat center center/cover; /* Ảnh nền pixel art làng */
-            border: 5px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.5), inset 0 0 15px rgba(0, 242, 255, 0.3);
+        /* Khung chứa sảnh game */
+        #lobby-container {
+            width: 90vw;
+            height: 85vh;
+            max-width: 1000px;
             position: relative;
+            border: 4px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue), inset 0 0 50px rgba(0, 242, 255, 0.2);
+            /* Ảnh nền làng pixel art */
+            background: linear-gradient(var(--dark-overlay), var(--dark-overlay)), 
+                        url('https://le-shpountz.github.io/isometric-map/assets/images/map.png');
+            background-size: cover;
+            background-position: center;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 40px;
         }
 
-        .game-title {
-            font-family: var(--modern-font);
+        /* Tiêu đề game */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 3.5rem;
             color: var(--neon-blue);
-            text-shadow: 0 0 20px var(--neon-blue), 0 0 5px var(--neon-blue);
-            margin-top: 10px;
-            letter-spacing: 2px;
-            text-align: center;
+            text-shadow: 0 0 15px var(--neon-blue);
+            letter-spacing: 5px;
         }
 
-        .subtitle {
-            font-family: var(--modern-font);
+        .header p {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
             font-size: 1.2rem;
-            color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
-            margin-top: -15px; /* Kéo lên gần title */
-            letter-spacing: 1px;
-            text-align: center;
+            letter-spacing: 3px;
+            opacity: 0.8;
         }
 
-        .info-panel {
+        /* Bảng chỉ số Gold/Diamond */
+        .stats-panel {
             position: absolute;
-            top: 100px;
+            top: 40px;
             right: 40px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             border: 2px solid var(--neon-gold);
             padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(255, 207, 0, 0.4);
-            font-family: var(--pixel-font);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            text-align: left;
-        }
-        .info-panel span {
-            color: var(--neon-gold);
-            text-shadow: 0 0 5px var(--neon-gold);
+            border-radius: 5px;
+            box-shadow: 0 0 15px var(--neon-gold);
         }
 
-        .button-group {
+        .stat-item {
+            color: #fff;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .stat-item span { color: var(--neon-gold); }
+
+        /* Nhóm nút bấm */
+        .menu-options {
             position: absolute;
-            bottom: 40px;
-            right: 40px;
+            bottom: 60px;
+            right: 60px;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .game-button {
-            width: 200px;
-            padding: 15px 0;
-            background: var(--button-bg);
+        .btn {
+            width: 220px;
+            padding: 12px;
+            background: rgba(0, 242, 255, 0.1);
             border: 2px solid var(--neon-blue);
             color: var(--neon-blue);
-            font-family: var(--pixel-font);
-            font-size: 1rem;
-            text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+            transition: 0.3s;
+            text-align: center;
+            text-transform: uppercase;
         }
 
-        .game-button:hover {
+        .btn:hover {
             background: var(--neon-blue);
-            color: var(--dark-bg);
-            box-shadow: 0 0 20px var(--neon-blue), 0 0 5px var(--neon-blue);
-            transform: scale(1.05);
+            color: #000;
+            box-shadow: 0 0 25px var(--neon-blue);
+            transform: translateX(-10px);
+        }
+
+        /* Nhân vật đứng giữa sảnh (tạo cảm giác sinh động) */
+        .character-preview {
+            position: absolute;
+            bottom: 20%;
+            left: 30%;
+            width: 64px;
+            height: 64px;
+            background: url('https://opengameart.org/sites/default/files/knight_f_run_anim_f0.png') no-repeat;
+            background-size: contain;
+            image-rendering: pixelated;
+            transform: scale(3);
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(3) translateY(0); }
+            to { transform: scale(3) translateY(-5px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="game-lobby-container">
-        <div>
-            <h1 class="game-title">NECESSEGAME SINHTON</h1>
-            <p class="subtitle">by HoangKun</p>
+    <div id="lobby-container">
+        <div class="header">
+            <h1>NECESSEGAME SINHTON</h1>
+            <p>by HoangKun</p>
         </div>
 
-        <div class="info-panel">
-            💰 GOLD: <span>1500</span> <br>
-            💎 DIAMONDS: <span>50</span>
+        <div class="stats-panel">
+            <div class="stat-item">💰 GOLD: <span id="gold">1500</span></div>
+            <div class="stat-item">💎 DIAMONDS: <span id="diamonds">50</span></div>
         </div>
 
-        <div class="button-group">
-            <button class="game-button" onclick="handleButtonClick('Chơi Mới')">CHƠI MỚI</button>
-            <button class="game-button" onclick="handleButtonClick('Tiếp Tục')">TIẾP TỤC</button>
-            <button class="game-button" onclick="handleButtonClick('Cài Đặt')">CÀI ĐẶT</button>
-            <button class="game-button" onclick="handleButtonClick('Thoát Game')">THOÁT GAME</button>
+        <div class="character-preview"></div>
+
+        <div class="menu-options">
+            <button class="btn" onclick="playGame()">CHƠI MỚI</button>
+            <button class="btn" onclick="alert('Đang tải dữ liệu...')">TIẾP TỤC</button>
+            <button class="btn" onclick="alert('Cài đặt hệ thống')">CÀI ĐẶT</button>
+            <button class="btn" onclick="window.close()">THOÁT GAME</button>
         </div>
     </div>
 
     <script>
-        function handleButtonClick(action) {
-            alert(`Bạn đã chọn: ${action}`);
-            // Ở đây, bạn sẽ thêm logic thực tế cho mỗi nút
-            // Ví dụ:
-            // if (action === 'Chơi Mới') {
-            //     // Khởi tạo game mới
-            // } else if (action === 'Tiếp Tục') {
-            //     // Load game đã lưu
-            // }
+        function playGame() {
+            alert("Bắt đầu hành trình sinh tồn!");
+            // Ở đây bạn có thể dùng document.getElementById('lobby-container').style.display = 'none' 
+            // để vào màn hình chơi game thực tế.
         }
     </script>
 </body>

@@ -52,7 +52,6 @@
 
         .menu-options { position: absolute; bottom: 0; right: 0; display: flex; flex-direction: column; gap: 15px; }
         
-        /* PHẦN MỚI THÊM: Ô NHẬP TÊN */
         .name-input {
             width: 220px;
             height: 45px;
@@ -66,7 +65,6 @@
             margin-bottom: 5px;
             text-align: center;
         }
-        .name-input::placeholder { color: #8d6e63; }
 
         .wood-button {
             width: 220px;
@@ -87,49 +85,76 @@
         .wood-button:hover { background: #a1887f; transform: translateY(-3px); }
         .wood-button:active { transform: translateY(5px); border-bottom: 2px solid #2d1b16; }
 
+        #settings-modal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: #5d4037;
+            border: 6px solid #3d251e;
+            box-shadow: 10px 10px 0px #000;
+            z-index: 1000;
+            padding: 20px;
+            color: #f4e4bc;
+        }
+        .settings-title { font-size: 3rem; text-align: center; margin-bottom: 20px; border-bottom: 4px solid #3d251e; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 1.8rem; }
+        
+        #overlay-bg {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 998;
+        }
+
         #loading-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            z-index: 999;
+            z-index: 1001;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: #f4e4bc;
         }
 
-        .loading-text {
-            font-size: 3.5rem;
-            letter-spacing: 5px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 15px #f4e4bc;
-            animation: pulse 1.5s infinite;
-        }
-
         .pixel-spinner {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border: 8px solid #5d4037;
             border-top: 8px solid #f4e4bc;
             animation: spin 1s steps(8) infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse {
-            0% { opacity: 0.5; transform: scale(0.95); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.5; transform: scale(0.95); }
-        }
     </style>
 </head>
-<body>
+<body onclick="initAudio()"> <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound">
+        <source src="https://www.fesliyanstudios.com/play-mp3/6" type="audio/mpeg">
+    </audio>
 
     <div id="lobby-container">
+        <div id="overlay-bg" onclick="toggleSettings()"></div>
+
+        <div id="settings-modal">
+            <div class="settings-title">CÀI ĐẶT</div>
+            <div class="setting-item">
+                <span>ÂM LƯỢNG</span>
+                <input type="range" id="volControl" min="0" max="1" step="0.1" value="0.5" onchange="updateVol()">
+            </div>
+            <div class="wood-button" style="width: 100%; height: 50px;" onclick="toggleSettings()">ĐÓNG</div>
+        </div>
+
         <div id="loading-overlay">
             <div class="pixel-spinner"></div>
-            <div class="loading-text">ĐANG KẾT NỐI THẾ GIỚI...</div>
+            <div style="font-size: 3rem; margin-top: 20px;">ĐANG KẾT NỐI...</div>
         </div>
 
         <div class="content-area">
@@ -145,33 +170,52 @@
 
             <div class="menu-options">
                 <input type="text" id="charName" class="name-input" placeholder="TÊN NHÂN VẬT..." maxlength="12">
-                
-                <div class="wood-button" onclick="connectWorld()">CHƠI MỚI</div>
-                <div class="wood-button">TIẾP TỤC</div>
-                <div class="wood-button">CÀI ĐẶT</div>
-                <div class="wood-button" onclick="alert('Không thể thoát tự động trên trình duyệt!')">THOÁT</div>
+                <div class="wood-button" onclick="playClick(); connectWorld()">CHƠI MỚI</div>
+                <div class="wood-button" onclick="playClick()">TIẾP TỤC</div>
+                <div class="wood-button" onclick="playClick(); toggleSettings()">CÀI ĐẶT</div>
+                <div class="wood-button" onclick="playClick()">THOÁT</div>
             </div>
         </div>
     </div>
 
     <script>
-        function connectWorld() {
-            // Lấy tên từ ô input
-            var name = document.getElementById('charName').value;
-            
-            // Nếu không nhập gì thì lấy tên mặc định
-            if (name.trim() === "") {
-                name = "Hành Giả";
-            }
+        const bgMusic = document.getElementById('bgMusic');
+        const clickSound = document.getElementById('clickSound');
+        let audioInitialized = false;
 
-            // Hiện màn hình chờ
+        // Hàm này chạy 1 lần duy nhất khi user click vào trang để mở khóa âm thanh
+        function initAudio() {
+            if (!audioInitialized) {
+                bgMusic.volume = 0.5;
+                bgMusic.play().catch(e => console.log("Chờ tương tác..."));
+                audioInitialized = true;
+            }
+        }
+
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play();
+        }
+
+        function updateVol() {
+            bgMusic.volume = document.getElementById('volControl').value;
+        }
+
+        function connectWorld() {
+            var name = document.getElementById('charName').value || "Hành Giả";
             document.getElementById('loading-overlay').style.display = 'flex';
-            
             setTimeout(() => {
-                // Hiển thị tên đã nhập vào câu chào
-                alert("Kết nối thành công! Chào mừng " + name + " đến với thế giới mới.");
+                alert("Kết nối thành công! Chào mừng " + name);
                 document.getElementById('loading-overlay').style.display = 'none';
-            }, 3000);
+            }, 2000);
+        }
+
+        function toggleSettings() {
+            var modal = document.getElementById('settings-modal');
+            var bg = document.getElementById('overlay-bg');
+            var isShowing = modal.style.display === 'block';
+            modal.style.display = isShowing ? 'none' : 'block';
+            bg.style.display = isShowing ? 'none' : 'block';
         }
     </script>
 </body>

@@ -17,51 +17,29 @@
             overflow: hidden;
         }
 
-        /* KHUNG CHÍNH BAO PHỦ TOÀN MÀN HÌNH */
         #lobby-container {
             width: 100vw;
             height: 100vh;
             position: relative;
-            /* SỬ DỤNG LINK ẢNH BẠN GỬI */
             background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), 
                         url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/pixels-game-thumb.jpg');
             background-size: cover;
             background-position: center;
-            image-rendering: pixelated; /* Giữ nét cho ảnh pixel */
+            image-rendering: pixelated;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* VÙNG NỘI DUNG GIỚI HẠN ĐỂ CĂN CHỈNH */
-        .content-area {
-            width: 90%;
-            height: 85%;
-            position: relative;
-            max-width: 1200px;
-        }
+        .content-area { width: 90%; height: 85%; position: relative; max-width: 1200px; }
 
-        /* TIÊU ĐỀ GÓC TRÁI */
-        .header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: #fff;
-            text-shadow: 4px 4px 0px #000;
-        }
-        .header h1 { font-size: 4rem; letter-spacing: 2px; line-height: 1; }
-        .header p { font-size: 2rem; color: #f4e4bc; margin-top: 5px; }
+        .header { position: absolute; top: 0; left: 0; color: #fff; text-shadow: 4px 4px 0px #000; }
+        .header h1 { font-size: 4rem; letter-spacing: 2px; }
+        .header p { font-size: 2rem; color: #f4e4bc; }
 
-        /* BẢNG CHỈ SỐ GÓC PHẢI - RESET VỀ 0 */
-        .stats-area {
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: flex;
-            gap: 20px;
-        }
+        .stats-area { position: absolute; top: 0; right: 0; display: flex; gap: 20px; }
         .stat-box {
-            background: rgba(93, 64, 55, 0.95);
+            background: rgba(93, 64, 55, 0.9);
             border: 4px solid #3d251e;
             padding: 8px 20px;
             color: #f4e4bc;
@@ -71,17 +49,8 @@
             align-items: center;
             gap: 10px;
         }
-        .dia-box { border-color: #1a237e; background: rgba(40, 53, 147, 0.9); }
 
-        /* NHÓM NÚT BẤM GỖ GÓC PHẢI DƯỚI */
-        .menu-options {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .menu-options { position: absolute; bottom: 0; right: 0; display: flex; flex-direction: column; gap: 15px; }
         .wood-button {
             width: 220px;
             height: 65px;
@@ -98,21 +67,57 @@
             align-items: center;
             transition: 0.1s;
         }
-        .wood-button:hover {
-            background: #a1887f;
-            transform: translateY(-3px);
+        .wood-button:hover { background: #a1887f; transform: translateY(-3px); }
+        .wood-button:active { transform: translateY(5px); border-bottom: 2px solid #2d1b16; }
+
+        /* PHẦN ĐANG KẾT NỐI (MÀN HÌNH CHỜ) */
+        #loading-overlay {
+            display: none; /* Mặc định ẩn đi */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #f4e4bc;
         }
-        .wood-button:active {
-            transform: translateY(5px);
-            border-bottom: 2px solid #2d1b16;
+
+        .loading-text {
+            font-size: 3.5rem;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #f4e4bc;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Vòng xoay pixel */
+        .pixel-spinner {
+            width: 60px;
+            height: 60px;
+            border: 8px solid #5d4037;
+            border-top: 8px solid #f4e4bc;
+            animation: spin 1s steps(8) infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.5; transform: scale(0.95); }
         }
     </style>
 </head>
 <body>
 
     <div id="lobby-container">
+        <div id="loading-overlay">
+            <div class="pixel-spinner"></div>
+            <div class="loading-text">ĐANG KẾT NỐI THẾ GIỚI...</div>
+        </div>
+
         <div class="content-area">
-            
             <div class="header">
                 <h1>NECESSEGAME SINH TỒN</h1>
                 <p>by HoangKun</p>
@@ -120,18 +125,29 @@
 
             <div class="stats-area">
                 <div class="stat-box">GOLD: <span>0</span></div>
-                <div class="stat-box dia-box">💎: <span>0</span></div>
+                <div class="stat-box" style="border-color: #1a237e;">💎: <span>0</span></div>
             </div>
 
             <div class="menu-options">
-                <div class="wood-button" onclick="alert('Đang tạo thế giới mới...')">CHƠI MỚI</div>
+                <div class="wood-button" onclick="connectWorld()">CHƠI MỚI</div>
                 <div class="wood-button">TIẾP TỤC</div>
                 <div class="wood-button">CÀI ĐẶT</div>
                 <div class="wood-button" onclick="window.close()">THOÁT</div>
             </div>
-
         </div>
     </div>
 
+    <script>
+        function connectWorld() {
+            // Hiện màn hình chờ
+            document.getElementById('loading-overlay').style.display = 'flex';
+            
+            // Giả lập sau 3 giây kết nối xong (sau này bạn thay bằng code vào game thật)
+            setTimeout(() => {
+                alert("Kết nối thành công! Chào mừng HoangKun đến với thế giới mới.");
+                document.getElementById('loading-overlay').style.display = 'none';
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

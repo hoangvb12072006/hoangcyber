@@ -2,14 +2,13 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NecesseGame Sinhton by HoangKun</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background-color: #1a1a1a;
+            background-color: #0c0c0c;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,135 +16,128 @@
             font-family: 'VT323', monospace;
         }
 
-        /* KHUNG CHÍNH */
+        /* KHUNG CHÍNH - MÔ PHỎNG LẠI BỨC ẢNH GỐC */
         #lobby-container {
-            width: 800px;
-            height: 600px;
+            width: 900px;
+            height: 650px;
             position: relative;
-            border: 8px solid #3d251e; /* Viền gỗ đậm */
-            /* Ảnh nền làng pixel art ban đêm */
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                        url('https://le-shpountz.github.io/isometric-map/assets/images/map.png');
+            border: 6px solid #2d1b16;
+            /* Dùng ảnh nền isometric làng gỗ ban đêm */
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+                        url('https://i.imgur.com/39YgX8f.png'); /* Đây là link ảnh minh họa tương đồng nhất */
             background-size: cover;
             background-position: center;
             image-rendering: pixelated;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
 
         /* TIÊU ĐỀ GÓC TRÁI */
         .header {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #fff;
-            text-shadow: 2px 2px #000;
+            top: 30px;
+            left: 35px;
+            color: #f4e4bc;
+            text-shadow: 3px 3px 0px #000;
         }
-        .header h1 { font-size: 3rem; letter-spacing: 2px; }
-        .header p { font-size: 1.5rem; opacity: 0.8; }
+        .header h1 { font-size: 3.5rem; letter-spacing: 1px; line-height: 1; }
+        .header p { font-size: 1.8rem; margin-top: 5px; color: #d9c5a3; }
 
-        /* BẢNG CHỈ SỐ GÓC PHẢI (RESET VỀ 0) */
-        .stats-group {
+        /* BẢNG CHỈ SỐ GÓC PHẢI - ĐÃ RESET VỀ 0 */
+        .stats-area {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 30px;
+            right: 35px;
             display: flex;
-            flex-direction: column;
+            gap: 15px;
+        }
+        .stat-plate {
+            background: #5d4037;
+            border: 4px solid #3d251e;
+            padding: 5px 20px;
+            color: #f4e4bc;
+            font-size: 1.8rem;
+            box-shadow: 4px 4px 0px #000;
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
-        .stat-box {
-            background: #5d4037; /* Màu gỗ */
-            border: 3px solid #3d251e;
-            padding: 5px 15px;
-            display: flex;
-            justify-content: space-between;
-            min-width: 150px;
-            color: #fff;
-            font-size: 1.5rem;
-            box-shadow: 2px 2px 0px #000;
-        }
-        .stat-box span { color: #ffcf00; } /* Màu vàng số 0 */
+        .stat-plate span { color: #fff; }
 
-        /* MENU NÚT BẤM DẠNG GỖ */
+        /* NHÓM NÚT BẤM GỖ BÊN PHẢI */
         .menu-options {
             position: absolute;
-            bottom: 40px;
-            right: 40px;
+            top: 220px;
+            right: 35px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
-        .btn-wood {
-            width: 180px;
-            padding: 10px;
+        .wood-button {
+            width: 200px;
+            height: 60px;
             background: #8d6e63;
             border: 4px solid #5d4037;
-            border-bottom: 8px solid #3d251e; /* Hiệu ứng khối gỗ */
-            color: #fff;
+            border-bottom: 8px solid #2d1b16;
+            color: #f4e4bc;
             font-family: 'VT323', monospace;
-            font-size: 1.8rem;
+            font-size: 2rem;
             cursor: pointer;
-            text-align: center;
-            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: 0.1s;
         }
-        .btn-wood:hover {
+        .wood-button:hover {
             background: #a1887f;
-            transform: translateY(-2px);
+            transform: scale(1.03);
         }
-        .btn-wood:active {
+        .wood-button:active {
             transform: translateY(4px);
-            border-bottom: 2px solid #3d251e;
+            border-bottom: 2px solid #2d1b16;
         }
 
-        /* NHÂN VẬT ĐỨNG GIỮA */
-        .hero {
+        /* ĐỐNG LỬA TRUNG TÂM (HIỆU ỨNG ÁNH SÁNG) */
+        .campfire-light {
             position: absolute;
-            bottom: 30%;
-            left: 30%;
-            width: 64px;
-            height: 64px;
-            background: url('https://opengameart.org/sites/default/files/knight_f_run_anim_f0.png') no-repeat center;
-            background-size: contain;
-            image-rendering: pixelated;
-            transform: scale(3);
-            animation: breathe 1.5s infinite alternate;
+            bottom: 40%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255,140,0,0.4) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+            animation: flicker 0.2s infinite alternate;
         }
 
-        @keyframes breathe {
-            from { transform: scale(3) translateY(0); }
-            to { transform: scale(3) translateY(-5px); }
+        @keyframes flicker {
+            from { opacity: 0.8; transform: translate(-50%, 50%) scale(1); }
+            to { opacity: 1; transform: translate(-50%, 50%) scale(1.1); }
         }
     </style>
 </head>
 <body>
 
     <div id="lobby-container">
+        <div class="campfire-light"></div>
+
         <div class="header">
             <h1>NECESSEGAME SINH TỒN</h1>
             <p>by HoangKun</p>
         </div>
 
-        <div class="stats-group">
-            <div class="stat-box">GOLD: <span id="gold">0</span></div>
-            <div class="stat-item" style="color:#00f2ff; font-size: 1.5rem; text-align:right; text-shadow: 2px 2px #000;">
-                DIAMONDS: <span>0</span>
-            </div>
+        <div class="stats-area">
+            <div class="stat-plate">GOLD: <span>0</span></div>
+            <div class="stat-plate" style="border-color: #1a237e;">💎: <span>0</span></div>
         </div>
 
-        <div class="hero"></div>
-
         <div class="menu-options">
-            <button class="btn-wood" onclick="playGame()">CHƠI MỚI</button>
-            <button class="btn-wood">TIẾP TỤC</button>
-            <button class="btn-wood">CÀI ĐẶT</button>
-            <button class="btn-wood" onclick="window.close()">THOÁT</button>
+            <div class="wood-button" onclick="alert('Bắt đầu game!')">CHƠI MỚI</div>
+            <div class="wood-button">TIẾP TỤC</div>
+            <div class="wood-button">CÀI ĐẶT</div>
+            <div class="wood-button" onclick="window.close()">THOÁT</div>
         </div>
     </div>
 
-    <script>
-        function playGame() {
-            alert("Đang vào game...");
-            // Code chuyển sang màn hình chơi game sẽ viết ở đây
-        }
-    </script>
 </body>
 </html>

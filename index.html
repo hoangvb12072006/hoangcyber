@@ -2,118 +2,151 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HoangKun Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoangKun - Pro Gamer</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: white; text-align: center; margin: 0; overflow: hidden; touch-action: none; }
-        .card { background: #1e1e1e; max-width: 380px; margin: 15px auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .avatar { width: 100px; height: 100px; border-radius: 20px; border: 3px solid #ffcc00; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #121212; color: white; text-align: center; padding: 20px; margin: 0; }
+        .card { background: #1e1e1e; max-width: 450px; margin: auto; padding: 25px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        .btn-social {
-            display: inline-block; padding: 10px; margin: 5px; color: white; 
-            text-decoration: none; border-radius: 10px; font-weight: bold; width: 40%; font-size: 14px;
-        }
-        .fb { background: #1877F2; } .zl { background: #0068FF; } .tt { background: #000; border: 1px solid #444; }
+        .avatar { width: 120px; height: 120px; border-radius: 20px; border: 3px solid #ffcc00; margin-bottom: 10px; }
 
-        #gameWrapper { position: relative; width: 320px; height: 350px; margin: 15px auto; border-radius: 15px; overflow: hidden; border: 2px solid #ffcc00; }
-        #gameCanvas { background: #000; display: block; touch-action: none; }
+        .btn-social {
+            display: flex; align-items: center; justify-content: center;
+            padding: 12px; margin: 8px auto; color: white; text-decoration: none;
+            border-radius: 12px; font-weight: bold; width: 85%; transition: 0.3s;
+        }
+        .facebook { background: #1877F2; } .zalo { background: #0068FF; } .tiktok { background: #000; border: 1px solid #444; }
+
+        /* Game Style */
+        #gameWrapper { position: relative; width: 100%; max-width: 350px; margin: 20px auto; border-radius: 15px; overflow: hidden; border: 3px solid #444; }
+        #gameCanvas { background: #000; display: block; width: 100%; cursor: none; touch-action: none; }
         
         #gameOverlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); display: flex; flex-direction: column;
             align-items: center; justify-content: center; z-index: 10;
         }
-        .btn-game { background: #ffcc00; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .stats { display: flex; justify-content: space-around; margin: 10px 0; font-weight: bold; color: #ffcc00; }
+
+        .btn-game {
+            background: #ffcc00; border: none; padding: 10px 25px; border-radius: 10px;
+            font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+
+        .score-board { display: flex; justify-content: space-around; margin-bottom: 10px; font-weight: bold; }
+        .shake { animation: shake 0.2s linear; }
+        @keyframes shake { 0% { transform: translate(2px); } 50% { transform: translate(-2px); } 100% { transform: translate(0); } }
     </style>
 </head>
 <body>
     <div class="card">
-        <img src="g2.jpg.webp" class="avatar" alt="HoangKun">
-        <h2 style="margin: 10px 0;">HOANG KUN 👑</h2>
+        <img src="g2.jpg.webp" class="avatar" alt="G2 Esports">
+        <h2 style="margin: 5px 0;">HoangKun 👑</h2>
         
-        <a href="https://facebook.com/nvh12072006" class="btn-social fb">Facebook</a>
-        <a href="https://zalo.me/84788265513" class="btn-social zl">Zalo</a>
-        <a href="https://www.tiktok.com/@hpdbox" class="btn-social tt" style="width: 85%;">TikTok</a>
+        <a href="https://www.tiktok.com/@hpdbox" class="btn-social tiktok">🎵 TikTok @hpdbox</a>
+        <a href="https://facebook.com/nvh12072006" class="btn-social facebook">🔵 Facebook</a>
+        <a href="https://zalo.me/84788265513" class="btn-social zalo">📱 Zalo</a>
 
-        <div class="stats">
-            <div>Điểm: <span id="sc">0</span></div>
-            <div>Kỷ lục: <span id="hs">0</span></div>
+        <div class="score-board">
+            <div style="color: #ffa500;">Điểm: <span id="scoreVal">0</span></div>
+            <div style="color: #00ff00;">Kỷ lục: <span id="highScoreVal">0</span></div>
         </div>
 
         <div id="gameWrapper">
-            <canvas id="gameCanvas" width="320" height="350"></canvas>
+            <canvas id="gameCanvas" width="350" height="300"></canvas>
             <div id="gameOverlay">
-                <h2 id="msg" style="color:#ffcc00">SẴN SÀNG?</h2>
+                <h2 id="statusText">HỨNG TÁO KHÔNG?</h2>
+                <p id="finalScore"></p>
                 <button id="startBtn" class="btn-game">CHƠI LUÔN</button>
             </div>
         </div>
+        <p style="font-size: 12px; color: #888;">Né quả <strong style="color: purple;">Táo Độc ☠️</strong> ra nhé!</p>
     </div>
 
     <script>
-        const cvs = document.getElementById('gameCanvas');
-        const ctx = cvs.getContext('2d');
-        let score = 0, highScore = localStorage.getItem('hkhs') || 0, running = false;
-        document.getElementById('hs').innerText = highScore;
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('scoreVal');
+        const highScoreEl = document.getElementById('highScoreVal');
+        const overlay = document.getElementById('gameOverlay');
+        const startBtn = document.getElementById('startBtn');
 
-        let basket = { x: 120, y: 320, w: 80, h: 10 };
-        let items = [];
+        let score = 0, highScore = localStorage.getItem('appleHS') || 0, gameRunning = false;
+        highScoreEl.innerText = highScore;
 
-        function spawn() {
-            let type = Math.random() > 0.8 ? 'bad' : 'good';
-            items.push({ x: Math.random()*290+15, y: -20, r: 10, s: 3 + score/10, t: type });
-        }
+        let basket = { x: 140, y: 270, w: 70, h: 10 };
+        let apple = { x: 100, y: 0, r: 10, speed: 3, type: 'good' };
 
-        function move(e) {
-            let rect = cvs.getBoundingClientRect();
-            let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-            basket.x = x - basket.w / 2;
-            if(basket.x < 0) basket.x = 0;
-            if(basket.x > cvs.width - basket.w) basket.x = cvs.width - basket.w;
-        }
+        function draw() {
+            if (!gameRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        cvs.addEventListener('mousemove', move);
-        cvs.addEventListener('touchmove', (e) => { move(e); e.preventDefault(); }, { passive: false });
-
-        function loop() {
-            if(!running) return;
-            ctx.clearRect(0,0,cvs.width,cvs.height);
-            
+            // Giỏ táo
             ctx.fillStyle = '#ffcc00';
             ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
 
-            items.forEach((it, i) => {
-                it.y += it.s;
-                ctx.beginPath();
-                ctx.fillStyle = it.t === 'good' ? '#ff4d4d' : '#9b59b6';
-                ctx.arc(it.x, it.y, it.r, 0, Math.PI*2); ctx.fill();
+            // Vật thể rơi
+            ctx.fillStyle = apple.type === 'good' ? '#ff4d4d' : '#9b59b6'; // Đỏ là táo thường, Tím là táo độc
+            ctx.beginPath(); ctx.arc(apple.x, apple.y, apple.r, 0, Math.PI*2); ctx.fill();
 
-                if(it.y+it.r > basket.y && it.x > basket.x && it.x < basket.x+basket.w) {
-                    if(it.t === 'bad') { running = false; end(); }
-                    else { score++; items.splice(i,1); }
-                } else if(it.y > cvs.height) {
-                    if(it.t === 'good') { running = false; end(); }
-                    else items.splice(i,1);
+            apple.y += apple.speed;
+
+            // Xử lý va chạm
+            if (apple.y + apple.r > basket.y && apple.x > basket.x && apple.x < basket.x + basket.w) {
+                if (apple.type === 'good') {
+                    score++;
+                    apple.speed += 0.2;
+                } else {
+                    score = Math.max(0, score - 5); // Táo độc trừ 5 điểm
+                    document.getElementById('gameWrapper').classList.add('shake');
+                    setTimeout(() => document.getElementById('gameWrapper').classList.remove('shake'), 200);
                 }
-            });
+                resetApple();
+            }
 
-            if(Math.random() < 0.03) spawn();
-            document.getElementById('sc').innerText = score;
-            requestAnimationFrame(loop);
+            if (apple.y > canvas.height) {
+                if (apple.type === 'good') gameOver();
+                else resetApple();
+            }
+
+            scoreEl.innerText = score;
+            requestAnimationFrame(draw);
         }
 
-        function end() {
-            if(score > highScore) { highScore = score; localStorage.setItem('hkhs', highScore); }
-            document.getElementById('hs').innerText = highScore;
-            document.getElementById('msg').innerText = "THUA RỒI: " + score;
-            document.getElementById('gameOverlay').style.display = 'flex';
+        function resetApple() {
+            apple.y = 0;
+            apple.x = Math.random() * (canvas.width - 20) + 10;
+            apple.type = Math.random() > 0.8 ? 'bad' : 'good'; // 20% tỉ lệ ra táo độc
         }
 
-        document.getElementById('startBtn').onclick = () => {
-            score = 0; items = []; running = true;
-            document.getElementById('gameOverlay').style.display = 'none';
-            loop();
+        function gameOver() {
+            gameRunning = false;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('appleHS', highScore);
+                highScoreEl.innerText = highScore;
+            }
+            document.getElementById('statusText').innerText = "THUA RỒI!";
+            document.getElementById('finalScore').innerText = "Bạn đạt: " + score + " điểm";
+            startBtn.innerText = "THỬ LẠI";
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            score = 0; apple.speed = 3; 
+            resetApple();
+            gameRunning = true;
+            overlay.style.display = 'none';
+            draw();
         };
+
+        const moveBasket = (e) => {
+            let rect = canvas.getBoundingClientRect();
+            let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            basket.x = x * (canvas.width / rect.width) - basket.w / 2;
+        };
+
+        canvas.addEventListener('mousemove', moveBasket);
+        canvas.addEventListener('touchmove', (e) => { moveBasket(e); e.preventDefault(); }, {passive:false});
     </script>
 </body>
 </html>

@@ -81,123 +81,115 @@
 
     <script>
         const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const bgMusic = document.getElementById('bgMusic');
+const ctx = canvas.getContext('2d');
 
-        // 1. TẢI ẢNH (Quan trọng: Phải đúng tên file)
-        const imgP = new Image(); imgP.src = 'nhanvat.png';
-        const imgG = new Image(); imgG.src = 'co.png';
-        const imgT = new Image(); imgT.src = 'cay.png';
+// 1. KHỞI TẠO ẢNH
+const imgP = new Image(); imgP.src = './nhanvat.png';
+const imgG = new Image(); imgG.src = './co.png';
+const imgT = new Image(); imgT.src = './cay.png';
 
-        let gameActive = false;
-        let isPaused = false;
-        let audioStarted = false;
+let gameActive = false;
+let isPaused = false;
 
-        // 2. KHỞI TẠO ĐỐI TƯỢNG
-        const player = {
-            x: 2000, y: 2000,
-            speed: 5,
-            dir: 0, // 0: Down, 1: Up, 2: Left, 3: Right
-            frameX: 0,
-            isWalking: false,
-            name: ""
-        };
+// Thông số nhân vật
+const player = {
+    x: 2000, y: 2000,
+    speed: 5,
+    dir: 0, frameX: 0,
+    isWalking: false
+};
 
-        const trees = [];
-        for(let i=0; i<30; i++) {
-            trees.push({ x: Math.random()*4000, y: Math.random()*4000 });
-        }
+// 2. HÀM KÍCH HOẠT KHI BẤM NÚT "VÀO GAME"
+function connectWorld() {
+    // Hiện loading cho chuyên nghiệp
+    document.getElementById('loading-overlay').style.display = 'flex';
+    
+    setTimeout(() => {
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('lobby-container').style.display = 'none';
+        
+        // KÍCH HOẠT CANVAS
+        canvas.style.display = 'block';
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        document.getElementById('pause-btn').style.display = 'flex';
+        
+        gameActive = true;
+        gameLoop();
+    }, 1000);
+}
 
-        const keys = {};
+// 3. VÒNG LẶP GAME
+function update() {
+    if (isPaused) return;
+    player.isWalking = false;
 
-        // 3. LOGIC HỆ THỐNG
-        function initAudio() {
-            if(!audioStarted) {
-                bgMusic.volume = 0.3;
-                bgMusic.play();
-                audioStarted = true;
+    if (keys['KeyW']) { player.y -= player.speed; player.dir = 1; player.isWalking = true; }
+    if (keys['KeyS']) { player.y += player.speed; player.dir = 0; player.isWalking = true; }
+    if (keys['KeyA']) { player.x -= player.speed; player.dir = 2; player.isWalking = true; }
+    if (keys['KeyD']) { player.x += player.speed; player.dir = 3; player.isWalking = true; }
+
+    if (player.isWalking) {
+        player.frameX = (Math.floor(Date.now() / 200) % 2);
+    } else {
+        player.frameX = 0;
+    }
+}
+
+function draw() {
+    // Đảm bảo Canvas luôn full màn hình
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // VẼ NỀN XANH (Để không bao giờ bị đen màn hình nữa)
+    ctx.fillStyle = "#41924B"; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const camX = player.x - canvas.width / 2;
+    const camY = player.y - canvas.height / 2;
+
+    // VẼ CỎ (Nếu có ảnh thì vẽ, không thì thôi)
+    if (imgG.complete && imgG.naturalWidth !== 0) {
+        for (let x = 0; x < 4000; x += 256) {
+            for (let y = 0; y < 4000; y += 256) {
+                ctx.drawImage(imgG, x - camX, y - camY, 256, 256);
             }
         }
+    }
 
-        function connectWorld() {
-            player.name = document.getElementById('charName').value || "Hành Giả";
-            document.getElementById('loading-overlay').style.display = 'flex';
-            
-            setTimeout(() => {
-                document.getElementById('loading-overlay').style.display = 'none';
-                document.getElementById('lobby-container').style.display = 'none';
-                canvas.style.display = 'block';
-                document.getElementById('pause-btn').style.display = 'flex';
-                gameActive = true;
-                gameLoop();
-            }, 1500);
-        }
+    // VẼ NHÂN VẬT
+    if (imgP.complete && imgP.naturalWidth !== 0) {
+        let sx = player.frameX * 350;
+        let sy = player.dir * 350;
+        ctx.drawImage(imgP, sx, sy, 350, 350, canvas.width/2 - 40, canvas.height/2 - 50, 80, 100);
+    } else {
+        // NẾU LỖI ẢNH: Vẽ hình vuông đỏ để bạn vẫn CHƠI ĐƯỢC
+        ctx.fillStyle = "red";
+        ctx.fillRect(canvas.width/2 - 20, canvas.height/2 - 20, 40, 40);
+        ctx.fillStyle = "white";
+        ctx.fillText("Lỗi ảnh - Đang dùng chế độ dự phòng", 10, 20);
+    }
+}
 
-        function togglePause() {
-            isPaused = !isPaused;
-            document.getElementById('pause-modal').style.display = isPaused ? 'flex' : 'none';
-        }
+function gameLoop() {
+    if (!gameActive) return;
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
 
-        window.onkeydown = (e) => { 
-            keys[e.code] = true; 
-            if(e.code === 'Escape' && gameActive) togglePause();
-        };
-        window.onkeyup = (e) => keys[e.code] = false;
+// Hệ thống phím
+const keys = {};
+window.onkeydown = (e) => { 
+    keys[e.code] = true; 
+    if(e.code === 'Escape' && gameActive) togglePause();
+};
+window.onkeyup = (e) => keys[e.code] = false;
 
-        // 4. VÒNG LẶP CHÍNH
-        function update() {
-            if(isPaused) return;
-            player.isWalking = false;
-
-            if(keys['KeyW']) { player.y -= player.speed; player.dir = 1; player.isWalking = true; }
-            if(keys['KeyS']) { player.y += player.speed; player.dir = 0; player.isWalking = true; }
-            if(keys['KeyA']) { player.x -= player.speed; player.dir = 2; player.isWalking = true; }
-            if(keys['KeyD']) { player.x += player.speed; player.dir = 3; player.isWalking = true; }
-
-            if(player.isWalking) {
-                player.frameX = (Math.floor(Date.now() / 200) % 2);
-            } else {
-                player.frameX = 0;
-            }
-        }
-
-        function draw() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const camX = player.x - canvas.width/2;
-            const camY = player.y - canvas.height/2;
-
-            // Vẽ nền cỏ
-            for(let x=0; x<4000; x+=256) {
-                for(let y=0; y<4000; y+=256) {
-                    ctx.drawImage(imgG, x - camX, y - camY, 256, 256);
-                }
-            }
-
-            // Vẽ cây
-            trees.forEach(t => {
-                ctx.drawImage(imgT, t.x - camX, t.y - camY, 120, 160);
-            });
-
-            // Vẽ nhân vật (Cắt đúng 350x350 từ Sprite Sheet)
-            let sx = player.frameX * 350;
-            let sy = player.dir * 350;
-            ctx.drawImage(imgP, sx, sy, 350, 350, canvas.width/2 - 40, canvas.height/2 - 50, 80, 100);
-
-            // Vẽ tên
-            ctx.fillStyle = "white";
-            ctx.font = "24px VT323";
-            ctx.textAlign = "center";
-            ctx.fillText(player.name, canvas.width/2, canvas.height/2 - 60);
-        }
-
-        function gameLoop() {
-            if(!gameActive) return;
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
+function togglePause() {
+    isPaused = !isPaused;
+    document.getElementById('pause-modal').style.display = isPaused ? 'flex' : 'none';
+}
     </script>
 </body>
 </html>

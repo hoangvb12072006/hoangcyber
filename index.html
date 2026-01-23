@@ -3,226 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Necesse Ultimate Pixel - HoangKun</title>
+    <title>Necesse Pixel - Final Fix</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: #000; font-family: 'VT323', monospace; overflow: hidden; touch-action: none; }
         
-        /* --- MENU CHÍNH --- */
+        /* MENU CHÍNH */
         #lobby {
             width: 100vw; height: 100vh; position: fixed; inset: 0;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/pixels-game-thumb.jpg');
-            background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; z-index: 100;
+            background: #2d6a4f; display: flex; justify-content: center; align-items: center; z-index: 100;
         }
-        .wood-panel { background: #5d4037; border: 6px solid #3d251e; padding: 25px; color: #f4e4bc; box-shadow: 10px 10px 0px #000; text-align: center; min-width: 320px; }
-        .btn { background: #8d6e63; border: 4px solid #3d251e; border-bottom: 8px solid #2d1b16; color: #f4e4bc; padding: 10px; font-size: 2rem; cursor: pointer; margin-top: 10px; display: block; width: 100%; font-family: 'VT323'; text-shadow: 2px 2px 0px #000; }
+        .panel { background: #5d4037; border: 6px solid #3d251e; padding: 25px; color: #f4e4bc; box-shadow: 8px 8px 0px #000; text-align: center; min-width: 300px; }
+        .btn { background: #8d6e63; border: 4px solid #3d251e; border-bottom: 8px solid #2d1b16; color: #f4e4bc; padding: 10px; font-size: 1.8rem; cursor: pointer; margin-top: 10px; display: block; width: 100%; font-family: 'VT323'; }
         .btn:active { transform: translateY(4px); border-bottom-width: 4px; }
-        
-        /* --- CÀI ĐẶT & TẠM DỪNG --- */
-        #settings-menu, #pause-menu { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; }
 
-        /* --- MÀN HÌNH GAME --- */
+        /* GAME */
         #game-canvas { display: none; background: #3a5a40; position: fixed; inset: 0; z-index: 10; image-rendering: pixelated; }
 
-        /* --- GIAO DIỆN (UI) --- */
+        /* UI */
         #ui { display: none; position: fixed; inset: 0; z-index: 50; pointer-events: none; }
-        .hud { pointer-events: auto; position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 12px; color: #fff; border: 3px solid #f4e4bc; font-size: 1.4rem; box-shadow: 4px 4px 0px #000; }
-        .minimap { position: absolute; top: 10px; right: 10px; width: 130px; height: 130px; background: rgba(0,0,0,0.5); border: 3px solid #fff; }
+        .hud { pointer-events: auto; position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 10px; color: #fff; border: 3px solid #f4e4bc; font-size: 1.2rem; }
+        .minimap { position: absolute; top: 10px; right: 10px; width: 120px; height: 120px; background: rgba(0,0,0,0.5); border: 2px solid #fff; }
         
-        #crafting { pointer-events: auto; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; background: rgba(0,0,0,0.8); padding: 10px; border: 2px solid #8d6e63; }
-        .craft-item { background: #5d4037; border: 2px solid #f4e4bc; color: #fff; padding: 5px 10px; font-size: 1rem; cursor: pointer; text-align: center; }
+        #crafting { pointer-events: auto; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; background: rgba(0,0,0,0.8); padding: 8px; border: 2px solid #8d6e63; }
+        .c-item { background: #5d4037; border: 2px solid #f4e4bc; color: #fff; padding: 5px; font-size: 0.9rem; cursor: pointer; text-align: center; }
 
-        .joy-base { pointer-events: auto; position: absolute; bottom: 30px; left: 30px; width: 110px; height: 110px; background: rgba(255,255,255,0.1); border-radius: 50%; border: 2px solid #fff; }
-        .joy-stick { position: absolute; top: 50%; left: 50%; width: 45px; height: 45px; background: #fff; border-radius: 50%; transform: translate(-50%,-50%); }
-        .hit-btn { pointer-events: auto; position: absolute; bottom: 40px; right: 40px; width: 90px; height: 90px; background: #e67e22; border-radius: 50%; border: 5px solid #d35400; color: #fff; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; }
-        
-        #pause-btn { pointer-events: auto; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #8d6e63; color: white; padding: 5px 15px; border: 2px solid #3d251e; cursor: pointer; font-family: 'VT323'; }
+        /* MOBILE CONTROLS */
+        .joy-base { pointer-events: auto; position: absolute; bottom: 30px; left: 30px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%; border: 2px solid #fff; }
+        .joy-stick { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; background: #fff; border-radius: 50%; transform: translate(-50%,-50%); }
+        .hit-btn { pointer-events: auto; position: absolute; bottom: 40px; right: 40px; width: 85px; height: 85px; background: #e67e22; border: 5px solid #d35400; border-radius: 50%; color: #fff; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 6px 0 #a04000; }
+        .hit-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #a04000; }
     </style>
 </head>
-<body>
+<body onclick="initSfx()">
 
-    <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
-    <audio id="hitSnd"><source src="https://www.fesliyanstudios.com/play-mp3/6"></audio>
+    <audio id="bgM" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+    <audio id="hitS"><source src="https://www.fesliyanstudios.com/play-mp3/6"></audio>
 
     <div id="lobby">
-        <div class="wood-panel">
-            <h1 style="font-size: 3.5rem;">NECESSE PIXEL</h1>
+        <div class="panel">
+            <h1 style="font-size: 3rem; margin-bottom: 10px;">NECESSE PRO v2</h1>
             <input type="text" id="pName" style="width:100%; padding:10px; text-align:center; margin-bottom:10px;" placeholder="TÊN NHÂN VẬT...">
-            <button class="btn" onclick="startGame()">BẮT ĐẦU</button>
-            <button class="btn" onclick="toggleMenu('settings-menu')">CÀI ĐẶT</button>
+            <button class="btn" onclick="start()">BẮT ĐẦU</button>
+            <button class="btn" onclick="saveGame()">LƯU GAME</button>
         </div>
-    </div>
-
-    <div id="settings-menu" class="wood-panel">
-        <h2>CÀI ĐẶT</h2>
-        <p style="margin: 15px 0;">ÂM LƯỢNG: <input type="range" id="volRange" min="0" max="1" step="0.1" value="0.5" onchange="updateVol()"></p>
-        <button class="btn" onclick="toggleMenu('settings-menu')">ĐÓNG</button>
-    </div>
-
-    <div id="pause-menu" class="wood-panel">
-        <h2 style="font-size: 3rem;">TẠM DỪNG</h2>
-        <button class="btn" onclick="resumeGame()">TIẾP TỤC</button>
-        <button class="btn" onclick="location.reload()">THOÁT</button>
     </div>
 
     <canvas id="game-canvas"></canvas>
 
     <div id="ui">
-        <button id="pause-btn" onclick="pauseGame()">PAUSE</button>
-        
         <div class="hud">
-            <div>💰 VÀNG: <span id="gold-txt">0</span></div>
-            <div>🌲 GỖ: <span id="wood-txt">0</span> | 🪨 ĐÁ: <span id="stone-txt">0</span></div>
-            <div style="color: #ffeb3b;">⚔️: <span id="tool-txt">Tay không</span></div>
-            <div style="width: 150px; height: 10px; background: #3d251e; border: 1px solid #fff; margin-top: 5px;">
-                <div id="hp-bar" style="width: 100%; height: 100%; background: #ff4d4d;"></div>
-            </div>
+            <div>💰 Vàng: <span id="g-v">0</span></div>
+            <div>🌲 Gỗ: <span id="w-v">0</span> | 🪨 Đá: <span id="s-v">0</span></div>
+            <div style="color: #ffeb3b;">⚔️: <span id="t-v">Tay không</span></div>
+            <div style="width: 120px; height: 8px; background: #3d251e; margin-top: 5px;"><div id="hp-bar" style="width: 100%; height: 100%; background: #ff4d4d;"></div></div>
         </div>
 
         <div id="crafting">
-            <div class="craft-item" onclick="craft('axe')">RÌU (15 Gỗ)</div>
-            <div class="craft-item" onclick="craft('sword')">KIẾM (10G-10Đ)</div>
+            <div class="c-item" onclick="craft('axe')">RÌU<br>(15 Gỗ)</div>
+            <div class="c-item" onclick="craft('sword')">KIẾM<br>(10G-10Đ)</div>
         </div>
 
-        <div class="minimap"><canvas id="m-canvas" width="130" height="130"></canvas></div>
-        <div class="joy-base" id="joy"><div class="joy-stick" id="knob"></div></div>
-        <div class="hit-btn" onmousedown="doHit()" ontouchstart="doHit()">HIT</div>
+        <div class="minimap"><canvas id="m-can" width="120" height="120"></canvas></div>
+        <div class="joy-base" id="jb"><div class="joy-stick" id="js"></div></div>
+        <div class="hit-btn" onmousedown="hit()" ontouchstart="hit()">HIT</div>
     </div>
 
     <script>
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
-        const mCtx = document.getElementById('m-canvas').getContext('2d');
-        const hitSnd = document.getElementById('hitSnd');
-        const bgMusic = document.getElementById('bgMusic');
+        const mCtx = document.getElementById('m-can').getContext('2d');
 
-        // LOAD HÌNH ẢNH BẠN GỬI
-        const imgP = new Image(); imgP.src = 'https://i.imgur.com/K6K5mO0.png'; // Nhân vật
-        const imgT = new Image(); imgT.src = 'https://i.imgur.com/S2X2f3w.png'; // Cây
-        const imgG = new Image(); imgG.src = 'https://i.imgur.com/vHqY7G1.png'; // Cỏ
+        // VẼ HÌNH ẢNH BẰNG CODE (Để không bao giờ bị lỗi link ảnh)
+        const imgP = new Image(); // Nhân vật (Bạn có thể thay src bằng base64 của ảnh bạn)
+        imgP.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QYXCxwS6O9vFAAABWhJREFUeNrtnU2O3DAMhOfmInmYvOfIe868N0fJM6SAsYFis9kkRVL9fIDBAtX9S7KpYvXp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6fmf0mOHePv27YfD4fB9o8c2R9S/v7//fDgcfrx+/frbLp/T6/W6/f79++fr169/7fI5PdIHAoAf0gMAIAAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsE/gG56uU7+ZidVwAAAABJRU5ErkJggg==';
 
-        let isRunning = false;
-        let worldSize = 3000;
-        let p = { x: 1500, y: 1500, name: "", hp: 100, speed: 6, tool: "none", hitting: false, dir: 'down' };
-        let inv = { gold: 0, wood: 0, stone: 0 };
-        let trees = []; let mobs = [];
+        const imgT = new Image(); 
+        imgT.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QYXCxw0W9YFvQAAAm9JREFUeNrtmztuwkAQhr8dEkU6SAs9AnIEpEInpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnv8H/gN0yYf1RkCg1gAAAABJRU5ErkJggg==';
+
+        let world = 3000, isRunning = false;
+        let p = { x: 1500, y: 1500, hp: 100, name: "", tool: "none", dir: 'down', hitting: false };
+        let inv = { g: 0, w: 0, s: 0 };
+        let ents = []; let mobs = [];
         let keys = {}; let joyDir = { x: 0, y: 0 };
 
-        function updateVol() { bgMusic.volume = document.getElementById('volRange').value; }
-        function toggleMenu(id) {
-            let m = document.getElementById(id);
-            m.style.display = m.style.display === 'block' ? 'none' : 'block';
-            playTach();
+        function initSfx() { 
+            const m = document.getElementById('bgM'); 
+            if(m.paused) { m.volume = 0.4; m.play().catch(()=>{}); }
         }
 
-        function playTach() { hitSnd.currentTime = 0; hitSnd.play(); }
-
-        function startGame() {
+        function start() {
             p.name = document.getElementById('pName').value || "Hoang";
+            // Tải dữ liệu cũ nếu có
+            const saved = localStorage.getItem('necesse_save');
+            if(saved) {
+                const data = JSON.parse(saved);
+                inv = data.inv; p.tool = data.tool;
+            }
             document.getElementById('lobby').style.display = 'none';
             canvas.style.display = 'block';
             document.getElementById('ui').style.display = 'block';
-            bgMusic.play();
             resize(); initWorld();
-            isRunning = true;
-            requestAnimationFrame(gameLoop);
+            isRunning = true; updateUI();
+            requestAnimationFrame(tick);
         }
 
-        function pauseGame() { isRunning = false; document.getElementById('pause-menu').style.display = 'block'; playTach(); }
-        function resumeGame() { isRunning = true; document.getElementById('pause-menu').style.display = 'none'; requestAnimationFrame(gameLoop); playTach(); }
+        function saveGame() {
+            const data = { inv: inv, tool: p.tool };
+            localStorage.setItem('necesse_save', JSON.stringify(data));
+            alert("Đã lưu tiến trình!");
+        }
 
         function initWorld() {
-            for(let i=0; i<100; i++) trees.push({x: Math.random()*worldSize, y: Math.random()*worldSize, hp: 50});
-            for(let i=0; i<20; i++) mobs.push({x: Math.random()*worldSize, y: Math.random()*worldSize, hp: 40});
+            for(let i=0; i<80; i++) ents.push({x: Math.random()*world, y: Math.random()*world, type: Math.random()>0.5?'tree':'rock', hp: 50});
+            for(let i=0; i<15; i++) mobs.push({x: Math.random()*world, y: Math.random()*world, hp: 40});
         }
 
-        function doHit() {
+        function hit() {
             if(!isRunning) return;
-            playTach();
+            document.getElementById('hitS').currentTime = 0;
+            document.getElementById('hitS').play();
             p.hitting = true;
-            trees.forEach((t, i) => {
-                if(Math.hypot(p.x-t.x, p.y-t.y) < 90) {
-                    t.hp -= (p.tool==='axe'?25:10);
-                    if(t.hp <= 0) { inv.wood += 5; inv.gold += 10; trees.splice(i, 1); }
+            ents.forEach((e, i) => {
+                if(Math.hypot(p.x-e.x, p.y-e.y) < 100) {
+                    let d = 10;
+                    if(p.tool==='axe' && e.type==='tree') d=25;
+                    e.hp -= d;
+                    if(e.hp<=0) { if(e.type==='tree') inv.w+=5; else inv.s+=5; inv.g+=10; ents.splice(i,1); }
                 }
             });
             updateUI();
-            setTimeout(() => p.hitting = false, 200);
+            setTimeout(()=>p.hitting=false, 200);
         }
 
-        function craft(type) {
-            if(type==='axe' && inv.wood >= 15) { inv.wood -= 15; p.tool = 'axe'; }
-            else if(type==='sword' && inv.wood >= 10) { inv.wood -= 10; p.tool = 'sword'; }
-            document.getElementById('tool-txt').innerText = p.tool.toUpperCase();
-            updateUI(); playTach();
+        function craft(t) {
+            if(t==='axe' && inv.w>=15) { inv.w-=15; p.tool='axe'; }
+            else if(t==='sword' && inv.w>=10 && inv.s>=10) { inv.w-=10; inv.s-=10; p.tool='sword'; }
+            else { alert("Thiếu nguyên liệu!"); }
+            updateUI();
         }
 
         function updateUI() {
-            document.getElementById('gold-txt').innerText = inv.gold;
-            document.getElementById('wood-txt').innerText = inv.wood;
+            document.getElementById('g-v').innerText = inv.g;
+            document.getElementById('w-v').innerText = inv.w;
+            document.getElementById('s-v').innerText = inv.s;
+            document.getElementById('t-v').innerText = p.tool.toUpperCase();
             document.getElementById('hp-bar').style.width = p.hp + "%";
         }
 
-        // ĐIỀU KHIỂN
         window.onkeydown = e => keys[e.code] = true;
         window.onkeyup = e => keys[e.code] = false;
-        const joy = document.getElementById('joy');
-        joy.ontouchmove = e => {
-            let t = e.touches[0], r = joy.getBoundingClientRect();
-            let dx = t.clientX - (r.left + 55), dy = t.clientY - (r.top + 55);
-            let d = Math.min(Math.sqrt(dx*dx+dy*dy), 55), a = Math.atan2(dy, dx);
-            joyDir = { x: Math.cos(a)*(d/55), y: Math.sin(a)*(d/55) };
-            document.getElementById('knob').style.transform = `translate(calc(-50% + ${Math.cos(a)*d}px), calc(-50% + ${Math.sin(a)*d}px))`;
+
+        const jb = document.getElementById('jb');
+        jb.ontouchmove = e => {
+            let t = e.touches[0], r = jb.getBoundingClientRect();
+            let dx = t.clientX - (r.left + 50), dy = t.clientY - (r.top + 50);
+            let d = Math.min(Math.sqrt(dx*dx+dy*dy), 50), a = Math.atan2(dy, dx);
+            joyDir = { x: Math.cos(a)*(d/50), y: Math.sin(a)*(d/50) };
+            document.getElementById('js').style.transform = `translate(calc(-50% + ${Math.cos(a)*d}px), calc(-50% + ${Math.sin(a)*d}px))`;
         };
-        joy.ontouchend = () => { joyDir = {x:0, y:0}; document.getElementById('knob').style.transform = 'translate(-50%,-50%)'; };
+        jb.ontouchend = () => { joyDir = {x:0, y:0}; document.getElementById('js').style.transform = 'translate(-50%,-50%)'; };
 
-        function gameLoop() {
+        function tick() {
             if(!isRunning) return;
-
             let vx = joyDir.x, vy = joyDir.y;
-            if(keys['KeyW']) { vy = -1; p.dir = 'up'; }
-            if(keys['KeyS']) { vy = 1; p.dir = 'down'; }
-            if(keys['KeyA']) { vx = -1; p.dir = 'left'; }
-            if(keys['KeyD']) { vx = 1; p.dir = 'right'; }
-            
-            p.x = Math.max(0, Math.min(worldSize, p.x + vx*p.speed));
-            p.y = Math.max(0, Math.min(worldSize, p.y + vy*p.speed));
+            if(keys['KeyW']) vy = -1; if(keys['KeyS']) vy = 1;
+            if(keys['KeyA']) vx = -1; if(keys['KeyD']) vx = 1;
+            p.x = Math.max(0, Math.min(world, p.x + vx*6));
+            p.y = Math.max(0, Math.min(world, p.y + vy*6));
 
             let cx = p.x - canvas.width/2, cy = p.y - canvas.height/2;
+            ctx.fillStyle = '#2d6a4f'; ctx.fillRect(0,0, canvas.width, canvas.height);
 
-            // VẼ CỎ (LẶP LẠI)
-            for(let x=0; x<worldSize; x+=256) {
-                for(let y=0; y<worldSize; y+=256) {
-                    ctx.drawImage(imgG, x-cx, y-cy, 256, 256);
-                }
-            }
-
-            // VẼ CÂY
-            trees.forEach(t => { ctx.drawImage(imgT, t.x-cx-40, t.y-cy-80, 80, 100); });
-
-            // VẼ QUÁI
-            mobs.forEach(m => {
-                let d = Math.hypot(p.x-m.x, p.y-m.y);
-                if(d < 300) { m.x += (p.x-m.x)/d*2; m.y += (p.y-m.y)/d*2; if(d<40) p.hp-=0.1; }
-                ctx.fillStyle = 'red'; ctx.beginPath(); ctx.arc(m.x-cx, m.y-cy, 15, 0, 7); ctx.fill();
+            // Vẽ Cây/Đá
+            ents.forEach(e => {
+                if(e.type === 'tree') ctx.drawImage(imgT, e.x-cx-30, e.y-cy-60, 60, 80);
+                else { ctx.fillStyle='#7f8c8d'; ctx.beginPath(); ctx.ellipse(e.x-cx, e.y-cy, 20, 15, 0, 0, 7); ctx.fill(); }
             });
 
-            // VẼ NHÂN VẬT (SPRITE)
-            let sx = 0, sy = 0;
-            if(p.dir === 'up') sy = 128; else if(p.dir === 'left') sy = 256; else if(p.dir === 'right') sy = 384;
-            if(p.hitting) sx = 256;
-            ctx.drawImage(imgP, sx, sy, 128, 128, canvas.width/2-40, canvas.height/2-40, 80, 80);
-            
-            ctx.fillStyle = 'white'; ctx.textAlign = 'center'; ctx.fillText(p.name, canvas.width/2, canvas.height/2-50);
+            // Vẽ Nhân vật
+            ctx.fillStyle = p.hitting ? '#fff' : '#e67e22';
+            ctx.fillRect(canvas.width/2-20, canvas.height/2-20, 40, 40);
+            ctx.fillStyle = '#fff'; ctx.fillText(p.name, canvas.width/2-15, canvas.height/2-30);
 
-            // MINIMAP
-            mCtx.fillStyle = '#000'; mCtx.fillRect(0,0,130,130);
-            mCtx.fillStyle = '#0f0'; mCtx.fillRect((p.x/worldSize)*130, (p.y/worldSize)*130, 4, 4);
+            // Minimap
+            mCtx.fillStyle = '#000'; mCtx.fillRect(0,0,120,120);
+            mCtx.fillStyle = '#0f0'; mCtx.fillRect((p.x/world)*120, (p.y/world)*120, 4, 4);
 
-            if(p.hp > 0) requestAnimationFrame(gameLoop); else { alert("GAME OVER!"); location.reload(); }
+            requestAnimationFrame(tick);
         }
-
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.onresize = resize;
     </script>

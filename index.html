@@ -5,6 +5,7 @@
     <title>NecesseGame Sinhton by HoangKun</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
+        /* GIỮ NGUYÊN TOÀN BỘ STYLE CỦA BẠN */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
@@ -52,6 +53,7 @@
 
         .menu-options { position: absolute; bottom: 0; right: 0; display: flex; flex-direction: column; gap: 15px; }
         
+        /* INPUT TÊN */
         .name-input {
             width: 220px;
             height: 45px;
@@ -85,7 +87,7 @@
         .wood-button:hover { background: #a1887f; transform: translateY(-3px); }
         .wood-button:active { transform: translateY(5px); border-bottom: 2px solid #2d1b16; }
 
-        /* MODAL CÀI ĐẶT */
+        /* BẢNG CÀI ĐẶT */
         #settings-modal {
             display: none;
             position: fixed;
@@ -101,8 +103,7 @@
         }
         .settings-title { font-size: 3rem; text-align: center; margin-bottom: 20px; border-bottom: 4px solid #3d251e; }
         .setting-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 1.8rem; }
-        .setting-item input[type="range"] { accent-color: #8d6e63; cursor: pointer; }
-
+        
         #overlay-bg {
             display: none;
             position: fixed;
@@ -126,16 +127,29 @@
         }
 
         .pixel-spinner {
-            width: 60px; height: 60px;
+            width: 60px;
+            height: 60px;
             border: 8px solid #5d4037;
             border-top: 8px solid #f4e4bc;
             animation: spin 1s steps(8) infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.5; transform: scale(0.95); }
+        }
     </style>
 </head>
 <body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/07/The-Old-Tower-Inn-Adventure-Music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="lobby-container">
         <div id="overlay-bg" onclick="toggleSettings()"></div>
@@ -143,21 +157,10 @@
         <div id="settings-modal">
             <div class="settings-title">CÀI ĐẶT</div>
             <div class="setting-item">
-                <span>ÂM THANH</span>
-                <input type="range" min="0" max="100" value="80">
+                <span>ÂM LƯỢNG</span>
+                <input type="range" id="volControl" min="0" max="1" step="0.1" value="0.5" onchange="updateVol()">
             </div>
-            <div class="setting-item">
-                <span>NHẠC NỀN</span>
-                <input type="range" min="0" max="100" value="50">
-            </div>
-            <div class="setting-item">
-                <span>ĐỒ HỌA</span>
-                <select style="background: #3d251e; color: #f4e4bc; font-family: 'VT323'; border: none;">
-                    <option>PIXEL LOW</option>
-                    <option selected>PIXEL HIGH</option>
-                </select>
-            </div>
-            <div class="wood-button" style="width: 100%; height: 50px; margin-top: 10px;" onclick="toggleSettings()">LƯU & ĐÓNG</div>
+            <div class="wood-button" style="width: 100%; height: 50px;" onclick="toggleSettings()">ĐÓNG</div>
         </div>
 
         <div id="loading-overlay">
@@ -178,39 +181,53 @@
 
             <div class="menu-options">
                 <input type="text" id="charName" class="name-input" placeholder="TÊN NHÂN VẬT..." maxlength="12">
-                <div class="wood-button" onclick="connectWorld()">CHƠI MỚI</div>
-                <div class="wood-button" onclick="alert('Tính năng đang phát triển!')">TIẾP TỤC</div>
-                <div class="wood-button" onclick="toggleSettings()">CÀI ĐẶT</div>
-                <div class="wood-button" onclick="alert('Không thể thoát tự động!')">THOÁT</div>
+                <div class="wood-button" onclick="actionWrapper(connectWorld)">CHƠI MỚI</div>
+                <div class="wood-button" onclick="actionWrapper()">TIẾP TỤC</div>
+                <div class="wood-button" onclick="actionWrapper(toggleSettings)">CÀI ĐẶT</div>
+                <div class="wood-button" onclick="actionWrapper()">THOÁT</div>
             </div>
         </div>
     </div>
 
     <script>
-        function connectWorld() {
-            var name = document.getElementById('charName').value;
-            if (name.trim() === "") name = "Hành Giả";
+        const bgMusic = document.getElementById('bgMusic');
+        const clickSound = document.getElementById('clickSound');
 
-            document.getElementById('loading-overlay').style.display = 'flex';
+        // Hàm bọc để vừa phát âm thanh vừa chạy chức năng
+        function actionWrapper(callback) {
+            // Phát tiếng click
+            clickSound.currentTime = 0;
+            clickSound.play();
             
+            // Tự động phát nhạc nền ở lần click đầu tiên
+            if (bgMusic.paused) {
+                bgMusic.volume = 0.5;
+                bgMusic.play();
+            }
+
+            // Chạy hàm chức năng nếu có
+            if (callback) callback();
+        }
+
+        function updateVol() {
+            bgMusic.volume = document.getElementById('volControl').value;
+        }
+
+        function connectWorld() {
+            var name = document.getElementById('charName').value || "Hành Giả";
+            document.getElementById('loading-overlay').style.display = 'flex';
             setTimeout(() => {
-                alert("Kết nối thành công! Chào mừng " + name + " đến với thế giới mới.");
+                alert("Kết nối thành công! Chào mừng " + name);
                 document.getElementById('loading-overlay').style.display = 'none';
             }, 2000);
         }
 
-        // Hàm ẩn/hiện bảng Cài đặt
         function toggleSettings() {
             var modal = document.getElementById('settings-modal');
             var bg = document.getElementById('overlay-bg');
-            
-            if (modal.style.display === 'block') {
-                modal.style.display = 'none';
-                bg.style.display = 'none';
-            } else {
-                modal.style.display = 'block';
-                bg.style.display = 'block';
-            }
+            var isShowing = modal.style.display === 'block';
+            modal.style.display = isShowing ? 'none' : 'block';
+            bg.style.display = isShowing ? 'none' : 'block';
         }
     </script>
 </body>

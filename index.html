@@ -3,368 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NecesseGame Sinhton by HoangKun</title>
+    <title>Necesse Survival Pro - HoangKun</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
+        /* --- CSS: GIAO DIỆN CHI TIẾT --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'VT323', monospace; overflow: hidden; touch-action: none; }
-        
-        /* --- GIAO DIỆN LOBBY GỐC --- */
+        body { 
+            background-color: #1a1a1a; 
+            font-family: 'VT323', monospace; 
+            overflow: hidden; 
+            touch-action: none; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Lobby chính */
         #lobby-container {
-            width: 100vw; height: 100vh; position: fixed; top: 0; left: 0;
-            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/pixels-game-thumb.jpg');
-            background-size: cover; background-position: center; image-rendering: pixelated;
-            display: flex; justify-content: center; align-items: center; z-index: 100;
-        }
-        .content-area { width: 90%; height: 85%; position: relative; max-width: 1200px; }
-        .header { position: absolute; top: 0; left: 0; color: #fff; text-shadow: 4px 4px 0px #000; }
-        .header h1 { font-size: 4rem; letter-spacing: 2px; }
-        .header p { font-size: 2rem; color: #f4e4bc; }
-
-        .stats-area { position: absolute; top: 0; right: 0; display: flex; gap: 20px; }
-        .stat-box {
-            background: rgba(93, 64, 55, 0.9); border: 4px solid #3d251e; padding: 8px 20px;
-            color: #f4e4bc; font-size: 2rem; box-shadow: 5px 5px 0px #000; display: flex; align-items: center; gap: 10px;
+            width: 100vw; 
+            height: 100vh; 
+            position: fixed; 
+            top: 0; left: 0;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/pixels-game-thumb.jpg');
+            background-size: cover; 
+            background-position: center; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 100;
         }
 
-        .menu-options { position: absolute; bottom: 0; right: 0; display: flex; flex-direction: column; gap: 15px; }
-        .name-input { width: 220px; height: 45px; background: #3d251e; border: 4px solid #8d6e63; color: #f4e4bc; font-family: 'VT323'; font-size: 1.5rem; text-align: center; outline: none; margin-bottom: 5px; }
-
-        .wood-button {
-            width: 220px; height: 65px; background: #8d6e63; border: 4px solid #5d4037; border-bottom: 8px solid #2d1b16;
-            color: #f4e4bc; font-size: 2.2rem; cursor: pointer; text-shadow: 2px 2px 0px #000;
-            display: flex; justify-content: center; align-items: center; transition: 0.1s;
+        .main-panel {
+            background: #5d4037;
+            border: 6px solid #3d251e;
+            padding: 40px;
+            color: #f4e4bc;
+            box-shadow: 12px 12px 0px #000;
+            text-align: center;
+            width: 400px;
         }
-        .wood-button:hover { background: #a1887f; transform: translateY(-3px); }
-        .wood-button:active { transform: translateY(5px); border-bottom: 2px solid #2d1b16; }
 
-        /* --- BẢNG CÀI ĐẶT ĐỦ Ý --- */
-        #settings-modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 400px; background: #5d4037; border: 6px solid #3d251e; box-shadow: 10px 10px 0px #000;
-            z-index: 1000; padding: 20px; color: #f4e4bc;
+        .game-title {
+            font-size: 4.5rem;
+            color: #fff;
+            text-shadow: 5px 5px 0px #2d1b16;
+            margin-bottom: 20px;
         }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 1.8rem; }
-        #overlay-bg { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 998; }
 
-        /* --- GAME & UI --- */
-        #game-canvas { display: none; background: #2d6a4f; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10; image-rendering: pixelated; } /* Thêm pixelated */
-        #ui-controls { display: none; position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: 50; pointer-events: none; }
-        .joystick-base { pointer-events: auto; position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: rgba(255,255,255,0.2); border-radius: 50%; }
-        .joystick-knob { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; background: rgba(255,255,255,0.5); border-radius: 50%; transform: translate(-50%, -50%); }
-        .action-btn { pointer-events: auto; position: absolute; bottom: 50px; right: 50px; width: 80px; height: 80px; background: #8d6e63; border: 4px solid #5d4037; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #f4e4bc; font-size: 1.5rem; box-shadow: 0 6px 0 #2d1b16; cursor: pointer; }
+        /* Nút bấm kiểu gỗ */
+        .wood-btn {
+            width: 100%;
+            height: 65px;
+            background: #8d6e63;
+            border: 4px solid #5d4037;
+            border-bottom: 8px solid #2d1b16;
+            color: #f4e4bc;
+            font-size: 2.2rem;
+            cursor: pointer;
+            text-shadow: 2px 2px 0px #000;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.1s;
+        }
+        .wood-btn:hover { background: #a1887f; }
+        .wood-btn:active { transform: translateY(6px); border-bottom-width: 2px; }
 
-        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; color: #f4e4bc; }
-        .pixel-spinner { width: 60px; height: 60px; border: 8px solid #5d4037; border-top: 8px solid #f4e4bc; animation: spin 1s steps(8) infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            background: #3d251e;
+            color: #f4e4bc;
+            border: 4px solid #8d6e63;
+            font-family: 'VT323';
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Canvas và UI trong game */
+        #game-canvas {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            image-rendering: pixelated;
+        }
+
+        #ui-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        /* Thanh trạng thái HUD */
+        .hud-stats {
+            pointer-events: auto;
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: rgba(61, 37, 30, 0.9);
+            border: 4px solid #f4e4bc;
+            padding: 20px;
+            color: #f4e4bc;
+            font-size: 1.8rem;
+            box-shadow: 6px 6px 0px #000;
+        }
+
+        .hp-container {
+            width: 200px;
+            height: 15px;
+            background: #2d1b16;
+            border: 2px solid #fff;
+            margin-top: 10px;
+        }
+        #hp-fill { width: 100%; height: 100%; background: #ff4d4d; transition: width 0.3s; }
+
+        /* Điều khiển Mobile xịn */
+        .joy-container {
+            pointer-events: auto;
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            width: 130px;
+            height: 130px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 4px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+        }
+        .joy-stick {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 55px; height: 55px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .btn-action {
+            pointer-events: auto;
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            width: 110px;
+            height: 110px;
+            background: #e67e22;
+            border: 6px solid #d35400;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 0 #a04000;
+            cursor: pointer;
+            font-weight: bold;
+            user-select: none;
+        }
+        .btn-action:active { transform: translateY(4px); box-shadow: 0 2px 0 #a04000; }
+
+        /* Cài đặt */
+        #settings-menu {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
-<body onclick="initAudio()">
+<body onclick="handleFirstClick()">
 
-    <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
-    <audio id="clickSound"><source src="https://www.fesliyanstudios.com/play-mp3/6" type="audio/mpeg"></audio>
-    <audio id="hitSound"><source src="https://assets.mixkit.co/active_storage/sfx/1393/1393-preview.mp3" type="audio/mpeg"></audio> <div id="overlay-bg" onclick="toggleSettings()"></div>
-
-    <div id="settings-modal">
-        <div style="font-size: 3rem; text-align: center; margin-bottom: 20px; border-bottom: 4px solid #3d251e;">CÀI ĐẶT</div>
-        <div class="setting-row"><span>ÂM THANH</span><input type="range" id="volSfx" min="0" max="1" step="0.1" value="0.8"></div>
-        <div class="setting-row"><span>NHẠC NỀN</span><input type="range" id="volMusic" min="0" max="1" step="0.1" value="0.5" onchange="updateVol()"></div>
-        <div class="wood-button" style="width: 100%; height: 50px;" onclick="playClickSound(); toggleSettings()">LƯU & ĐÓNG</div>
-    </div>
+    <audio id="msc-bg" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+    <audio id="snd-hit"><source src="https://www.fesliyanstudios.com/play-mp3/6"></audio>
 
     <div id="lobby-container">
-        <div id="loading-overlay"><div class="pixel-spinner"></div><div style="font-size: 3rem; margin-top: 20px;">ĐANG KẾT NỐI...</div></div>
-        <div class="content-area">
-            <div class="header"><h1>NECESSE SINH TỒN</h1><p>by HoangKun</p></div>
-            <div class="stats-area">
-                <div class="stat-box">GOLD: <span id="goldVal">0</span></div>
-                <div class="stat-box" style="border-color: #1a237e;">💎: <span id="diaVal">0</span></div>
-            </div>
-            <div class="menu-options">
-                <input type="text" id="charName" class="name-input" placeholder="TÊN NHÂN VẬT..." maxlength="12">
-                <div class="wood-button" onclick="playClickSound(); startGame()">CHƠI MỚI</div>
-                <div class="wood-button" onclick="playClickSound()">TIẾP TỤC</div>
-                <div class="wood-button" onclick="playClickSound(); toggleSettings()">CÀI ĐẶT</div>
-                <div class="wood-button" onclick="playClickSound()">THOÁT</div>
-            </div>
+        <div class="main-panel">
+            <h1 class="game-title">NECESSE PRO</h1>
+            <p style="font-size: 1.5rem; margin-bottom: 20px;">PHIÊN BẢN SINH TỒN 2026</p>
+            
+            <input type="text" id="input-name" class="name-input" placeholder="TÊN NHÂN VẬT..." maxlength="10">
+            
+            <div class="wood-btn" onclick="initGame('new')">BẮT ĐẦU MỚI</div>
+            <div class="wood-btn" onclick="initGame('load')">TIẾP TỤC</div>
+            <div class="wood-btn" onclick="toggleSettings()">CÀI ĐẶT</div>
         </div>
     </div>
 
+    <div id="settings-menu" class="main-panel">
+        <h2 style="font-size: 3rem; border-bottom: 4px solid #3d251e;">CÀI ĐẶT</h2>
+        <div style="margin: 30px 0; text-align: left;">
+            <label style="font-size: 1.8rem;">ÂM LƯỢNG NHẠC:</label>
+            <input type="range" id="vol-music" min="0" max="1" step="0.1" value="0.5" style="width: 100%; margin-top: 10px;">
+        </div>
+        <div class="wood-btn" style="height: 50px;" onclick="toggleSettings()">LƯU & ĐÓNG</div>
+    </div>
+
     <canvas id="game-canvas"></canvas>
-    <div id="ui-controls">
-        <div class="joystick-base" id="joyBase"><div class="joystick-knob" id="joyKnob"></div></div>
-        <div class="action-btn" onmousedown="doAction()" ontouchstart="doAction()">HIT</div>
+
+    <div id="ui-overlay">
+        <div class="hud-stats">
+            <div id="display-name" style="border-bottom: 2px solid #8d6e63; margin-bottom: 5px;">PLAYER</div>
+            <div>VÀNG: <span id="val-gold" style="color:#ffeb3b">0</span></div>
+            <div>GỖ: <span id="val-wood" style="color:#4db6ac">0</span></div>
+            <div class="hp-container"><div id="hp-fill"></div></div>
+        </div>
+
+        <div style="position: absolute; top: 25px; right: 25px; pointer-events: auto;">
+            <button class="wood-btn" style="width: 100px; height: 40px; font-size: 1.2rem;" onclick="saveGame()">LƯU</button>
+        </div>
+
+        <div class="joy-container" id="joyBase">
+            <div class="joy-stick" id="joyStick"></div>
+        </div>
+
+        <div class="btn-action" onmousedown="playerHit()" ontouchstart="playerHit()">HIT</div>
     </div>
 
     <script>
+        /* --- KHAI BÁO BIẾN TOÀN CỤC (GLOBAL VARIABLES) --- */
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
-        const clickSound = document.getElementById('clickSound');
-        const hitSound = document.getElementById('hitSound'); // Âm thanh đánh
-        const bgMusic = document.getElementById('bgMusic');
-        
-        let stats = { gold: 0, diamonds: 0 };
-        let player = { 
-            x: 0, y: 0, 
-            worldX: 0, worldY: 0, // Vị trí trong thế giới lớn
-            size: 32, // Kích thước nhân vật
-            speed: 3, 
-            name: "", 
-            isHitting: false,
-            image: new Image()
+        const mscBg = document.getElementById('msc-bg');
+        const sndHit = document.getElementById('snd-hit');
+
+        // Hình ảnh nhân vật & cây (Mã hóa Base64 để tránh lỗi file)
+        const imgPlayer = new Image(); 
+        imgPlayer.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QYXCxwS6O9vFAAABWhJREFUeNrtnU2O3DAMhOfmInmYvOfIe868N0fJM6SAsYFis9kkRVL9fIDBAtX9S7KpYvXp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6fmf0mOHePv27YfD4fB9o8c2R9S/v7//fDgcfrx+/frbLp/T6/W6/f79++fr169/7fI5PdIHAoAf0gMAIAAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsEgAASAAABIAAACwSAABIAAAEgAAALBIAAEgAAASAAAAsE/gG56uU7+ZidVwAAAABJRU5ErkJggg==';
+        const imgTree = new Image(); 
+        imgTree.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QYXCxw0W9YFvQAAAm9JREFUeNrtmztuwkAQhr8dEkU6SAs9AnIEpEInpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnpEAnv8H/gN0yYf1RkCg1gAAAABJRU5ErkJggg==';
+
+        // Thông số thế giới và người chơi
+        let game = {
+            active: false,
+            worldSize: 4000,
+            trees: [],
+            keys: {},
+            joy: { x: 0, y: 0, active: false }
         };
-        player.image.src = 'assets/player.png'; // Đảm bảo đường dẫn đúng!
 
-        let isGameRunning = false;
-        let keys = {};
-        let moveVec = { x: 0, y: 0 };
+        let player = {
+            wx: 2000, wy: 2000, // Vị trí trong thế giới (World X, World Y)
+            name: "",
+            gold: 0, wood: 0, hp: 100,
+            speed: 6,
+            dir: 'down',
+            isHitting: false
+        };
 
-        // --- CẤU HÌNH BẢN ĐỒ ---
-        const TILE_SIZE = 32; // Kích thước mỗi ô gạch
-        const WORLD_WIDTH = 2000; // Chiều rộng thế giới ảo
-        const WORLD_HEIGHT = 2000; // Chiều cao thế giới ảo
-
-        const mapTiles = []; // Mảng chứa dữ liệu các ô gạch trên bản đồ
-        const entities = []; // Mảng chứa các vật thể như cây, đá
-
-        const grassTile = new Image(); grassTile.src = 'assets/grass.png'; // Ảnh cỏ
-        const treeSprite = new Image(); treeSprite.src = 'assets/tree.png'; // Ảnh cây
-
-        // Tạo bản đồ và các vật thể
-        function generateWorld() {
-            // Đổ nền cỏ cho toàn bộ bản đồ
-            for (let y = 0; y < WORLD_HEIGHT / TILE_SIZE; y++) {
-                for (let x = 0; x < WORLD_WIDTH / TILE_SIZE; x++) {
-                    mapTiles.push({ x: x * TILE_SIZE, y: y * TILE_SIZE, type: 'grass' });
-                }
-            }
-
-            // Rải cây ngẫu nhiên
-            for (let i = 0; i < 50; i++) { // 50 cây
-                let x = Math.random() * (WORLD_WIDTH - TILE_SIZE);
-                let y = Math.random() * (WORLD_HEIGHT - TILE_SIZE);
-                entities.push({ x: x, y: y, type: 'tree', width: 48, height: 48, hp: 10 }); // Cây có HP
-            }
+        /* --- HỆ THỐNG XỬ LÝ SỰ KIỆN --- */
+        function handleFirstClick() {
+            if(mscBg.paused) { mscBg.volume = 0.4; mscBg.play(); }
         }
-
-        // --- CÁC HÀM XỬ LÝ ÂM THANH & UI ---
-        function playClickSound() { 
-            clickSound.volume = document.getElementById('volSfx').value;
-            clickSound.currentTime = 0;
-            clickSound.play();
-        }
-        function playHitSound() {
-            hitSound.volume = document.getElementById('volSfx').value;
-            hitSound.currentTime = 0;
-            hitSound.play();
-        }
-
-        function initAudio() { if(bgMusic.paused) { bgMusic.volume = 0.5; bgMusic.play(); } }
-        function updateVol() { bgMusic.volume = document.getElementById('volMusic').value; }
 
         function toggleSettings() {
-            let isShow = document.getElementById('settings-modal').style.display === 'block';
-            document.getElementById('settings-modal').style.display = isShow ? 'none' : 'block';
-            document.getElementById('overlay-bg').style.display = isShow ? 'none' : 'block';
+            let m = document.getElementById('settings-menu').style;
+            m.display = (m.display === 'block') ? 'none' : 'block';
         }
 
-        // --- HÀM CHUYỂN CẢNH GAME ---
-        function startGame() {
-            player.name = document.getElementById('charName').value || "Hành Giả";
-            document.getElementById('loading-overlay').style.display = 'flex';
-            
-            // Đảm bảo ảnh đã tải xong trước khi vào game
-            Promise.all([
-                new Promise(resolve => player.image.onload = resolve),
-                new Promise(resolve => grassTile.onload = resolve),
-                new Promise(resolve => treeSprite.onload = resolve)
-            ]).then(() => {
-                setTimeout(() => {
-                    document.getElementById('lobby-container').style.display = 'none';
-                    document.getElementById('loading-overlay').style.display = 'none';
-                    canvas.style.display = 'block';
-                    if ('ontouchstart' in window) document.getElementById('ui-controls').style.display = 'block';
-                    
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                    player.x = canvas.width / 2 - player.size / 2; // Giữa màn hình
-                    player.y = canvas.height / 2 - player.size / 2; // Giữa màn hình
-                    player.worldX = WORLD_WIDTH / 2; // Bắt đầu ở giữa thế giới
-                    player.worldY = WORLD_HEIGHT / 2; // Bắt đầu ở giữa thế giới
-
-                    generateWorld(); // Tạo bản đồ
-                    isGameRunning = true;
-                    requestAnimationFrame(gameLoop);
-                }, 1500);
-            });
-        }
-
-        // --- HÀNH ĐỘNG CỦA NGƯỜI CHƠI ---
-        function doAction() {
-            playHitSound(); // Phát tiếng đánh
-            player.isHitting = true;
-            stats.gold += 10;
-            document.getElementById('goldVal').innerText = stats.gold;
-            
-            // Xử lý chặt cây (kiểm tra va chạm với cây gần nhất)
-            for (let i = entities.length - 1; i >= 0; i--) {
-                let ent = entities[i];
-                if (ent.type === 'tree' && isColliding(player, ent, 50)) { // Trong phạm vi 50px
-                    ent.hp -= 5; // Giảm máu cây
-                    if (ent.hp <= 0) {
-                        entities.splice(i, 1); // Xóa cây
-                        stats.gold += 50; // Thưởng vàng khi chặt xong cây
-                        document.getElementById('goldVal').innerText = stats.gold;
-                    }
-                    break; 
+        function initGame(mode) {
+            // Load dữ liệu nếu chọn Continue
+            if(mode === 'load') {
+                let saved = localStorage.getItem('necesse_hoangkun_save');
+                if(saved) {
+                    let d = JSON.parse(saved);
+                    player.gold = d.gold; player.wood = d.wood; player.name = d.name;
+                } else {
+                    alert("Không có file đã lưu!"); return;
                 }
+            } else {
+                player.name = document.getElementById('input-name').value || "HoangKun";
             }
 
-            setTimeout(() => player.isHitting = false, 150);
-        }
+            document.getElementById('lobby-container').style.display = 'none';
+            canvas.style.display = 'block';
+            document.getElementById('ui-overlay').style.display = 'block';
 
-        // Kiểm tra va chạm đơn giản
-        function isColliding(obj1, obj2, margin = 0) {
-            return obj1.worldX < obj2.x + obj2.width + margin &&
-                   obj1.worldX + obj1.size + margin > obj2.x &&
-                   obj1.worldY < obj2.y + obj2.height + margin &&
-                   obj1.worldY + obj1.size + margin > obj2.y;
-        }
-
-
-        // --- CẬP NHẬT TRẠNG THÁI GAME ---
-        function update() {
-            if(!isGameRunning) return;
-            
-            let dx = 0;
-            let dy = 0;
-
-            // PC Controls
-            if(keys['KeyW'] || keys['ArrowUp']) dy -= 1;
-            if(keys['KeyS'] || keys['ArrowDown']) dy += 1;
-            if(keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
-            if(keys['KeyD'] || keys['ArrowRight']) dx += 1;
-            
-            // Mobile Joystick Controls
-            dx += moveVec.x;
-            dy += moveVec.y;
-
-            // Chuẩn hóa vector di chuyển để tốc độ không đổi khi đi chéo
-            if (dx !== 0 || dy !== 0) {
-                let magnitude = Math.sqrt(dx*dx + dy*dy);
-                dx /= magnitude;
-                dy /= magnitude;
+            // Tạo rừng cây ngẫu nhiên (120 cây)
+            for(let i=0; i<120; i++) {
+                game.trees.push({
+                    x: Math.random() * game.worldSize,
+                    y: Math.random() * game.worldSize,
+                    hp: 40
+                });
             }
 
-            // Cập nhật vị trí nhân vật trong thế giới
-            player.worldX += dx * player.speed;
-            player.worldY += dy * player.speed;
-
-            // Giới hạn nhân vật trong biên thế giới
-            player.worldX = Math.max(0, Math.min(WORLD_WIDTH - player.size, player.worldX));
-            player.worldY = Math.max(0, Math.min(WORLD_HEIGHT - player.size, player.worldY));
+            resizeCanvas();
+            game.active = true;
+            updateHUD();
+            requestAnimationFrame(gameLoop);
         }
 
-        // --- VẼ CÁC ĐỐI TƯỢNG LÊN MÀN HÌNH ---
-        function draw() {
-            if(!isGameRunning) return;
+        function saveGame() {
+            let data = { gold: player.gold, wood: player.wood, name: player.name };
+            localStorage.setItem('necesse_hoangkun_save', JSON.stringify(data));
+            alert("Đã lưu tiến trình!");
+        }
 
-            // Camera offset (parallax scrolling)
-            let camX = player.worldX - canvas.width / 2;
-            let camY = player.worldY - canvas.height / 2;
+        /* --- ĐIỀU KHIỂN JOYSTICK --- */
+        const jBase = document.getElementById('joyBase');
+        const jStick = document.getElementById('joyStick');
 
-            // 1. Vẽ bản đồ (ô cỏ)
-            ctx.fillStyle = '#2d6a4f'; // Màu nền nếu không có cỏ
+        jBase.addEventListener('touchstart', (e) => {
+            game.joy.active = true;
+            e.preventDefault();
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if(!game.joy.active) return;
+            let t = e.touches[0];
+            let rect = jBase.getBoundingClientRect();
+            let centerX = rect.left + rect.width/2;
+            let centerY = rect.top + rect.height/2;
+            
+            let dx = t.clientX - centerX;
+            let dy = t.clientY - centerY;
+            let dist = Math.min(Math.sqrt(dx*dx + dy*dy), 65);
+            let angle = Math.atan2(dy, dx);
+
+            game.joy.x = Math.cos(angle) * (dist/65);
+            game.joy.y = Math.sin(angle) * (dist/65);
+
+            jStick.style.transform = `translate(calc(-50% + ${Math.cos(angle)*dist}px), calc(-50% + ${Math.sin(angle)*dist}px))`;
+        });
+
+        window.addEventListener('touchend', () => {
+            game.joy.active = false;
+            game.joy.x = 0; game.joy.y = 0;
+            jStick.style.transform = 'translate(-50%, -50%)';
+        });
+
+        /* --- HÀNH ĐỘNG ĐÁNH (HIT) --- */
+        function playerHit() {
+            if(!game.active) return;
+            sndHit.currentTime = 0; sndHit.play();
+            player.isHitting = true;
+
+            // Kiểm tra va chạm với từng cái cây
+            game.trees.forEach((tree, index) => {
+                let d = Math.hypot(player.wx - tree.x, player.wy - tree.y);
+                if(d < 90) { // Phạm vi đánh 90px
+                    tree.hp -= 20;
+                    if(tree.hp <= 0) {
+                        game.trees.splice(index, 1);
+                        player.wood += 5; player.gold += 10;
+                        updateHUD();
+                    }
+                }
+            });
+
+            setTimeout(() => { player.isHitting = false; }, 150);
+        }
+
+        /* --- VÒNG LẶP GAME --- */
+        window.onkeydown = (e) => { game.keys[e.code] = true; };
+        window.onkeyup = (e) => { game.keys[e.code] = false; };
+
+        function updateHUD() {
+            document.getElementById('display-name').innerText = player.name;
+            document.getElementById('val-gold').innerText = player.gold;
+            document.getElementById('val-wood').innerText = player.wood;
+            document.getElementById('hp-fill').style.width = player.hp + "%";
+        }
+
+        function moveLogic() {
+            let moveX = game.joy.x;
+            let moveY = game.joy.y;
+
+            // Phím bấm PC
+            if(game.keys['KeyW']) moveY = -1;
+            if(game.keys['KeyS']) moveY = 1;
+            if(game.keys['KeyA']) moveX = -1;
+            if(game.keys['KeyD']) moveX = 1;
+
+            if(moveX !== 0 || moveY !== 0) {
+                // Chuẩn hóa tốc độ
+                let m = Math.sqrt(moveX*moveX + moveY*moveY);
+                player.wx += (moveX/m) * player.speed;
+                player.wy += (moveY/m) * player.speed;
+
+                // Giới hạn biên thế giới
+                player.wx = Math.max(0, Math.min(game.worldSize, player.wx));
+                player.wy = Math.max(0, Math.min(game.worldSize, player.wy));
+
+                // Hướng mặt
+                if(moveX > 0) player.dir = 'right';
+                else if(moveX < 0) player.dir = 'left';
+            }
+        }
+
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Tính toán Camera (Để người chơi luôn ở giữa)
+            let camX = player.wx - canvas.width / 2;
+            let camY = player.wy - canvas.height / 2;
+
+            // 1. Vẽ nền cỏ (Dùng màu xanh rừng)
+            ctx.fillStyle = '#2d6a4f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            mapTiles.forEach(tile => {
-                let screenX = tile.x - camX;
-                let screenY = tile.y - camY;
-                // Chỉ vẽ những ô nằm trong tầm nhìn
-                if (screenX + TILE_SIZE > 0 && screenX < canvas.width &&
-                    screenY + TILE_SIZE > 0 && screenY < canvas.height) {
-                    ctx.drawImage(grassTile, screenX, screenY, TILE_SIZE, TILE_SIZE);
-                }
-            });
-
-            // 2. Vẽ các vật thể (cây cối)
-            entities.forEach(ent => {
-                let screenX = ent.x - camX;
-                let screenY = ent.y - camY;
-                // Chỉ vẽ những vật thể nằm trong tầm nhìn
-                if (screenX + ent.width > 0 && screenX < canvas.width &&
-                    screenY + ent.height > 0 && screenY < canvas.height) {
-                    if (ent.type === 'tree') {
-                        ctx.drawImage(treeSprite, screenX, screenY, ent.width, ent.height);
-                        // Vẽ thanh máu cho cây khi bị đánh
-                        if (ent.hp < 10) {
-                             ctx.fillStyle = 'red';
-                             ctx.fillRect(screenX, screenY - 5, ent.width * (ent.hp/10), 3);
-                             ctx.strokeStyle = 'black';
-                             ctx.strokeRect(screenX, screenY - 5, ent.width, 3);
-                        }
-                    }
-                }
-            });
-
-            // 3. Vẽ nhân vật (luôn ở giữa màn hình)
-            // ctx.fillStyle = player.isHitting ? '#ffeb3b' : '#e67e22'; // Màu nhân vật cũ
-            // ctx.fillRect(player.x, player.y, player.size, player.size);
-            
-            // Vẽ ảnh nhân vật
-            ctx.drawImage(player.image, player.x, player.y, player.size, player.size);
-            
-            // Hiệu ứng khi đánh (đổi màu viền)
-            if (player.isHitting) {
-                ctx.strokeStyle = 'yellow';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(player.x, player.y, player.size, player.size);
+            // 2. Vẽ lưới ô đất (Trang trí)
+            ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+            for(let i = -camX % 100; i < canvas.width; i += 100) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+            }
+            for(let j = -camY % 100; j < canvas.height; j += 100) {
+                ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke();
             }
 
-            ctx.fillStyle = 'white'; ctx.font = '20px VT323'; ctx.textAlign = 'center';
-            ctx.fillText(player.name, player.x + player.size/2, player.y - 10);
+            // 3. Vẽ cây cối
+            game.trees.forEach(t => {
+                // Chỉ vẽ nếu cây nằm trong màn hình để mượt hơn
+                if(t.x > camX - 100 && t.x < camX + canvas.width + 100 &&
+                   t.y > camY - 100 && t.y < camY + canvas.height + 100) {
+                    ctx.drawImage(imgTree, t.x - camX - 32, t.y - camY - 64, 64, 85);
+                }
+            });
+
+            // 4. Vẽ người chơi (Sử dụng Sprite Sheet Logic)
+            let spriteX = 0; 
+            let spriteY = 0; 
+
+            if(player.dir === 'left') spriteY = 256; 
+            if(player.dir === 'right') spriteY = 384;
+            if(player.isHitting) spriteX = 256; // Frame đang đánh
+
+            ctx.drawImage(
+                imgPlayer, 
+                spriteX, spriteY, 128, 128, // Cắt ảnh từ sprite
+                canvas.width/2 - 45, canvas.height/2 - 45, // Vị trí giữa màn hình
+                90, 90 // Kích thước hiển thị
+            );
+
+            // Tên người chơi trên đầu
+            ctx.fillStyle = "white";
+            ctx.font = "24px VT323";
+            ctx.textAlign = "center";
+            ctx.fillText(player.name, canvas.width/2, canvas.height/2 - 55);
         }
 
-        // --- VÒNG LẶP GAME (GAME LOOP) ---
         function gameLoop() {
-            update();
-            draw();
-            if(isGameRunning) requestAnimationFrame(gameLoop);
+            if(!game.active) return;
+            moveLogic();
+            drawGame();
+            requestAnimationFrame(gameLoop);
         }
 
-        // --- XỬ LÝ SỰ KIỆN ---
-        window.addEventListener('keydown', e => {
-            keys[e.code] = true;
-            if(e.code === 'Space' && isGameRunning) doAction(); // Space để đánh trên PC
-        });
-        window.addEventListener('keyup', e => keys[e.code] = false);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
 
-        // JOYSTICK LOGIC
-        let stickActive = false;
-        const joyBase = document.getElementById('joyBase');
-        const joyKnob = document.getElementById('joyKnob');
-        joyBase.addEventListener('touchstart', e => { stickActive = true; e.preventDefault(); }); // Ngăn cuộn trang
-        window.addEventListener('touchmove', e => {
-            if (!stickActive) return;
-            let t = e.touches[0]; let r = joyBase.getBoundingClientRect();
-            let dx = t.clientX - (r.left + r.width/2); let dy = t.clientY - (r.top + r.height/2);
-            let d = Math.min(Math.sqrt(dx*dx+dy*dy), r.width/2);
-            let ang = Math.atan2(dy, dx);
-            moveVec.x = Math.cos(ang) * (d/(r.width/2));
-            moveVec.y = Math.sin(ang) * (d/(r.width/2));
-            joyKnob.style.transform = `translate(calc(-50% + ${Math.cos(ang)*d}px), calc(-50% + ${Math.sin(ang)*d}px))`;
-        }, { passive: false }); // { passive: false } để ngăn cuộn trang
-        window.addEventListener('touchend', () => { stickActive = false; moveVec = {x:0, y:0}; joyKnob.style.transform = 'translate(-50%, -50%)'; });
-
-        // Xử lý resize màn hình
-        window.addEventListener('resize', () => {
-            if (isGameRunning) {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                player.x = canvas.width / 2 - player.size / 2;
-                player.y = canvas.height / 2 - player.size / 2;
-            }
-        });
     </script>
 </body>
 </html>

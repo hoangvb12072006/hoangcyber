@@ -3,114 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoangKun - Online Multiplayer</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <title>Game Phi Thuyền - Gemini Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
     <style>
-        body { margin: 0; background: #050505; color: white; font-family: sans-serif; text-align: center; overflow: hidden; }
-        #game-container { position: relative; width: 100vw; height: 80vh; background: #111; border-bottom: 2px solid #00f2fe; }
-        .player { position: absolute; width: 20px; height: 20px; transition: all 0.1s linear; border-radius: 4px; }
-        .player-label { position: absolute; top: -20px; left: -10px; font-size: 10px; width: 50px; }
-        .controls { padding: 20px; display: flex; justify-content: center; gap: 10px; }
-        .btn { padding: 15px 25px; background: #333; color: white; border: none; border-radius: 10px; font-weight: bold; }
+        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
+        canvas { box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid #444; }
     </style>
 </head>
 <body>
 
-    <h2>MULTIPLAVER NEON WORLD 🌍</h2>
-    <p id="status">Đang kết nối server...</p>
-
-    <div id="game-container"></div>
-
-    <div class="controls">
-        <button class="btn" onclick="move('up')">UP</button>
-        <button class="btn" onclick="move('left')">LEFT</button>
-        <button class="btn" onclick="move('down')">DOWN</button>
-        <button class="btn" onclick="move('right')">RIGHT</button>
-    </div>
-
 <script>
-    // --- THAY THẾ CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY ---
-    const firebaseConfig = {
-        apiKey: "AIzaSy...",
-        authDomain: "your-project.firebaseapp.com",
-        databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-        projectId: "your-project",
-        storageBucket: "your-project.appspot.com",
-        messagingSenderId: "...",
-        appId: "..."
-    };
-    // --------------------------------------------------
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: { gravity: { y: 0 }, debug: false }
+    },
+    scene: { preload: preload, create: create, update: update }
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const playersRef = db.ref("players");
+const game = new Phaser.Game(config);
+let player, cursors, bullets, enemies, score = 0, scoreText, lastFired = 0;
 
-    let myId;
-    let myData = {
-        x: Math.floor(Math.random() * 200) + 50,
-        y: Math.floor(Math.random() * 200) + 50,
-        color: `hsl(${Math.random() * 360}, 70%, 60%)`,
-        name: "Player_" + Math.floor(Math.random() * 1000)
-    };
+function preload() {
+    // Sử dụng các placeholder graphics đơn giản
+    this.load.image('ship', 'https://labs.phaser.io/assets/sprites/shmup-ship.png');
+    this.load.image('bullet', 'https://labs.phaser.io/assets/sprites/bullets/bullet1.png');
+    this.load.image('enemy', 'https://labs.phaser.io/assets/sprites/asplode1.png');
+}
 
-    // Tạo ID cho người chơi hiện tại
-    const newPlayerRef = playersRef.push();
-    myId = newPlayerRef.key;
-    document.getElementById("status").innerText = "Bạn là: " + myData.name;
+function create() {
+    // 1. Tạo người chơi
+    player = this.physics.add.sprite(400, 500, 'ship').setCollideWorldBounds(true);
+    
+    // 2. Điều khiển
+    cursors = this.input.keyboard.createCursorKeys();
+    this.input.keyboard.on('keydown-SPACE', shootBullet, this);
 
-    // Cập nhật vị trí lên Firebase
-    newPlayerRef.set(myData);
+    // 3. Nhóm đạn và kẻ địch
+    bullets = this.physics.add.group({ classType: Phaser.Physics.Arcade.Image, maxSize: 20, runChildUpdate: true });
+    enemies = this.physics.add.group();
 
-    // Khi ngắt kết nối, xóa người chơi này
-    newPlayerRef.onDisconnect().remove();
+    // 4. Tạo kẻ địch định kỳ
+    this.time.addEvent({ delay: 1000, callback: spawnEnemy, callbackScope: this, loop: true });
 
-    // Lắng nghe dữ liệu từ những người chơi khác
-    playersRef.on("value", (snapshot) => {
-        const players = snapshot.val() || {};
-        const container = document.getElementById("game-container");
-        container.innerHTML = ""; // Vẽ lại toàn bộ thế giới
+    // 5. Va chạm
+    this.physics.add.overlap(bullets, enemies, hitEnemy, null, this);
+    this.physics.add.overlap(player, enemies, gameOver, null, this);
 
-        Object.keys(players).forEach(id => {
-            const p = players[id];
-            const div = document.createElement("div");
-            div.className = "player";
-            div.style.left = p.x + "px";
-            div.style.top = p.y + "px";
-            div.style.background = p.color;
-            div.style.boxShadow = `0 0 10px ${p.color}`;
-            
-            const label = document.createElement("div");
-            label.className = "player-label";
-            label.innerText = p.name + (id === myId ? " (Bạn)" : "");
-            div.appendChild(label);
-            
-            container.appendChild(div);
-        });
-    });
+    // 6. Hiển thị điểm
+    scoreText = this.add.text(16, 16, 'Điểm: 0', { fontSize: '32px', fill: '#fff' });
+}
 
-    // Hàm di chuyển
-    function move(dir) {
-        const step = 15;
-        if(dir === 'up') myData.y -= step;
-        if(dir === 'down') myData.y += step;
-        if(dir === 'left') myData.x -= step;
-        if(dir === 'right') myData.x += step;
+function update() {
+    // Di chuyển phi thuyền
+    if (cursors.left.isDown) player.setVelocityX(-300);
+    else if (cursors.right.isDown) player.setVelocityX(300);
+    else player.setVelocityX(0);
 
-        // Giới hạn biên màn hình
-        myData.x = Math.max(0, Math.min(window.innerWidth - 20, myData.x));
-        myData.y = Math.max(0, Math.min(window.innerHeight * 0.8 - 20, myData.y));
+    if (cursors.up.isDown) player.setVelocityY(-300);
+    else if (cursors.down.isDown) player.setVelocityY(300);
+    else player.setVelocityY(0);
 
-        newPlayerRef.update(myData);
+    // Xóa đạn bay ra ngoài màn hình
+    bullets.children.each(function(b) {
+        if (b.active && b.y < 0) b.destroy();
+    }, this);
+}
+
+function shootBullet() {
+    let bullet = bullets.get(player.x, player.y - 20, 'bullet');
+    if (bullet) {
+        bullet.setActive(true).setVisible(true);
+        bullet.body.velocity.y = -500;
     }
+}
 
-    // Điều khiển bằng phím mũi tên
-    window.addEventListener("keydown", (e) => {
-        if(e.key === "ArrowUp") move('up');
-        if(e.key === "ArrowDown") move('down');
-        if(e.key === "ArrowLeft") move('left');
-        if(e.key === "ArrowRight") move('right');
-    });
+function spawnEnemy() {
+    let x = Phaser.Math.Between(50, 750);
+    let enemy = enemies.create(x, -50, 'enemy');
+    enemy.setVelocityY(Phaser.Math.Between(150, 300));
+}
+
+function hitEnemy(bullet, enemy) {
+    bullet.destroy();
+    enemy.destroy();
+    score += 10;
+    scoreText.setText('Điểm: ' + score);
+}
+
+function gameOver() {
+    this.physics.pause();
+    player.setTint(0xff0000);
+    this.add.text(300, 250, 'GAME OVER', { fontSize: '64px', fill: '#ff0000' });
+    this.add.text(320, 320, 'F5 để chơi lại', { fontSize: '24px', fill: '#fff' });
+}
 </script>
+
 </body>
 </html>

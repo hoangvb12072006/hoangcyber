@@ -1,190 +1,408 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Necesse Mini By HoangKun</title>
-<style>
-body{margin:0;overflow:hidden;background:#000;font-family:monospace}
-button{
-  font-size:20px;
-  padding:10px 20px;
-  background:#8d6e63;
-  color:#fff;
-  border:3px solid #3d251e;
-}
-#menu,#pause,#craft{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.8);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:15px;z-index:10;
-}
-canvas{display:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NecesseGame Sinhton by HoangKun</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'VT323', monospace; overflow: hidden; touch-action: none; }
+        
+        /* --- GIAO DIỆN LOBBY GỐC --- */
+        #lobby-container {
+            width: 100vw; height: 100vh; position: fixed; top: 0; left: 0;
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/11/pixels-game-thumb.jpg');
+            background-size: cover; background-position: center; image-rendering: pixelated;
+            display: flex; justify-content: center; align-items: center; z-index: 100;
+        }
+        .content-area { width: 90%; height: 85%; position: relative; max-width: 1200px; }
+        .header { position: absolute; top: 0; left: 0; color: #fff; text-shadow: 4px 4px 0px #000; }
+        .header h1 { font-size: 4rem; letter-spacing: 2px; }
+        .header p { font-size: 2rem; color: #f4e4bc; }
+
+        .stats-area { position: absolute; top: 0; right: 0; display: flex; gap: 20px; }
+        .stat-box {
+            background: rgba(93, 64, 55, 0.9); border: 4px solid #3d251e; padding: 8px 20px;
+            color: #f4e4bc; font-size: 2rem; box-shadow: 5px 5px 0px #000; display: flex; align-items: center; gap: 10px;
+        }
+
+        .menu-options { position: absolute; bottom: 0; right: 0; display: flex; flex-direction: column; gap: 15px; }
+        .name-input { width: 220px; height: 45px; background: #3d251e; border: 4px solid #8d6e63; color: #f4e4bc; font-family: 'VT323'; font-size: 1.5rem; text-align: center; outline: none; margin-bottom: 5px; }
+
+        .wood-button {
+            width: 220px; height: 65px; background: #8d6e63; border: 4px solid #5d4037; border-bottom: 8px solid #2d1b16;
+            color: #f4e4bc; font-size: 2.2rem; cursor: pointer; text-shadow: 2px 2px 0px #000;
+            display: flex; justify-content: center; align-items: center; transition: 0.1s;
+        }
+        .wood-button:hover { background: #a1887f; transform: translateY(-3px); }
+        .wood-button:active { transform: translateY(5px); border-bottom: 2px solid #2d1b16; }
+
+        /* --- BẢNG CÀI ĐẶT ĐỦ Ý --- */
+        #settings-modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 400px; background: #5d4037; border: 6px solid #3d251e; box-shadow: 10px 10px 0px #000;
+            z-index: 1000; padding: 20px; color: #f4e4bc;
+        }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 1.8rem; }
+        #overlay-bg { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 998; }
+
+        /* --- GAME & UI --- */
+        #game-canvas { display: none; background: #2d6a4f; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 10; image-rendering: pixelated; } /* Thêm pixelated */
+        #ui-controls { display: none; position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: 50; pointer-events: none; }
+        .joystick-base { pointer-events: auto; position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: rgba(255,255,255,0.2); border-radius: 50%; }
+        .joystick-knob { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; background: rgba(255,255,255,0.5); border-radius: 50%; transform: translate(-50%, -50%); }
+        .action-btn { pointer-events: auto; position: absolute; bottom: 50px; right: 50px; width: 80px; height: 80px; background: #8d6e63; border: 4px solid #5d4037; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #f4e4bc; font-size: 1.5rem; box-shadow: 0 6px 0 #2d1b16; cursor: pointer; }
+
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; color: #f4e4bc; }
+        .pixel-spinner { width: 60px; height: 60px; border: 8px solid #5d4037; border-top: 8px solid #f4e4bc; animation: spin 1s steps(8) infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
-
-<body ontouchstart="">
-
-<div id="menu">
-  <h1 style="color:#fff">NECESSE MINI</h1>
-  <button onclick="startGame()">START GAME</button>
+<body onclick="initAudio()">
+<div id="pause-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="background: #5d4037; border: 6px solid #3d251e; padding: 30px; text-align: center; color: #f4e4bc; box-shadow: 10px 10px 0px #000;">
+        <h2 style="font-size: 3rem; margin: 0 0 20px 0;">TẠM DỪNG</h2>
+        <div class="wood-button" onclick="togglePause()" style="width: 200px; padding: 10px; background: #8d6e63; margin-bottom: 10px; cursor: pointer;">TIẾP TỤC</div>
+        <div class="wood-button" onclick="location.reload()" style="width: 200px; padding: 10px; background: #e74c3c; cursor: pointer;">VỀ SẢNH</div>
+    </div>
 </div>
 
-<div id="pause" style="display:none">
-  <h2 style="color:white">PAUSE</h2>
-  <button onclick="resume()">TIẾP TỤC</button>
-  <button onclick="backMenu()">VỀ SẢNH</button>
+<div onclick="togglePause()" style="position: fixed; top: 20px; right: 20px; z-index: 999; width: 45px; height: 45px; background: #8d6e63; border: 3px solid #3d251e; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold;">||</div>
+
+    <audio id="bgMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg"></audio>
+    <audio id="clickSound"><source src="https://www.fesliyanstudios.com/play-mp3/6" type="audio/mpeg"></audio>
+    <audio id="hitSound"><source src="https://assets.mixkit.co/active_storage/sfx/1393/1393-preview.mp3" type="audio/mpeg"></audio> <div id="overlay-bg" onclick="toggleSettings()"></div>
+
+    <div id="settings-modal">
+        <div style="font-size: 3rem; text-align: center; margin-bottom: 20px; border-bottom: 4px solid #3d251e;">CÀI ĐẶT</div>
+        <div class="setting-row"><span>ÂM THANH</span><input type="range" id="volSfx" min="0" max="1" step="0.1" value="0.8"></div>
+        <div class="setting-row"><span>NHẠC NỀN</span><input type="range" id="volMusic" min="0" max="1" step="0.1" value="0.5" onchange="updateVol()"></div>
+        <div class="wood-button" style="width: 100%; height: 50px;" onclick="playClickSound(); toggleSettings()">LƯU & ĐÓNG</div>
+    </div>
+
+    <div id="lobby-container">
+        <div id="loading-overlay"><div class="pixel-spinner"></div><div style="font-size: 3rem; margin-top: 20px;">ĐANG KẾT NỐI SEVER...VUI LÒNG ĐỢI </div></div>
+        <div class="content-area">
+            <div class="header"><h1>NECESSE SINH TỒN</h1><p>By HoangKun</p></div>
+            <div class="stats-area">
+                <div class="stat-box">GOLD: <span id="goldVal">0</span></div>
+                <div class="stat-box" style="border-color: #1a237e;">💎: <span id="diaVal">0</span></div>
+            </div>
+            <div class="menu-options">
+                <input type="text" id="charName" class="name-input" placeholder="TÊN NHÂN VẬT..." maxlength="12">
+                <div class="wood-button" onclick="playClickSound(); startGame()">THẾ GIỚI MỚI</div>
+                <div class="wood-button" onclick="playClickSound()">TIẾP TỤC</div>
+                <div class="wood-button" onclick="playClickSound(); toggleSettings()">CÀI ĐẶT</div>
+                <div class="wood-button" onclick="playClickSound()">THOÁT</div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+    <div id="ui-controls">
+        <div class="joystick-base" id="joyBase"><div class="joystick-knob" id="joyKnob"></div></div>
+        <div class="action-btn" onmousedown="doAction()" ontouchstart="doAction()">HIT</div>
+    </div> 
+    <div id="pause-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+    <div style="background: #5d4037; border: 6px solid #3d251e; padding: 30px; text-align: center; color: #f4e4bc; box-shadow: 10px 10px 0px #000; font-family: 'VT323', monospace;">
+        <h2 style="font-size: 3rem; margin: 0 0 20px 0;">TẠM DỪNG</h2>
+        <div class="wood-button" onclick="togglePause()" style="width: 200px; padding: 15px; background: #8d6e63; margin-bottom: 15px; cursor: pointer; border: 3px solid #3d251e;">TIẾP TỤC</div>
+        <div class="wood-button" onclick="location.reload()" style="width: 200px; padding: 15px; background: #e74c3c; cursor: pointer; border: 3px solid #3d251e;">VỀ SẢNH</div>
+    </div>
 </div>
 
-<div id="craft" style="display:none">
-  <h2 style="color:white">CRAFT</h2>
-  <button onclick="craftSword()">Kiếm (5 Gỗ)</button>
-  <button onclick="closeCraft()">ĐÓNG</button>
-</div>
+<div onclick="togglePause()" style="position: fixed; top: 20px; right: 20px; z-index: 999; width: 45px; height: 45px; background: #8d6e63; border: 3px solid #3d251e; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; font-family: Arial;">||</div>
 
-<canvas id="game"></canvas>
+    <script>
+    let isPaused = false;
 
-<script>
-/* ====== CORE ====== */
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-/* ====== GAME STATE ====== */
-let running=false, paused=false;
-let keys={};
-
-/* ====== PLAYER ====== */
-const player={
-  x:1000,y:1000,
-  size:32,speed:3,
-  frame:0,dir:0,
-  hasSword:false,
-  hp:100
-};
-
-/* ====== WORLD ====== */
-const trees=[];
-const slimes=[];
-for(let i=0;i<50;i++){
-  trees.push({x:Math.random()*2000,y:Math.random()*2000,hp:3});
+function togglePause() {
+    isPaused = !isPaused;
+    const modal = document.getElementById('pause-modal');
+    if (isPaused) {
+        modal.style.display = 'flex';
+        if(bgMusic) bgMusic.pause(); // Tạm dừng nhạc
+    } else {
+        modal.style.display = 'none';
+        if(bgMusic) bgMusic.play(); // Chơi tiếp nhạc
+        gameLoop(); // Chạy lại vòng lặp game
+    }
 }
-for(let i=0;i<10;i++){
-  slimes.push({x:Math.random()*2000,y:Math.random()*2000,hp:3});
-}
 
-/* ====== INVENTORY ====== */
-const inv={wood:0};
-
-/* ====== CONTROLS ====== */
-addEventListener("keydown",e=>{
-  keys[e.code]=true;
-  if(e.code==="Escape") togglePause();
+// Bấm phím ESC để tạm dừng
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape') togglePause();
 });
-addEventListener("keyup",e=>keys[e.code]=false);
 
-/* ====== MENU ====== */
-function startGame(){
-  document.getElementById("menu").style.display="none";
-  canvas.style.display="block";
-  running=true;
-  loop();
-}
-function togglePause(){
-  paused=!paused;
-  document.getElementById("pause").style.display=paused?"flex":"none";
-}
-function resume(){ paused=false; document.getElementById("pause").style.display="none"; }
-function backMenu(){ location.reload(); }
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const clickSound = document.getElementById('clickSound');
+        const hitSound = document.getElementById('hitSound'); // Âm thanh đánh
+        const bgMusic = document.getElementById('bgMusic');
+        
+        let stats = { gold: 0, diamonds: 0 };
+        let player = { 
+            x: 0, y: 0, 
+            worldX: 0, worldY: 0, // Vị trí trong thế giới lớn
+            size: 32, // Kích thước nhân vật
+            speed: 3, 
+            name: "", 
+            isHitting: false,
+            image: new Image()
+        };
+        player.image.src = 'assets/player.png'; // Đảm bảo đường dẫn đúng!
 
-/* ====== CRAFT ====== */
-function craftSword(){
-  if(inv.wood>=5){
-    inv.wood-=5;
-    player.hasSword=true;
-    alert("Đã chế tạo kiếm!");
-  }
-}
-function closeCraft(){ document.getElementById("craft").style.display="none"; }
+        let isGameRunning = false;
+        let keys = {};
+        let moveVec = { x: 0, y: 0 };
 
-/* ====== ATTACK ====== */
-addEventListener("click",attack);
-function attack(){
-  if(!running||paused) return;
-  trees.forEach((t,i)=>{
-    if(dist(player,t)<50){
-      t.hp--;
-      if(t.hp<=0){ trees.splice(i,1); inv.wood++; }
-    }
-  });
-  slimes.forEach((s,i)=>{
-    if(dist(player,s)<50){
-      s.hp--;
-      if(s.hp<=0) slimes.splice(i,1);
-    }
-  });
-}
+        // --- CẤU HÌNH BẢN ĐỒ ---
+        const TILE_SIZE = 32; // Kích thước mỗi ô gạch
+        const WORLD_WIDTH = 2000; // Chiều rộng thế giới ảo
+        const WORLD_HEIGHT = 2000; // Chiều cao thế giới ảo
 
-/* ====== LOOP ====== */
-function loop(){
-  if(!running) return;
-  if(!paused){
-    update();
-    draw();
-  }
-  requestAnimationFrame(loop);
-}
+        const mapTiles = []; // Mảng chứa dữ liệu các ô gạch trên bản đồ
+        const entities = []; // Mảng chứa các vật thể như cây, đá
 
-/* ====== UPDATE ====== */
-function update(){
-  let dx=0,dy=0;
-  if(keys.KeyW)dy--;
-  if(keys.KeyS)dy++;
-  if(keys.KeyA)dx--;
-  if(keys.KeyD)dx++;
-  player.x+=dx*player.speed;
-  player.y+=dy*player.speed;
-  player.frame=(player.frame+1)%20;
-}
+        const grassTile = new Image(); grassTile.src = 'assets/grass.png'; // Ảnh cỏ
+        const treeSprite = new Image(); treeSprite.src = 'assets/tree.png'; // Ảnh cây
 
-/* ====== DRAW ====== */
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const camX=player.x-canvas.width/2;
-  const camY=player.y-canvas.height/2;
+        // Tạo bản đồ và các vật thể
+        function generateWorld() {
+            // Đổ nền cỏ cho toàn bộ bản đồ
+            for (let y = 0; y < WORLD_HEIGHT / TILE_SIZE; y++) {
+                for (let x = 0; x < WORLD_WIDTH / TILE_SIZE; x++) {
+                    mapTiles.push({ x: x * TILE_SIZE, y: y * TILE_SIZE, type: 'grass' });
+                }
+            }
 
-  // grass
-  ctx.fillStyle="#2d6a4f";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+            // Rải cây ngẫu nhiên
+            for (let i = 0; i < 50; i++) { // 50 cây
+                let x = Math.random() * (WORLD_WIDTH - TILE_SIZE);
+                let y = Math.random() * (WORLD_HEIGHT - TILE_SIZE);
+                entities.push({ x: x, y: y, type: 'tree', width: 48, height: 48, hp: 10 }); // Cây có HP
+            }
+        }
 
-  // trees
-  ctx.fillStyle="#3e2723";
-  trees.forEach(t=>{
-    ctx.fillRect(t.x-camX,t.y-camY,32,32);
-  });
+        // --- CÁC HÀM XỬ LÝ ÂM THANH & UI ---
+        function playClickSound() { 
+            clickSound.volume = document.getElementById('volSfx').value;
+            clickSound.currentTime = 0;
+            clickSound.play();
+        }
+        function playHitSound() {
+            hitSound.volume = document.getElementById('volSfx').value;
+            hitSound.currentTime = 0;
+            hitSound.play();
+        }
 
-  // slimes
-  ctx.fillStyle="#4caf50";
-  slimes.forEach(s=>{
-    ctx.fillRect(s.x-camX,s.y-camY,28,28);
-  });
+        function initAudio() { if(bgMusic.paused) { bgMusic.volume = 0.5; bgMusic.play(); } }
+        function updateVol() { bgMusic.volume = document.getElementById('volMusic').value; }
 
-  // player (animation)
-  ctx.fillStyle=player.hasSword?"#ffd54f":"#ff9800";
-  ctx.fillRect(canvas.width/2,canvas.height/2,32,32);
+        function toggleSettings() {
+            let isShow = document.getElementById('settings-modal').style.display === 'block';
+            document.getElementById('settings-modal').style.display = isShow ? 'none' : 'block';
+            document.getElementById('overlay-bg').style.display = isShow ? 'none' : 'block';
+        }
 
-  // HUD
-  ctx.fillStyle="#fff";
-  ctx.fillText("Gỗ: "+inv.wood,20,30);
-  ctx.fillText("ESC: Pause | Click: Đánh | C: Craft",20,50);
-}
+        // --- HÀM CHUYỂN CẢNH GAME ---
+        function startGame() {
+            player.name = document.getElementById('charName').value || "Hành Giả";
+            document.getElementById('loading-overlay').style.display = 'flex';
+            
+            // Đảm bảo ảnh đã tải xong trước khi vào game
+            Promise.all([
+                new Promise(resolve => player.image.onload = resolve),
+                new Promise(resolve => grassTile.onload = resolve),
+                new Promise(resolve => treeSprite.onload = resolve)
+            ]).then(() => {
+                setTimeout(() => {
+                    document.getElementById('lobby-container').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    canvas.style.display = 'block';
+                    if ('ontouchstart' in window) document.getElementById('ui-controls').style.display = 'block';
+                    
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    player.x = canvas.width / 2 - player.size / 2; // Giữa màn hình
+                    player.y = canvas.height / 2 - player.size / 2; // Giữa màn hình
+                    player.worldX = WORLD_WIDTH / 2; // Bắt đầu ở giữa thế giới
+                    player.worldY = WORLD_HEIGHT / 2; // Bắt đầu ở giữa thế giới
 
-/* ====== UTILS ====== */
-function dist(a,b){
-  return Math.hypot(a.x-b.x,a.y-b.y);
-}
-</script>
+                    generateWorld(); // Tạo bản đồ
+                    isGameRunning = true;
+                    requestAnimationFrame(gameLoop);
+                }, 1500);
+            });
+        }
+
+        // --- HÀNH ĐỘNG CỦA NGƯỜI CHƠI ---
+        function doAction() {
+            playHitSound(); // Phát tiếng đánh
+            player.isHitting = true;
+            stats.gold += 10;
+            document.getElementById('goldVal').innerText = stats.gold;
+            
+            // Xử lý chặt cây (kiểm tra va chạm với cây gần nhất)
+            for (let i = entities.length - 1; i >= 0; i--) {
+                let ent = entities[i];
+                if (ent.type === 'tree' && isColliding(player, ent, 50)) { // Trong phạm vi 50px
+                    ent.hp -= 5; // Giảm máu cây
+                    if (ent.hp <= 0) {
+                        entities.splice(i, 1); // Xóa cây
+                        stats.gold += 50; // Thưởng vàng khi chặt xong cây
+                        document.getElementById('goldVal').innerText = stats.gold;
+                    }
+                    break; 
+                }
+            }
+
+            setTimeout(() => player.isHitting = false, 150);
+        }
+
+        // Kiểm tra va chạm đơn giản
+        function isColliding(obj1, obj2, margin = 0) {
+            return obj1.worldX < obj2.x + obj2.width + margin &&
+                   obj1.worldX + obj1.size + margin > obj2.x &&
+                   obj1.worldY < obj2.y + obj2.height + margin &&
+                   obj1.worldY + obj1.size + margin > obj2.y;
+        }
+
+
+        // --- CẬP NHẬT TRẠNG THÁI GAME ---
+        function update() {
+            if(!isGameRunning) return;
+            
+            let dx = 0;
+            let dy = 0;
+
+            // PC Controls
+            if(keys['KeyW'] || keys['ArrowUp']) dy -= 1;
+            if(keys['KeyS'] || keys['ArrowDown']) dy += 1;
+            if(keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
+            if(keys['KeyD'] || keys['ArrowRight']) dx += 1;
+            
+            // Mobile Joystick Controls
+            dx += moveVec.x;
+            dy += moveVec.y;
+
+            // Chuẩn hóa vector di chuyển để tốc độ không đổi khi đi chéo
+            if (dx !== 0 || dy !== 0) {
+                let magnitude = Math.sqrt(dx*dx + dy*dy);
+                dx /= magnitude;
+                dy /= magnitude;
+            }
+
+            // Cập nhật vị trí nhân vật trong thế giới
+            player.worldX += dx * player.speed;
+            player.worldY += dy * player.speed;
+
+            // Giới hạn nhân vật trong biên thế giới
+            player.worldX = Math.max(0, Math.min(WORLD_WIDTH - player.size, player.worldX));
+            player.worldY = Math.max(0, Math.min(WORLD_HEIGHT - player.size, player.worldY));
+        }
+
+        // --- VẼ CÁC ĐỐI TƯỢNG LÊN MÀN HÌNH ---
+        function draw() {
+            if(!isGameRunning) return;
+
+            // Camera offset (parallax scrolling)
+            let camX = player.worldX - canvas.width / 2;
+            let camY = player.worldY - canvas.height / 2;
+
+            // 1. Vẽ bản đồ (ô cỏ)
+            ctx.fillStyle = '#2d6a4f'; // Màu nền nếu không có cỏ
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            mapTiles.forEach(tile => {
+                let screenX = tile.x - camX;
+                let screenY = tile.y - camY;
+                // Chỉ vẽ những ô nằm trong tầm nhìn
+                if (screenX + TILE_SIZE > 0 && screenX < canvas.width &&
+                    screenY + TILE_SIZE > 0 && screenY < canvas.height) {
+                    ctx.drawImage(grassTile, screenX, screenY, TILE_SIZE, TILE_SIZE);
+                }
+            });
+
+            // 2. Vẽ các vật thể (cây cối)
+            entities.forEach(ent => {
+                let screenX = ent.x - camX;
+                let screenY = ent.y - camY;
+                // Chỉ vẽ những vật thể nằm trong tầm nhìn
+                if (screenX + ent.width > 0 && screenX < canvas.width &&
+                    screenY + ent.height > 0 && screenY < canvas.height) {
+                    if (ent.type === 'tree') {
+                        ctx.drawImage(treeSprite, screenX, screenY, ent.width, ent.height);
+                        // Vẽ thanh máu cho cây khi bị đánh
+                        if (ent.hp < 10) {
+                             ctx.fillStyle = 'red';
+                             ctx.fillRect(screenX, screenY - 5, ent.width * (ent.hp/10), 3);
+                             ctx.strokeStyle = 'black';
+                             ctx.strokeRect(screenX, screenY - 5, ent.width, 3);
+                        }
+                    }
+                }
+            });
+
+            // 3. Vẽ nhân vật (luôn ở giữa màn hình)
+            // ctx.fillStyle = player.isHitting ? '#ffeb3b' : '#e67e22'; // Màu nhân vật cũ
+            // ctx.fillRect(player.x, player.y, player.size, player.size);
+            
+            // Vẽ ảnh nhân vật
+            ctx.drawImage(player.image, player.x, player.y, player.size, player.size);
+            
+            // Hiệu ứng khi đánh (đổi màu viền)
+            if (player.isHitting) {
+                ctx.strokeStyle = 'yellow';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(player.x, player.y, player.size, player.size);
+            }
+
+            ctx.fillStyle = 'white'; ctx.font = '20px VT323'; ctx.textAlign = 'center';
+            ctx.fillText(player.name, player.x + player.size/2, player.y - 10);
+        }
+
+        // --- VÒNG LẶP GAME (GAME LOOP) ---
+        function gameLoop() {
+            update();
+            draw();
+            if(isGameRunning) requestAnimationFrame(gameLoop);
+        }
+
+        // --- XỬ LÝ SỰ KIỆN ---
+        window.addEventListener('keydown', e => {
+            keys[e.code] = true;
+            if(e.code === 'Space' && isGameRunning) doAction(); // Space để đánh trên PC
+        });
+        window.addEventListener('keyup', e => keys[e.code] = false);
+
+        // JOYSTICK LOGIC
+        let stickActive = false;
+        const joyBase = document.getElementById('joyBase');
+        const joyKnob = document.getElementById('joyKnob');
+        joyBase.addEventListener('touchstart', e => { stickActive = true; e.preventDefault(); }); // Ngăn cuộn trang
+        window.addEventListener('touchmove', e => {
+            if (!stickActive) return;
+            let t = e.touches[0]; let r = joyBase.getBoundingClientRect();
+            let dx = t.clientX - (r.left + r.width/2); let dy = t.clientY - (r.top + r.height/2);
+            let d = Math.min(Math.sqrt(dx*dx+dy*dy), r.width/2);
+            let ang = Math.atan2(dy, dx);
+            moveVec.x = Math.cos(ang) * (d/(r.width/2));
+            moveVec.y = Math.sin(ang) * (d/(r.width/2));
+            joyKnob.style.transform = `translate(calc(-50% + ${Math.cos(ang)*d}px), calc(-50% + ${Math.sin(ang)*d}px))`;
+        }, { passive: false }); // { passive: false } để ngăn cuộn trang
+        window.addEventListener('touchend', () => { stickActive = false; moveVec = {x:0, y:0}; joyKnob.style.transform = 'translate(-50%, -50%)'; });
+
+        // Xử lý resize màn hình
+        window.addEventListener('resize', () => {
+            if (isGameRunning) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                player.x = canvas.width / 2 - player.size / 2;
+                player.y = canvas.height / 2 - player.size / 2;
+            }
+        });
+    </script>
 </body>
 </html>

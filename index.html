@@ -323,6 +323,14 @@
     </div>
 </footer>
   </div>
+
+    <div id="char-creator" style="position: fixed; inset: 0; background: #1a1a1a; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Press Start 2P';">
+    <h2 style="color: #facc15; font-size: 1rem; margin-bottom: 30px;">TẠO NHÂN VẬT</h2>
+    <input type="text" id="player-name-input" placeholder="NHẬP TÊN..." style="padding: 10px; border: 4px solid #fff; background: #000; color: #fff; font-family: 'Press Start 2P'; margin-bottom: 20px; outline: none; width: 250px; text-align: center;">
+    
+    <button onclick="confirmChar()" style="padding: 15px 30px; background: #22c55e; color: #fff; border: 4px solid #166534; cursor: pointer; font-family: 'Press Start 2P'; font-size: 0.7rem;">XÁC NHẬN</button>
+</div>
+    
   <div id="game-dashboard" style="display: none; padding: 40px 5%; text-align: center; min-height: 100vh; position: relative; overflow: hidden;">
     <div id="snow-container" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 1;"></div>
 
@@ -379,7 +387,7 @@
                 <i class="fas fa-hammer" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
                 <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">BẮT ĐẦU</h3>
             </div>
-            <div class="pixel-btn" onclick="playClick()" style="background: #854d0e; border: 4px solid #fbbf24; padding: 15px 5px; cursor: pointer;">
+            <div class="pixel-btn" onclick="enterGame()" style="background: #854d0e; border: 4px solid #fbbf24; padding: 15px 5px; cursor: pointer;">
                 <i class="fas fa-box-open" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
                 <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">KHO ĐỒ</h3>
             </div>
@@ -388,6 +396,28 @@
                 <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">THOÁT</h3>
             </div>
         </div>
+    </div>
+</div>
+
+    <div id="play-screen" style="display: none; position: fixed; inset: 0; background: #000 url('https://img.itch.zone/aW1nLzExMDUwOTI5LnBuZw==/original/8O6%2FhX.png') no-repeat center; background-size: cover; z-index: 2000; flex-direction: column; align-items: center; justify-content: center;">
+    
+    <div style="position: absolute; top: 20px; background: rgba(0,0,0,0.8); padding: 10px; border: 2px solid #facc15; color: #fff; font-family: 'Press Start 2P'; font-size: 0.6rem;">
+        📍 KHU VỰC: RỪNG NGUYÊN SINH
+    </div>
+
+    <p style="color: #fff; font-family: 'Press Start 2P'; font-size: 0.8rem; text-shadow: 2px 2px #000;">🌲 ÔNG ĐÃ VÀO RỪNG! 🌲</p>
+
+    <button onclick="backToLobby()" style="position: absolute; bottom: 30px; padding: 10px; font-family: 'Press Start 2P'; font-size: 0.5rem; background: #ef4444; color: #fff; border: 3px solid #b91c1c; cursor: pointer;">QUAY LẠI SẢNH</button>
+</div>
+
+<div id="inventory-screen" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; flex-direction: column; align-items: center; justify-content: center; font-family: 'Press Start 2P';">
+    <div style="background: #2d1e12; border: 6px solid #854d0e; padding: 25px; width: 85%; max-width: 350px; box-shadow: 0 0 20px rgba(0,0,0,1); position: relative;">
+        <h2 style="color: #facc15; font-size: 0.8rem; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #854d0e; padding-bottom: 10px;">🎒 KHO ĐỒ CỦA BẠN</h2>
+        
+        <div id="inv-items" style="display: grid; grid-template-columns: 1fr; gap: 12px; color: #fff; font-size: 0.6rem;">
+            </div>
+
+        <button onclick="closeInv()" style="margin-top: 25px; width: 100%; padding: 12px; background: #ef4444; color: #fff; border: 4px solid #991b1b; cursor: pointer; font-family: 'Press Start 2P'; font-size: 0.6rem;">ĐÓNG KHO ĐỒ</button>
     </div>
 </div>
 
@@ -489,4 +519,45 @@ let progress = 0;
         }
     }, 50);
 }
+    // Hàm mở kho đồ
+function openInv() {
+    playClick();
+    const invItems = document.getElementById('inv-items');
+    if(invItems) {
+        invItems.innerHTML = `
+            <div style="background:rgba(0,0,0,0.5); padding:12px; border:2px solid #fb923c; margin-bottom:10px; display:flex; justify-content:space-between;">
+                <span>🪵 GỖ:</span> <span>${wood}</span>
+            </div>
+            <div style="background:rgba(0,0,0,0.5); padding:12px; border:2px solid #94a3b8; margin-bottom:10px; display:flex; justify-content:space-between;">
+                <span>🪨 ĐÁ:</span> <span>${stone}</span>
+            </div>
+            <div style="background:rgba(0,0,0,0.5); padding:12px; border:2px solid #facc15; margin-bottom:10px; display:flex; justify-content:space-between;">
+                <span>💰 VÀNG:</span> <span>${gold}</span>
+            </div>
+        `;
+    }
+    document.getElementById('inventory-screen').style.display = 'flex';
+}
+
+// Hàm đóng kho đồ
+function closeInv() {
+    playClick();
+    document.getElementById('inventory-screen').style.display = 'none';
+}
+
+// Hàm vào rừng (Chuyển cảnh)
+function enterGame() {
+    playClick();
+    document.getElementById('game-dashboard').style.display = 'none';
+    document.getElementById('play-screen').style.display = 'flex';
+}
+
+// Hàm quay lại sảnh (Thoát khỏi rừng)
+function backToLobby() {
+    playClick();
+    document.getElementById('play-screen').style.display = 'none';
+    document.getElementById('game-dashboard').style.display = 'block';
+}
 </script>
+</body>
+</html>

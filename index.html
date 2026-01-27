@@ -3,180 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Quest - New Adventure</title>
+    <title>Pixel Quest - Official Site</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
         :root {
-            --primary: #ff4b6b;
-            --secondary: #38bdf8;
+            --primary: #ff4b6b; /* Màu đỏ hồng neon */
+            --secondary: #38bdf8; /* Màu xanh nước biển sáng */
             --bg-dark: #0f172a;
-            --panel: rgba(15, 23, 42, 0.9);
+            --panel: rgba(30, 41, 59, 0.9);
+            --shadow: #000000;
         }
+
+        * { box-sizing: border-box; }
 
         body {
-            margin: 0; padding: 0;
+            margin: 0;
             font-family: 'Pixelify Sans', sans-serif;
-            background: var(--bg-dark);
-            /* Ảnh nền rừng Pixel Necesse chất lượng cao */
-            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
-                              url('https://i.redd.it/pixel-art-forest-background-v0-x1v59y2l16bb1.png?width=1280&format=png&auto=webp&s=84992497645f061956637e174066922378997a34');
-            background-size: cover; background-attachment: fixed;
-            color: white; image-rendering: pixelated; overflow-x: hidden;
+            background-color: var(--bg-dark);
+            /* Ảnh nền rừng pixel xịn */
+            background-image: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)), 
+                              url('https://wallpaperaccess.com/full/3591276.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            image-rendering: pixelated;
+            overflow-x: hidden;
         }
 
-        /* --- LANDING PAGE --- */
-        #landing-page { transition: 0.6s ease; text-align: center; padding-bottom: 100px; }
-
+        /* --- HEADER --- */
         header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 8%; background: rgba(0,0,0,0.8); border-bottom: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 4px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .hero { padding: 100px 20px; }
+        .logo {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-shadow: 3px 3px 0 #000;
+            transition: 0.3s;
+        }
+
+        .logo:hover {
+            filter: drop-shadow(0 0 10px var(--primary));
+            transform: scale(1.05);
+        }
+
+        nav a {
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            text-decoration: none;
+            font-size: 0.7rem;
+            margin-left: 20px;
+            transition: 0.3s;
+        }
+
+        nav a:hover { color: var(--secondary); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 120px 20px;
+        }
+
         .hero h1 {
-            font-family: 'Press Start 2P'; font-size: 3rem; color: var(--primary);
-            text-shadow: 6px 6px 0px #000; margin-bottom: 40px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 3.5rem;
+            color: var(--primary);
+            line-height: 1.4;
+            letter-spacing: 5px;
+            margin-bottom: 25px;
+            /* Viền đen cực dầy giúp chữ nét căng */
+            text-shadow: 
+                6px 6px 0px #000,
+                -2px -2px 0px #000,
+                2px -2px 0px #000,
+                -2px 2px 0px #000,
+                0 0 20px rgba(255, 75, 107, 0.4);
             animation: float 3s ease-in-out infinite;
         }
 
-        /* Ô nhập tên nhân vật */
-        .input-group { margin-bottom: 30px; }
-        .input-group input {
-            font-family: 'Press Start 2P'; padding: 20px; font-size: 0.8rem;
-            border: 4px solid var(--secondary); background: #1e293b; color: white;
-            width: 350px; text-align: center; outline: none; box-shadow: 6px 6px 0 #000;
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-shadow: 2px 2px 4px #000;
+            color: #cbd5e1;
         }
 
+        /* --- NÚT BẤM HIỆN ĐẠI PHÁT SÁNG --- */
         .btn-play {
-            font-family: 'Press Start 2P'; background: var(--primary); color: white;
-            padding: 25px 60px; border: none; cursor: pointer;
-            box-shadow: 6px 6px 0 #000; transition: 0.2s;
-        }
-        .btn-play:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
-
-        /* --- DASHBOARD --- */
-        #game-dashboard { display: none; padding: 40px 8%; animation: fadeIn 1s; }
-
-        .dashboard-grid {
-            display: grid; grid-template-columns: 280px 1fr 300px; gap: 20px;
-        }
-
-        .pixel-card {
-            background: var(--panel); border: 4px solid #334155; padding: 20px;
-            box-shadow: 8px 8px 0 #000;
+            font-family: 'Press Start 2P', cursive;
+            background: var(--primary);
+            color: white;
+            padding: 25px 50px;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 6px 6px 0 var(--shadow);
+            transition: all 0.2s ease;
+            overflow: hidden;
         }
 
-        .stat-bar {
-            height: 20px; background: #334155; border: 2px solid #000;
-            margin-bottom: 15px; position: relative;
+        .btn-play:hover {
+            transform: scale(1.05) translateY(-5px);
+            background-color: #ff6b81;
+            box-shadow: 0 0 30px var(--primary); /* Glow hiện đại */
         }
-        .fill-hp { background: #ff4b6b; width: 20%; height: 100%; } /* HP thấp lúc đầu */
-        .fill-mp { background: #38bdf8; width: 0%; height: 100%; }   /* MP về 0 */
 
-        .nav-item {
-            display: block; width: 100%; padding: 15px; margin-bottom: 10px;
-            background: #1e293b; border: 2px solid transparent; color: white;
-            font-family: 'Press Start 2P'; font-size: 0.6rem; text-align: left; cursor: pointer;
+        .btn-play:active {
+            transform: scale(0.95);
+            filter: brightness(1.5); /* Nháy sáng khi bấm */
         }
-        .nav-item:hover { border-color: var(--secondary); color: var(--secondary); }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Hiệu ứng tia sáng chạy qua nút */
+        .btn-play::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .btn-play:hover::before { left: 150%; }
 
-        .hidden { display: none !important; }
+        /* --- CÁC Ô TÍNH NĂNG --- */
+        .content {
+            padding: 80px 8%;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2rem;
+            color: var(--secondary);
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 4px solid #334155;
+            padding: 40px 20px;
+            box-shadow: 8px 8px 0 var(--shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3); /* Glow xanh */
+        }
+
+        .card i {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .card:hover i {
+            transform: rotate(10deg) scale(1.2);
+            color: var(--secondary);
+        }
+
+        .card h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .card p {
+            color: #94a3b8;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Hiệu ứng trôi lơ lửng cho tiêu đề */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: rgba(0,0,0,0.8);
+            border-top: 4px solid var(--primary);
+            font-size: 0.9rem;
+        }
+
     </style>
 </head>
 <body>
 
-    <div id="landing-page">
-        <header>
-            <div style="font-family:'Press Start 2P'; color:var(--primary);">PIXEL QUEST</div>
-            <div style="font-family:'Press Start 2P'; font-size:0.7rem;">WIKI | DISCORD</div>
-        </header>
+    <header>
+        <a href="#" class="logo">PIXEL QUEST</a>
+        <nav>
+            <a href="#">TRANG CHỦ</a>
+            <a href="#">WIKI</a>
+            <a href="#">DISCORD</a>
+        </nav>
+    </header>
 
-        <div class="hero">
-            <h1>KHÁM PHÁ<br>THẾ GIỚI PIXEL</h1>
-            
-            <div class="input-group">
-                <input type="text" id="nameInput" placeholder="NHẬP TÊN NHÂN VẬT..." maxlength="12">
-            </div>
-
-            <button class="btn-play" onclick="enterGame()">
-                CHƠI NGAY <i class="fas fa-gamepad"></i>
-            </button>
-        </div>
+    <div class="hero">
+        <h1>KHÁM PHÁ<br>THẾ GIỚI PIXEL</h1>
+        <p>Sinh tồn, xây dựng và chinh phục những hầm ngục tăm tối nhất. Trải nghiệm đỉnh cao của dòng game Pixel phiêu lưu ngay hôm nay.</p>
+        <button class="btn-play">
+            CHƠI NGAY <i class="fas fa-play" style="margin-left: 10px;"></i>
+        </button>
     </div>
 
-    <div id="game-dashboard">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h2 style="font-family:'Press Start 2P'; color:var(--secondary);">DASHBOARD CHỦ</h2>
-            <div style="display:flex; gap:20px;">
-                <div class="stat-bar" style="width:150px;"><div class="fill-hp"></div><span style="position:absolute; top:2px; left:35%; font-size:10px; font-family:'Press Start 2P'">HP</span></div>
-                <div class="stat-bar" style="width:150px;"><div class="fill-mp"></div><span style="position:absolute; top:2px; left:35%; font-size:10px; font-family:'Press Start 2P'">MP</span></div>
+    <div class="content">
+        <h2>TÍNH NĂNG CHÍNH</h2>
+        <div class="grid">
+            <div class="card">
+                <i class="fas fa-hammer"></i>
+                <h3>CHẾ TẠO</h3>
+                <p>Hơn 1000 công thức chế tạo vũ khí và đồ dùng để bạn sinh tồn.</p>
             </div>
-        </div>
-
-        <div class="dashboard-grid">
-            <div class="pixel-card" style="text-align:center;">
-                <i class="fas fa-user-ninja fa-4x" style="color:var(--primary); margin-bottom:15px;"></i>
-                <h3 id="charName" style="font-family:'Press Start 2P'; font-size:0.9rem; color:white;">PLAYER</h3>
-                <p style="color:#fbbf24; font-family:'Press Start 2P'; font-size:0.7rem;">CẤP ĐỘ 0</p>
-                <div style="margin-top:30px;">
-                    <button class="nav-item"><i class="fas fa-map-marked-alt"></i> BẢN ĐỒ</button>
-                    <button class="nav-item"><i class="fas fa-briefcase"></i> TÚI ĐỒ</button>
-                    <button class="nav-item" onclick="location.reload()" style="color:var(--primary); border-color:var(--primary);"><i class="fas fa-sign-out-alt"></i> THOÁT</button>
-                </div>
+            <div class="card">
+                <i class="fas fa-ghost"></i>
+                <h3>HẦM NGỤC</h3>
+                <p>Khám phá các di tích cổ xưa và đối đầu với Boss khổng lồ.</p>
             </div>
-
-            <div class="pixel-card">
-                <h3 style="font-family:'Press Start 2P'; font-size:0.9rem; margin-top:0;">VÙNG ĐẤT MỚI</h3>
-                <div style="height:350px; background:rgba(0,0,0,0.5); border:2px dashed #475569; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                    <i class="fas fa-lock fa-3x" style="color:#475569; margin-bottom:20px;"></i>
-                    <p style="text-align:center;">BẠN CẦN ĐẠT CẤP ĐỘ 1<br>ĐỂ MỞ KHÓA KHU VỰC NÀY</p>
-                    <button class="btn-play" style="padding:15px 30px; font-size:0.7rem; margin-top:20px;">NHẬN NHIỆM VỤ</button>
-                </div>
-            </div>
-
-            <div class="pixel-card">
-                <h3 style="font-family:'Press Start 2P'; font-size:0.8rem; color:var(--primary);">HỆ THỐNG</h3>
-                <p style="font-size:0.85rem; border-bottom:1px solid #334155; padding-bottom:10px;">Chào mừng tân thủ gia nhập thế giới!</p>
-                <h3 style="font-family:'Press Start 2P'; font-size:0.8rem; color:var(--secondary); margin-top:20px;">BẠN BÈ</h3>
-                <p style="color:#94a3b8;"><i class="fas fa-circle" style="color:#475569; font-size:10px;"></i> Chưa có ai online</p>
+            <div class="card">
+                <i class="fas fa-network-wired"></i>
+                <h3>ONLINE</h3>
+                <p>Chơi cùng bạn bè trên toàn thế giới với máy chủ tốc độ cao.</p>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-        function enterGame() {
-            const nameInput = document.getElementById('nameInput').value;
-            const charName = document.getElementById('charName');
-            
-            // Nếu người dùng không nhập tên, lấy mặc định
-            charName.innerText = nameInput.trim() !== "" ? nameInput.toUpperCase() : "TÂN THỦ";
+    <footer>
+        <p>&copy; 2026 PIXEL QUEST GAME STUDIO. MỌI QUYỀN ĐƯỢC BẢO LƯU.</p>
+        <div style="margin-top: 20px; font-size: 1.5rem;">
+            <i class="fab fa-discord" style="margin: 0 15px; cursor: pointer;"></i>
+            <i class="fab fa-facebook" style="margin: 0 15px; cursor: pointer;"></i>
+            <i class="fab fa-youtube" style="margin: 0 15px; cursor: pointer;"></i>
+        </div>
+    </footer>
 
-            // Hiệu ứng pháo hoa chúc mừng
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff4b6b', '#38bdf8']
-            });
-
-            // Chuyển cảnh từ từ
-            const landing = document.getElementById('landing-page');
-            const dashboard = document.getElementById('game-dashboard');
-
-            landing.style.opacity = '0';
-            setTimeout(() => {
-                landing.classList.add('hidden');
-                dashboard.style.display = 'block';
-                // Đổi ảnh nền mờ hơn để nhìn Dashboard rõ hơn
-                document.body.style.backgroundImage = "linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://i.redd.it/pixel-art-forest-background-v0-x1v59y2l16bb1.png?width=1280&format=png&auto=webp&s=84992497645f061956637e174066922378997a34')";
-            }, 500);
-        }
-    </script>
 </body>
 </html>

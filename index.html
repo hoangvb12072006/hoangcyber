@@ -221,7 +221,7 @@
     <div style="width: 280px; border: 3px solid #fff; padding: 5px; box-shadow: 5px 5px 0 #000;">
         <div id="load-bar" style="width: 0%; height: 18px; background: #38bdf8; transition: width 0.1s;"></div>
     </div>
-    <p style="font-family:'Press Start 2P'; font-size: 0.8rem; margin-top: 25px; color: #38bdf8; text-shadow: 2px 2px 0 #000;">ĐANG KẾT NỐI SERVER...</p>
+   <p id="loading-text" style="font-family:'Press Start 2P'; font-size: 0.8rem; margin-top: 25px; color: #38bdf8; text-shadow: 2px 2px 0 #000;">ĐANG KẾT NỐI SERVER...</p>
 </div>
 <div id="landing-page">
 
@@ -310,7 +310,86 @@
         <a href="#" style="color: white; margin: 0 15px;"><i class="fab fa-youtube"></i></a>
     </div>
 </footer>
+  
+        <div id="game-dashboard" style="display: none; padding: 60px 8%; text-align: center; min-height: 100vh;">
+    <div style="background: var(--panel); border: 4px solid var(--secondary); padding: 40px; box-shadow: 12px 12px 0 var(--shadow); display: inline-block; width: 100%; max-width: 900px;">
+        
+        <h1 style="font-family: 'Press Start 2P'; color: var(--secondary); font-size: 1.8rem; margin-bottom: 20px;">
+            HỆ THỐNG ĐÃ KẾT NỐI
+        </h1>
+
+        <div style="background: rgba(0,0,0,0.5); padding: 20px; border-left: 8px solid var(--primary); margin-bottom: 30px; text-align: left;">
+            <p style="font-family: 'Press Start 2P'; font-size: 0.9rem; color: white; margin: 0;">
+                TRẠNG THÁI: <span style="color: #4ade80;">ONLINE</span>
+            </p>
+            <p style="font-family: 'Press Start 2P'; font-size: 0.9rem; color: white; margin-top: 15px;">
+                CHIẾN BINH: <span id="displayName" style="color: var(--primary);">TÂN THỦ</span>
+            </p>
+        </div>
+
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;">
+            <div class="card" style="padding: 20px; cursor: pointer;">
+                <i class="fas fa-play-circle" style="font-size: 2rem; color: var(--secondary);"></i>
+                <h3 style="font-size: 0.8rem; margin-top: 15px;">VÀO TRẬN</h3>
+            </div>
+            <div class="card" style="padding: 20px; cursor: pointer;">
+                <i class="fas fa-box" style="font-size: 2rem; color: var(--primary);"></i>
+                <h3 style="font-size: 0.8rem; margin-top: 15px;">KHO ĐỒ</h3>
+            </div>
+            <div class="card" style="padding: 20px; cursor: pointer;">
+                <i class="fas fa-trophy" style="font-size: 2rem; color: #fbbf24;"></i>
+                <h3 style="font-size: 0.8rem; margin-top: 15px;">XẾP HẠNG</h3>
+            </div>
+            <div class="card" style="padding: 20px; cursor: pointer; border-color: #ef4444;" onclick="location.reload()">
+                <i class="fas fa-power-off" style="font-size: 2rem; color: #ef4444;"></i>
+                <h3 style="font-size: 0.8rem; margin-top: 15px; color: #ef4444;">THOÁT</h3>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
+function startGame() {
+    const loading = document.getElementById('loading-screen');
+    const loadBar = document.getElementById('load-bar');
+    const loadingText = document.getElementById('loading-text');
+    const landingPage = document.getElementById('landing-page');
+    const dashboard = document.getElementById('game-dashboard');
+
+    loading.style.display = 'flex';
+    
+    // Hiệu ứng dấu chấm chạy . .. ...
+    let dots = 0;
+    const dotInterval = setInterval(() => {
+        dots = (dots + 1) % 4;
+        loadingText.innerText = "ĐANG KẾT NỐI SERVER" + ".".repeat(dots);
+    }, 400);
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 2.5; // Tăng ngẫu nhiên cho thật
+        if (progress > 100) progress = 100;
+        loadBar.style.width = progress + '%';
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            clearInterval(dotInterval);
+            setTimeout(() => {
+                loading.style.display = 'none';
+                if(landingPage) landingPage.style.display = 'none';
+                if(dashboard) dashboard.style.display = 'block';
+                
+                // Lấy tên từ ô input dán vào sảnh 2
+                const userIn = document.getElementById('userInput');
+                const nameShow = document.getElementById('displayName');
+                if(userIn && nameShow) {
+                    nameShow.innerText = userIn.value.trim() !== "" ? userIn.value.toUpperCase() : "TÂN THỦ";
+                }
+            }, 600);
+        }
+    }, 50);
+}
+</script>
+        
 function startGame() {
     const loading = document.getElementById('loading-screen');
     const loadBar = document.getElementById('load-bar');

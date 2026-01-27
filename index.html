@@ -507,15 +507,15 @@ let progress = 0;
         let textIdx = Math.floor((progress / 101) * statusTexts.length);
         loadingText.innerText = `${statusTexts[textIdx]} [${Math.floor(progress)}%]`;
 
-        if (progress >= 100) {
-            clearInterval(timer);
-            setTimeout(() => {
-                document.getElementById('loading-screen').style.display = 'none';
-                document.getElementById('landing-page').style.display = 'none';
-                document.getElementById('game-dashboard').style.display = 'block';
-                createSnow();
-                displayName.innerText = nameInput.value.trim() !== "" ? nameInput.value.toUpperCase() : "TÂN THỦ";
-            }, 500);
+      if (progress >= 100) {
+            clearInterval(timer);
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('landing-page').style.display = 'none';
+                // Hiện màn hình đen để nhập tên trước khi vào sảnh
+                document.getElementById('char-creator').style.display = 'flex';
+                createSnow();
+            }, 500);
         }
     }, 50);
 }

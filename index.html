@@ -355,6 +355,25 @@
             </div>
         </div>
 
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 2px solid #444; font-family: 'Press Start 2P';">
+    <div style="text-align: center;">
+        <p style="font-size: 0.5rem; color: #facc15; margin: 0;">VÀNG</p>
+        <p id="gold-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">💰 0</p>
+    </div>
+    <div style="text-align: center;">
+        <p style="font-size: 0.5rem; color: #38bdf8; margin: 0;">KIM CƯƠNG</p>
+        <p id="diamond-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">💎 0</p>
+    </div>
+    <div style="text-align: center;">
+        <p style="font-size: 0.5rem; color: #94a3b8; margin: 0;">ĐÁ</p>
+        <p id="stone-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪨 0</p>
+    </div>
+    <div style="text-align: center;">
+        <p style="font-size: 0.5rem; color: #fb923c; margin: 0;">GỖ</p>
+        <p id="wood-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪵 0</p>
+    </div>
+</div>
+
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
             <div class="pixel-btn" onclick="playClick()" style="background: #166534; border: 4px solid #4ade80; padding: 15px 5px; cursor: pointer;">
                 <i class="fas fa-hammer" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
@@ -384,6 +403,18 @@
 </style>
 
 <script>
+    let gold = 0;
+let diamonds = 0;
+let stone = 0;
+let wood = 0;
+
+// Hàm để sau này ông dùng để cộng quà
+function addResource(type, amount) {
+    if(type === 'gold') { gold += amount; document.getElementById('gold-val').innerText = "💰 " + gold; }
+    if(type === 'diamonds') { diamonds += amount; document.getElementById('diamond-val').innerText = "💎 " + diamonds; }
+    if(type === 'stone') { stone += amount; document.getElementById('stone-val').innerText = "🪨 " + stone; }
+    if(type === 'wood') { wood += amount; document.getElementById('wood-val').innerText = "🪵 " + wood; }
+}
 let currentXP = 0;
 let currentLevel = 1;
 let xpNextLevel = 100;

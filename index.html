@@ -3,90 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Necesse-like Pixel Game - Trang Chủ</title>
+    <title>Pixel Quest - Necesse Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
-      /* Chỉnh lại font chữ chung cho dễ đọc */
-body {
-    font-family: 'Pixelify Sans', sans-serif;
-    line-height: 1.8; /* Tăng khoảng cách dòng */
-    letter-spacing: 0.5px; /* Giãn chữ một chút */
-}
-
-/* Tiêu đề chính KHÁM PHÁ THẾ GIỚI PIXEL */
-.hero h1 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 2.8rem;
-    line-height: 1.4;
-    letter-spacing: 4px; /* Giãn chữ rộng ra cho ngầu */
-    color: #ff4b6b; /* Màu đỏ hồng rực rỡ */
-    text-shadow: 
-        4px 4px 0px #000, 
-        -1px -1px 0px #000, 
-        1px -1px 0px #000, 
-        -1px 1px 0px #000; /* Viền đen sắc nét kiểu game cổ điển */
-    margin-bottom: 30px;
-}
-
-/* Chữ TÍNH NĂNG NỔI BẬT */
-.content-section h2 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.8rem;
-    letter-spacing: 3px;
-    color: #38bdf8; /* Đổi sang màu xanh dương sáng */
-    text-shadow: 3px 3px 0px #000;
-}
-
-/* Các tiêu đề nhỏ trong ô tính năng */
-.feature-item h3 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1rem;
-    margin-top: 15px;
-    color: #ffffff;
-    letter-spacing: 1px;
-}
-
-/* Phần text mô tả nhỏ */
-.feature-item p, .hero p {
-    font-size: 1.1rem;
-    color: #cbd5e1; /* Màu xám sáng để dịu mắt */
-    font-weight: 400;
-}
+        /* Khai báo màu sắc để sửa lỗi mất màu */
+        :root {
+            --pixel-font: 'Press Start 2P', cursive;
+            --main-font: 'Pixelify Sans', sans-serif;
+            --bg-color: #1a1a2e; 
+            --primary-color: #ff4b6b; 
+            --secondary-color: #0f3460; 
+            --text-color: #e0e0e0; 
+            --border-color: #533483; 
+            --shadow-color: #000000;
+        }
 
         body {
             font-family: var(--main-font);
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            overflow-x: hidden; /* Ngăn cuộn ngang */
-            background-image: url('https://wallpaperaccess.com/full/3591276.png');
+            overflow-x: hidden;
+            /* Ảnh nền đã fix link */
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://wallpaperaccess.com/full/3591276.png');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            image-rendering: crisp-edges;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: -webkit-optimize-contrast;
-            -ms-interpolation-mode: nearest-neighbor; /* Pixel rendering cho ảnh nền */
-        }
-
-        /* Khung chung cho các phần tử pixel */
-        .pixel-box {
-            border: 2px solid var(--border-color);
-            box-shadow: 4px 4px 0 var(--shadow-color);
-            padding: 10px 15px;
-            background-color: var(--secondary-color);
             image-rendering: pixelated;
         }
 
-        /* Header */
+        /* Header xịn hơn */
         header {
-            background-color: rgba(15, 20, 30, 0.8); /* Nền header hơi trong */
-            padding: 10px 20px;
+            background-color: rgba(15, 20, 30, 0.9);
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--primary-color);
+            border-bottom: 4px solid var(--primary-color);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -95,63 +50,61 @@ body {
         .logo {
             font-family: var(--pixel-font);
             color: var(--primary-color);
-            font-size: 1.8rem;
-            text-shadow: 2px 2px 0 var(--shadow-color);
-            letter-spacing: 2px;
+            font-size: 1.5rem;
+            text-shadow: 3px 3px 0 var(--shadow-color);
             text-decoration: none;
         }
 
         nav a {
             font-family: var(--pixel-font);
-            color: var(--text-color);
+            color: white;
             text-decoration: none;
-            margin-left: 25px;
-            font-size: 0.85rem;
-            text-shadow: 1px 1px 0 var(--shadow-color);
-            transition: color 0.2s ease-in-out;
+            margin-left: 20px;
+            font-size: 0.7rem;
+            transition: 0.3s;
         }
 
-        nav a:hover {
-            color: var(--primary-color);
-        }
+        nav a:hover { color: var(--primary-color); }
 
-        /* Hero Section */
+        /* Hero Section - Chữ đã được làm nét */
         .hero {
             text-align: center;
-            padding: 80px 20px;
-            background-color: rgba(0,0,0,0.5); /* Nền mờ cho phần hero */
-            margin-top: -2px; /* Kéo lên sát header */
+            padding: 100px 20px;
         }
 
         .hero h1 {
             font-family: var(--pixel-font);
             font-size: 3rem;
             color: var(--primary-color);
-            text-shadow: 4px 4px 0 var(--shadow-color);
-            margin-bottom: 20px;
-            animation: pulse 1.5s infinite alternate; /* Hiệu ứng nhấp nháy cho tiêu đề */
+            line-height: 1.4;
+            letter-spacing: 4px;
+            /* Đổ bóng chữ cực đậm để nổi bật trên nền ảnh */
+            text-shadow: 
+                4px 4px 0px #000, 
+                -2px -2px 0px #000, 
+                2px -2px 0px #000, 
+                -2px 2px 0px #000;
+            margin-bottom: 30px;
+            animation: pulse 1.5s infinite alternate;
         }
 
         .hero p {
-            font-family: var(--main-font);
             font-size: 1.2rem;
             max-width: 800px;
-            margin: 0 auto 40px auto;
-            color: var(--text-color);
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+            text-shadow: 2px 2px 2px #000;
         }
 
         .btn-play {
-            display: inline-block;
             font-family: var(--pixel-font);
             background-color: var(--primary-color);
-            color: var(--bg-color);
-            padding: 15px 30px;
-            text-decoration: none;
-            font-size: 1.2rem;
+            color: white;
+            padding: 20px 40px;
             border: none;
+            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 5px 5px 0 var(--shadow-color);
-            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+            box-shadow: 6px 6px 0 var(--shadow-color);
             image-rendering: pixelated;
         }
 
@@ -160,38 +113,34 @@ body {
             box-shadow: 3px 3px 0 var(--shadow-color);
         }
 
-        /* Nội dung chính */
+        /* Các ô tính năng */
         .content-section {
-            padding: 60px 20px;
+            padding: 60px 5%;
             max-width: 1200px;
-            margin: 40px auto;
-            background-color: rgba(26, 26, 46, 0.9); /* Nền hơi trong cho nội dung */
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            margin: auto;
         }
 
         .content-section h2 {
             font-family: var(--pixel-font);
-            color: var(--primary-color);
+            color: #38bdf8;
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 2rem;
-            text-shadow: 3px 3px 0 var(--shadow-color);
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 0 #000;
+            margin-bottom: 50px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         .feature-item {
-            text-align: center;
-            padding: 20px;
             background-color: var(--secondary-color);
-            border: 2px solid var(--border-color);
-            box-shadow: 4px 4px 0 var(--shadow-color);
-            image-rendering: pixelated;
+            border: 4px solid var(--border-color);
+            padding: 30px;
+            text-align: center;
+            box-shadow: 6px 6px 0 var(--shadow-color);
         }
 
         .feature-item i {
@@ -202,77 +151,32 @@ body {
 
         .feature-item h3 {
             font-family: var(--pixel-font);
-            font-size: 1.2rem;
-            color: var(--text-color);
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: white;
+            margin-bottom: 15px;
         }
 
         .feature-item p {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #b0b0b0;
+            line-height: 1.6;
         }
 
-        /* Footer */
         footer {
-            background-color: rgba(15, 20, 30, 0.8);
-            padding: 30px 20px;
+            padding: 40px;
             text-align: center;
-            border-top: 2px solid var(--primary-color);
-            margin-top: 50px;
+            background: rgba(0,0,0,0.8);
+            border-top: 4px solid var(--primary-color);
         }
 
-        footer p {
-            font-size: 0.8rem;
-            color: #b0b0b0;
-            margin-bottom: 10px;
-        }
-
-        .social-links a {
-            color: var(--text-color);
-            font-size: 1.5rem;
-            margin: 0 10px;
-            transition: color 0.2s;
-        }
-
-        .social-links a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Hiệu ứng Animation */
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.02); opacity: 0.95; }
-        }
-
-        /* Responsive cho màn hình nhỏ hơn */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 1.5rem;
-            }
-            nav a {
-                margin-left: 15px;
-                font-size: 0.75rem;
-            }
-            .hero h1 {
-                font-size: 2rem;
-            }
-            .hero p {
-                font-size: 1rem;
-            }
-            .btn-play {
-                font-size: 1rem;
-                padding: 12px 25px;
-            }
-            .content-section h2 {
-                font-size: 1.5rem;
-            }
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
         }
     </style>
 </head>
 <body>
+
     <header>
         <a href="#" class="logo">PIXEL QUEST</a>
         <nav>
@@ -285,46 +189,41 @@ body {
 
     <main>
         <section class="hero">
-            <h1>KHÁM PHÁ THẾ GIỚI PIXEL</h1>
-            <p>Tham gia cuộc phiêu lưu bất tận, xây dựng căn cứ, khám phá hầm ngục và chiến đấu với quái vật trong thế giới pixel đầy màu sắc này!</p>
+            <h1>KHÁM PHÁ<br>THẾ GIỚI PIXEL</h1>
+            <p>Tham gia cuộc phiêu lưu bất tận, xây dựng căn cứ, khám phá hầm ngục và chiến đấu với quái vật trong phong cách Necesse cổ điển!</p>
             <button class="btn-play">CHƠI NGAY <i class="fas fa-gamepad"></i></button>
         </section>
 
         <section class="content-section">
             <h2>TÍNH NĂNG NỔI BẬT</h2>
             <div class="features-grid">
-                <div class="feature-item pixel-box">
+                <div class="feature-item">
                     <i class="fas fa-tools"></i>
                     <h3>Xây Dựng & Chế Tạo</h3>
                     <p>Thu thập tài nguyên, xây dựng căn cứ vững chắc và chế tạo các công cụ mạnh mẽ.</p>
                 </div>
-                <div class="feature-item pixel-box">
+                <div class="feature-item">
                     <i class="fas fa-dragon"></i>
                     <h3>Khám Phá Hầm Ngục</h3>
-                    <p>Đối mặt với những thử thách nguy hiểm và những con trùm đáng sợ để giành lấy kho báu.</p>
+                    <p>Đối mặt với những thử thách nguy hiểm và trùm cuối để giành lấy kho báu.</p>
                 </div>
-                <div class="feature-item pixel-box">
+                <div class="feature-item">
                     <i class="fas fa-users"></i>
-                    <h3>Chế Độ Multiplayer</h3>
-                    <p>Mời bạn bè tham gia và cùng nhau sinh tồn, khám phá trong một thế giới rộng lớn.</p>
-                </div>
-                <div class="feature-item pixel-box">
-                    <i class="fas fa-seedling"></i>
-                    <h3>Nông Nghiệp & Nuôi Thú</h3>
-                    <p>Trồng trọt, chăn nuôi và thuần hóa các loài động vật hoang dã để hỗ trợ cuộc sống.</p>
+                    <h3>Multiplayer</h3>
+                    <p>Mời bạn bè cùng sinh tồn và khám phá trong một thế giới pixel rộng lớn.</p>
                 </div>
             </div>
         </section>
-
-        </main>
+    </main>
 
     <footer>
         <p>&copy; 2026 Pixel Quest Game. Mọi quyền được bảo lưu.</p>
         <div class="social-links">
-            <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
         </div>
     </footer>
+
 </body>
 </html>

@@ -7,17 +7,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Biến CSS để dễ dàng thay đổi màu sắc */
-        :root {
-            --pixel-font: 'Press Start 2P', cursive;
-            --main-font: 'Pixelify Sans', sans-serif;
-            --bg-color: #1a1a2e; /* Nền tối */
-            --primary-color: #e94560; /* Màu nhấn chính */
-            --secondary-color: #0f3460; /* Màu nhấn phụ */
-            --text-color: #e0e0e0; /* Màu chữ sáng */
-            --border-color: #533483; /* Màu viền */
-            --shadow-color: #0a0a1a;
-        }
+      /* Chỉnh lại font chữ chung cho dễ đọc */
+body {
+    font-family: 'Pixelify Sans', sans-serif;
+    line-height: 1.8; /* Tăng khoảng cách dòng */
+    letter-spacing: 0.5px; /* Giãn chữ một chút */
+}
+
+/* Tiêu đề chính KHÁM PHÁ THẾ GIỚI PIXEL */
+.hero h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.8rem;
+    line-height: 1.4;
+    letter-spacing: 4px; /* Giãn chữ rộng ra cho ngầu */
+    color: #ff4b6b; /* Màu đỏ hồng rực rỡ */
+    text-shadow: 
+        4px 4px 0px #000, 
+        -1px -1px 0px #000, 
+        1px -1px 0px #000, 
+        -1px 1px 0px #000; /* Viền đen sắc nét kiểu game cổ điển */
+    margin-bottom: 30px;
+}
+
+/* Chữ TÍNH NĂNG NỔI BẬT */
+.content-section h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    color: #38bdf8; /* Đổi sang màu xanh dương sáng */
+    text-shadow: 3px 3px 0px #000;
+}
+
+/* Các tiêu đề nhỏ trong ô tính năng */
+.feature-item h3 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    margin-top: 15px;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+/* Phần text mô tả nhỏ */
+.feature-item p, .hero p {
+    font-size: 1.1rem;
+    color: #cbd5e1; /* Màu xám sáng để dịu mắt */
+    font-weight: 400;
+}
 
         body {
             font-family: var(--main-font);

@@ -373,8 +373,9 @@
         filter: brightness(1.2);
     }
     .snow { position: absolute; background: white; border-radius: 50%; pointer-events: none; }
-</style>
-    
+  </style>
+        </script>
+    <script>
 // Hàm tạo tuyết rơi
 function createSnow() {
     const container = document.getElementById('snow-container');
@@ -391,7 +392,9 @@ function createSnow() {
         container.appendChild(snow);
     }
 }
+    </script>
 
+  <script>
 // Âm thanh Click giả lập (Dùng tạm Beep hệ thống)
 function playClick() {
     const context = new AudioContext();
@@ -445,8 +448,9 @@ function startGame() {
         }
     }, 50);
 }
+  </script>
     .pixel-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
-
+<script>
 function startGame() {
     const loading = document.getElementById('loading-screen');
     const loadBar = document.getElementById('load-bar');
@@ -490,7 +494,9 @@ function startGame() {
         }
     }, 50);
 }
+</script>
 
+           <script>
 function startGame() {
     const loading = document.getElementById('loading-screen');
     const loadBar = document.getElementById('load-bar');
@@ -531,6 +537,9 @@ function startGame() {
         }
     }, 50);
 }
+     </script>
+           
+      <script>
         // Khởi tạo các giá trị ban đầu cho nhân vật
 let currentXP = 0;
 let currentLevel = 1;

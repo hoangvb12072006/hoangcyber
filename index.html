@@ -217,11 +217,23 @@
     </style>
 </head>
 <body>
-    <div id="loading-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.98); z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
-    <div style="width: 280px; border: 3px solid #fff; padding: 5px; box-shadow: 5px 5px 0 #000;">
-        <div id="load-bar" style="width: 0%; height: 18px; background: #38bdf8; transition: width 0.1s;"></div>
+   <div id="loading-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#050505; z-index:9999; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;">
+    <div style="position:absolute; width:200%; height:200%; background-image: linear-gradient(0deg, transparent 24%, rgba(56, 189, 248, 0.05) 25%, rgba(56, 189, 248, 0.05) 26%, transparent 27%, transparent 74%, rgba(56, 189, 248, 0.05) 75%, rgba(56, 189, 248, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(56, 189, 248, 0.05) 25%, rgba(56, 189, 248, 0.05) 26%, transparent 27%, transparent 74%, rgba(56, 189, 248, 0.05) 75%, rgba(56, 189, 248, 0.05) 76%, transparent 77%, transparent); background-size: 50px 50px; animation: grid-move 10s linear infinite;"></div>
+
+    <div style="position:relative; z-index: 2; text-align:center;">
+        <h2 class="glitch-text" style="font-family:'Press Start 2P'; color:#fff; font-size:1rem; margin-bottom:30px; letter-spacing:2px;">ĐANG KẾT NỐI SEVER</h2>
+        <div style="width: 300px; height: 20px; background: #111; border: 3px solid #333; padding: 3px; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);">
+            <div id="load-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ff4b6b, #facc15, #38bdf8); background-size: 200% 100%; animation: rgb-move 2s linear infinite; transition: width 0.2s;"></div>
+        </div>
+        <p id="loading-text" style="font-family:'Press Start 2P'; font-size: 0.6rem; margin-top: 20px; color: #38bdf8; text-shadow: 0 0 5px #38bdf8;">> Đang khởi tạo... [0%]</p>
     </div>
-   <p id="loading-text" style="font-family:'Press Start 2P'; font-size: 0.8rem; margin-top: 25px; color: #38bdf8; text-shadow: 2px 2px 0 #000;">ĐANG KẾT NỐI SERVER...</p>
+
+    <style>
+        .glitch-text { text-shadow: 2px 0 #ff4b6b, -2px 0 #38bdf8; animation: glitch 1s infinite; }
+        @keyframes glitch { 0%, 100% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 80% { transform: translate(2px, -2px); } }
+        @keyframes rgb-move { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+        @keyframes grid-move { from { transform: translateY(0); } to { transform: translateY(-50px); } }
+    </style>
 </div>
 <div id="landing-page">
 
@@ -412,26 +424,37 @@ function startGame() {
     const dashboard = document.getElementById('game-dashboard');
     const nameInput = document.getElementById('userInput');
     const displayName = document.getElementById('displayName');
+let progress = 0;
+    const statusTexts = [
+        "> BYPASSING FIREWALL...",
+        "> FETCHING ASSETS...",
+        "> SYNCING DATABASE...",
+        "> ACCESS GRANTED!"
+    ];
 
-    loading.style.display = 'flex';
-    let progress = 0;
-    let timer = setInterval(() => {
-        progress += 3;
-        if(progress > 100) progress = 100;
-        loadBar.style.width = progress + '%';
+    let timer = setInterval(() => {
+        progress += Math.random() * 3 + 1; // Chạy nhanh chậm ngẫu nhiên cho thật
+        if (progress > 100) progress = 100;
+        
+        const loadBar = document.getElementById('load-bar');
+        const loadingText = document.getElementById('loading-text');
+        
+        loadBar.style.width = progress + '%';
+        
+        // Cập nhật dòng chữ theo tiến trình
+        let textIdx = Math.floor((progress / 101) * statusTexts.length);
+        loadingText.innerText = `${statusTexts[textIdx]} [${Math.floor(progress)}%]`;
 
-        if (progress >= 100) {
-            clearInterval(timer);
-            setTimeout(() => {
-                loading.style.display = 'none';
-                if(landingPage) landingPage.style.display = 'none';
-                if(dashboard) dashboard.style.display = 'block';
-                if(nameInput && displayName) {
-                    displayName.innerText = nameInput.value.trim() !== "" ? nameInput.value.toUpperCase() : "TÂN THỦ";
-                }
-                createSnow();
-            }, 500);
-        }
-    }, 40);
+        if (progress >= 100) {
+            clearInterval(timer);
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('landing-page').style.display = 'none';
+                document.getElementById('game-dashboard').style.display = 'block';
+                createSnow();
+                displayName.innerText = nameInput.value.trim() !== "" ? nameInput.value.toUpperCase() : "TÂN THỦ";
+            }, 500);
+        }
+    }, 50);
 }
 </script>

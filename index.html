@@ -8,6 +8,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
+
+        @keyframes fire-burn {
+    0% { transform: scale(1) rotate(-2deg); filter: brightness(1); }
+    50% { transform: scale(1.1) rotate(2deg); filter: brightness(1.3); }
+    100% { transform: scale(1) rotate(-2deg); filter: brightness(1); }
+}
+
+.fire-icon {
+    display: inline-block;
+    animation: fire-burn 0.5s infinite alternate;
+}
+        
         :root {
             --primary: #ff4b6b; /* Màu đỏ hồng neon */
             --secondary: #38bdf8; /* Màu xanh nước biển sáng */
@@ -363,18 +375,20 @@
             <div style="text-align: center;"><p style="font-size: 0.5rem; color: #fb923c; margin: 0;">GỖ</p><p id="wood-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪵 0</p></div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-           <div class="pixel-btn" onclick="enterGame()" style="background: #166534; border: 4px solid #4ade80; padding: 15px 5px; cursor: pointer; text-align: center;">
-                <i class="fas fa-hammer" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
-                <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">BẮT ĐẦU</h3>
-            </div>
-            <div class="pixel-btn" onclick="openInv()" style="background: #854d0e; border: 4px solid #fbbf24; padding: 15px 5px; cursor: pointer; text-align: center;">
-                <i class="fas fa-box-open" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
-                <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">KHO ĐỒ</h3>
-            </div>
-            <div class="pixel-btn" onclick="location.reload()" style="background: #991b1b; border: 4px solid #f87171; padding: 15px 5px; cursor: pointer; text-align: center;">
-                <i class="fas fa-sign-out-alt" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
-                <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">THOÁT</h3>
+       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px;">
+    <div class="pixel-btn btn-green" onclick="enterGame()">
+        <i class="fas fa-hammer"></i>
+        <h3>BẮT ĐẦU</h3>
+    </div>
+
+    <div class="pixel-btn btn-orange" onclick="openInv()">
+        <i class="fas fa-box"></i>
+        <h3>KHO ĐỒ</h3>
+    </div>
+
+    <div class="pixel-btn btn-red" onclick="backToLobby()">
+        <i class="fas fa-sign-out-alt"></i>
+        <h3>THOÁT</h3>
             </div>
         </div>
     </div>

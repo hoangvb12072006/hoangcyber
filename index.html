@@ -324,14 +324,15 @@
 </footer>
   </div>
     
-<div id="game-dashboard" style="display: none; position: fixed; inset: 0; z-index: 9999; pointer-events: none; flex-direction: column; align-items: center; justify-content: center;">
+<div id="game-dashboard" style="display: none; position: fixed; inset: 0; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.5);">
   <div id="snow-container" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 1;"></div>
+   
    <div style="background: #4a3728; border: 8px solid #2d1e12; padding: 30px; box-shadow: 15px 15px 0 rgba(0,0,0,0.4); display: inline-block; width: 90%; max-width: 500px; position: relative; z-index: 2; border-radius: 8px; pointer-events: auto;">
         
         <div style="position: absolute; top: -20px; right: -20px; font-size: 3rem; animation: fire-burn 0.5s infinite alternate;">🔥</div>
         <div style="position: absolute; top: -20px; left: -20px; font-size: 3rem; animation: fire-burn 0.5s infinite alternate-reverse;">🔥</div>
 
-        <h1 style="font-family: 'Press Start 2P'; color: #facc15; font-size: 1.5rem; text-shadow: 3px 3px 0 #000; margin-bottom: 25px;">
+        <h1 style="font-family: 'Press Start 2P'; color: #facc15; font-size: 1.5rem; text-shadow: 3px 3px 0 #000; margin-bottom: 25px; text-align: center;">
             🏕️ KHU CẮM TRẠI
         </h1>
 
@@ -355,36 +356,23 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 2px solid #444; font-family: 'Press Start 2P';">
-    <div style="text-align: center;">
-        <p style="font-size: 0.5rem; color: #facc15; margin: 0;">VÀNG</p>
-        <p id="gold-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">💰 0</p>
-    </div>
-    <div style="text-align: center;">
-        <p style="font-size: 0.5rem; color: #38bdf8; margin: 0;">KIM CƯƠNG</p>
-        <p id="diamond-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">💎 0</p>
-    </div>
-    <div style="text-align: center;">
-        <p style="font-size: 0.5rem; color: #94a3b8; margin: 0;">ĐÁ</p>
-        <p id="stone-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪨 0</p>
-    </div>
-    <div style="text-align: center;">
-        <p style="font-size: 0.5rem; color: #fb923c; margin: 0;">GỖ</p>
-        <p id="wood-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪵 0</p>
-    </div>
-</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; border: 2px solid #444; font-family: 'Press Start 2P';">
+            <div style="text-align: center;"><p style="font-size: 0.5rem; color: #facc15; margin: 0;">VÀNG</p><p id="gold-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">💰 0</p></div>
+            <div style="text-align: center;"><p style="font-size: 0.5rem; color: #38bdf8; margin: 0;">KIM CƯƠNG</p><p id="diamond-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">💎 0</p></div>
+            <div style="text-align: center;"><p style="font-size: 0.5rem; color: #94a3b8; margin: 0;">ĐÁ</p><p id="stone-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪨 0</p></div>
+            <div style="text-align: center;"><p style="font-size: 0.5rem; color: #fb923c; margin: 0;">GỖ</p><p id="wood-val" style="font-size: 0.65rem; color: #fff; margin-top: 5px;">🪵 0</p></div>
+        </div>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-           <div class="pixel-btn" onclick="enterGame()" style="background: #166534; border: 4px solid #4ade80; padding: 15px 5px; cursor: pointer;">
-    <i class="fas fa-hammer" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
-    <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">BẮT ĐẦU</h3>
-</div>
-
-<div class="pixel-btn" onclick="openInv()" style="background: #854d0e; border: 4px solid #fbbf24; padding: 15px 5px; cursor: pointer;">
-    <i class="fas fa-box-open" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
-    <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">KHO ĐỒ</h3>
-</div>
-            <div class="pixel-btn" onclick="location.reload()" style="background: #991b1b; border: 4px solid #f87171; padding: 15px 5px; cursor: pointer;">
+           <div class="pixel-btn" onclick="enterGame()" style="background: #166534; border: 4px solid #4ade80; padding: 15px 5px; cursor: pointer; text-align: center;">
+                <i class="fas fa-hammer" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
+                <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">BẮT ĐẦU</h3>
+            </div>
+            <div class="pixel-btn" onclick="openInv()" style="background: #854d0e; border: 4px solid #fbbf24; padding: 15px 5px; cursor: pointer; text-align: center;">
+                <i class="fas fa-box-open" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
+                <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">KHO ĐỒ</h3>
+            </div>
+            <div class="pixel-btn" onclick="location.reload()" style="background: #991b1b; border: 4px solid #f87171; padding: 15px 5px; cursor: pointer; text-align: center;">
                 <i class="fas fa-sign-out-alt" style="font-size: 1.2rem; color: #fff; display: block; margin-bottom: 8px;"></i>
                 <h3 style="font-family: 'Press Start 2P'; font-size: 0.5rem; color: #fff; margin: 0;">THOÁT</h3>
             </div>
@@ -392,64 +380,33 @@
     </div>
 </div>
 
-    <div id="play-screen" style="display: none; position: fixed; inset: 0; background: #000 url('https://img.itch.zone/aW1nLzExMDUwOTI5LnBuZw==/original/8O6%2FhX.png') no-repeat center; background-size: cover; z-index: 2000; flex-direction: column; align-items: center; justify-content: center;">
-    
+<div id="play-screen" style="display: none; position: fixed; inset: 0; background: #000 url('https://img.itch.zone/aW1nLzExMDUwOTI5LnBuZw==/original/8O6%2FhX.png') no-repeat center; background-size: cover; z-index: 10000; flex-direction: column; align-items: center; justify-content: center;">
     <div style="position: absolute; top: 20px; background: rgba(0,0,0,0.8); padding: 10px; border: 2px solid #facc15; color: #fff; font-family: 'Press Start 2P'; font-size: 0.6rem;">
         📍 KHU VỰC: RỪNG NGUYÊN SINH
     </div>
-
-    <p style="color: #fff; font-family: 'Press Start 2P'; font-size: 0.8rem; text-shadow: 2px 2px #000;">🌲 ÔNG ĐÃ VÀO RỪNG! 🌲</p>
-
+    <p style="color: #fff; font-family: 'Press Start 2P'; font-size: 0.8rem; text-shadow: 2px 2px #000;">🌲 ÔNG ĐÀ VÀO RỪNG! 🌲</p>
     <button onclick="backToLobby()" style="position: absolute; bottom: 30px; padding: 10px; font-family: 'Press Start 2P'; font-size: 0.5rem; background: #ef4444; color: #fff; border: 3px solid #b91c1c; cursor: pointer;">QUAY LẠI SẢNH</button>
 </div>
 
-<div id="inventory-screen" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; flex-direction: column; align-items: center; justify-content: center; font-family: 'Press Start 2P';">
+<div id="inventory-screen" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 11000; flex-direction: column; align-items: center; justify-content: center; font-family: 'Press Start 2P';">
     <div style="background: #2d1e12; border: 6px solid #854d0e; padding: 25px; width: 85%; max-width: 350px; box-shadow: 0 0 20px rgba(0,0,0,1); position: relative;">
-        <h2 style="color: #facc15; font-size: 0.8rem; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #854d0e; padding-bottom: 10px;">🎒 KHO ĐỒ CỦA BẠN</h2>
-        
-        <div id="inv-items" style="display: grid; grid-template-columns: 1fr; gap: 12px; color: #fff; font-size: 0.6rem;">
-            </div>
-
-        <button onclick="closeInv()" style="margin-top: 25px; width: 100%; padding: 12px; background: #ef4444; color: #fff; border: 4px solid #991b1b; cursor: pointer; font-family: 'Press Start 2P'; font-size: 0.6rem;">ĐÓNG KHO ĐỒ</button>
+        <h2 style="color: #facc15; font-size: 0.8rem; text-align: center; margin-bottom: 25px; border-bottom: 2px solid #854d0e; padding-bottom: 10px;">🎒 KHO ĐỒ</h2>
+        <div id="inv-items" style="display: grid; grid-template-columns: 1fr; gap: 12px; color: #fff; font-size: 0.6rem;"></div>
+        <button onclick="closeInv()" style="margin-top: 25px; width: 100%; padding: 12px; background: #ef4444; color: #fff; border: 4px solid #991b1b; cursor: pointer; font-family: 'Press Start 2P'; font-size: 0.6rem;">ĐÓNG</button>
     </div>
 </div>
 
-<style>
-    @keyframes fire-burn { from { transform: scale(1); } to { transform: scale(1.2); } }
-    .status-blink { animation: blink 1.5s infinite; }
-    @keyframes blink { 50% { opacity: 0.5; } }
-    .pixel-btn { transition: 0.2s; image-rendering: pixelated; }
-    .pixel-btn:hover { transform: translateY(-3px); filter: brightness(1.2); }
-    .pixel-btn:active { transform: translateY(0); }
-    .snow { position: absolute; background: white; border-radius: 50%; pointer-events: none; }
-    @keyframes snow-fall { to { transform: translateY(100vh); } }
-</style>
-
 <script>
-    let gold = 0;
-let diamonds = 0;
-let stone = 0;
-let wood = 0;
-
-// Hàm để sau này ông dùng để cộng quà
-function addResource(type, amount) {
-    if(type === 'gold') { gold += amount; document.getElementById('gold-val').innerText = "💰 " + gold; }
-    if(type === 'diamonds') { diamonds += amount; document.getElementById('diamond-val').innerText = "💎 " + diamonds; }
-    if(type === 'stone') { stone += amount; document.getElementById('stone-val').innerText = "🪨 " + stone; }
-    if(type === 'wood') { wood += amount; document.getElementById('wood-val').innerText = "🪵 " + wood; }
-}
-let currentXP = 0;
-let currentLevel = 1;
-let xpNextLevel = 100;
+let gold = 0, diamonds = 0, stone = 0, wood = 0;
 
 function createSnow() {
     const container = document.getElementById('snow-container');
+    container.innerHTML = ''; // Xóa tuyết cũ
     for (let i = 0; i < 40; i++) {
         let snow = document.createElement('div');
         snow.className = 'snow';
         let size = Math.random() * 4 + 2 + 'px';
-        snow.style.width = size;
-        snow.style.height = size;
+        snow.style.width = size; snow.style.height = size;
         snow.style.left = Math.random() * 100 + '%';
         snow.style.top = '-' + Math.random() * 20 + 'px';
         snow.style.opacity = Math.random();
@@ -474,100 +431,67 @@ function startGame() {
     playClick();
     const loading = document.getElementById('loading-screen');
     const loadBar = document.getElementById('load-bar');
-    const landingPage = document.getElementById('landing-page');
-    const dashboard = document.getElementById('game-dashboard');
-    const nameInput = document.getElementById('userInput');
-    const displayName = document.getElementById('displayName');
+    const loadingText = document.getElementById('loading-text');
+    const loadingHeader = document.querySelector('.glitch-text'); // Tìm đúng class glitch-text
+    
     loading.style.display = 'flex';
-let progress = 0;
-    const statusTexts = [
-       "> ĐANG VƯỢT TƯỜNG LỬA...",
-        "> ĐANG TẢI TÀI NGUYÊN...",
-        "> ĐỒNG BỘ DỮ LIỆU...",
-       "> KẾT NỐI THÀNH CÔNG!"
-    ];
+    let progress = 0;
+    const statusTexts = ["> ĐANG VƯỢT TƯỜNG LỬA...", "> ĐANG TẢI TÀI NGUYÊN...", "> ĐỒNG BỘ DỮ LIỆU...", "> KẾT NỐI THÀNH CÔNG!"];
 
-    let timer = setInterval(() => {
-        progress += Math.random() * 3 + 1; // Chạy nhanh chậm ngẫu nhiên cho thật
-        if (progress > 100) progress = 100;
-        
-        const loadBar = document.getElementById('load-bar');
-        const loadingText = document.getElementById('loading-text');
-        
-        loadBar.style.width = progress + '%';
-        
-        // Cập nhật dòng chữ theo tiến trình
-        let textIdx = Math.floor((progress / 101) * statusTexts.length);
-        loadingText.innerText = `${statusTexts[textIdx]} [${Math.floor(progress)}%]`;
+    let timer = setInterval(() => {
+        progress += Math.random() * 5 + 2;
+        if (progress > 100) progress = 100;
+        
+        loadBar.style.width = progress + '%';
+        let textIdx = Math.min(Math.floor((progress / 100) * statusTexts.length), statusTexts.length - 1);
+        loadingText.innerText = `${statusTexts[textIdx]} [${Math.floor(progress)}%]`;
 
-   if (progress >= 100) {
-        clearInterval(timer);
-        
-        // 1. Đổi chữ tiêu đề thành ĐANG KẾT NỐI SERVER
-        const loadingHeader = document.querySelector('#loading-screen h2');
-        if (loadingHeader) loadingHeader.innerText = "ĐANG KẾT NỐI SERVER...";
-        
-        // 2. Đợi 1.5 giây cho người chơi nhìn thấy chữ rồi mới vào sảnh
-        setTimeout(() => {
-            // Ẩn màn hình load
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('landing-page').style.display = 'none';
+        if (progress >= 100) {
+            clearInterval(timer);
             
-            // Hiện sảnh Dashboard và căn giữa
-            const dashboard = document.getElementById('game-dashboard');
-            dashboard.style.display = 'flex';
-            dashboard.style.justifyContent = 'center';
-            dashboard.style.alignItems = 'center';
+            // Hiện chữ KẾT NỐI SERVER
+            if (loadingHeader) loadingHeader.innerText = "ĐANG KẾT NỐI SERVER...";
 
-            createSnow();
+            setTimeout(() => {
+                loading.style.display = 'none';
+                document.getElementById('landing-page').style.display = 'none';
+                
+                const dashboard = document.getElementById('game-dashboard');
+                dashboard.style.display = 'flex';
+                
+                const nameInput = document.getElementById('userInput');
+                const displayName = document.getElementById('displayName');
+                if(displayName && nameInput) {
+                    displayName.innerText = nameInput.value.trim() !== "" ? nameInput.value.toUpperCase() : "HOANG KUN";
+                }
+                createSnow();
+            }, 1500);
+        }
+    }, 100);
+}
 
-            // Cập nhật tên
-            const nameInput = document.getElementById('userInput');
-            const displayName = document.getElementById('displayName');
-            if(displayName && nameInput) {
-                displayName.innerText = nameInput.value.trim() !== "" ? nameInput.value.toUpperCase() : "HOANG KUN";
-            }
-        }, 1500); // Khoảng thời gian chờ để hiện chữ "Kết nối Server"
-    }
-    // Hàm mở kho đồ
 function openInv() {
     playClick();
     const invItems = document.getElementById('inv-items');
-    if(invItems) {
-        invItems.innerHTML = `
-            <div style="background:rgba(0,0,0,0.5); padding:12px; border:2px solid #fb923c; margin-bottom:10px; display:flex; justify-content:space-between;">
-                <span>🪵 GỖ:</span> <span>${wood}</span>
-            </div>
-            <div style="background:rgba(0,0,0,0.5); padding:12px; border:2px solid #94a3b8; margin-bottom:10px; display:flex; justify-content:space-between;">
-                <span>🪨 ĐÁ:</span> <span>${stone}</span>
-            </div>
-            <div style="background:rgba(0,0,0,0.5); padding:12px; border:2px solid #facc15; margin-bottom:10px; display:flex; justify-content:space-between;">
-                <span>💰 VÀNG:</span> <span>${gold}</span>
-            </div>
-        `;
-    }
+    invItems.innerHTML = `
+        <div style="background:rgba(0,0,0,0.5); padding:10px; border:2px solid #fb923c; display:flex; justify-content:space-between;"><span>🪵 GỖ:</span> <span>${wood}</span></div>
+        <div style="background:rgba(0,0,0,0.5); padding:10px; border:2px solid #94a3b8; display:flex; justify-content:space-between;"><span>🪨 ĐÁ:</span> <span>${stone}</span></div>
+        <div style="background:rgba(0,0,0,0.5); padding:10px; border:2px solid #facc15; display:flex; justify-content:space-between;"><span>💰 VÀNG:</span> <span>${gold}</span></div>
+    `;
     document.getElementById('inventory-screen').style.display = 'flex';
 }
 
-// Hàm đóng kho đồ
-function closeInv() {
-    playClick();
-    document.getElementById('inventory-screen').style.display = 'none';
-}
+function closeInv() { playClick(); document.getElementById('inventory-screen').style.display = 'none'; }
 
-// Hàm vào rừng (Chuyển cảnh)
 function enterGame() {
     playClick();
     document.getElementById('game-dashboard').style.display = 'none';
     document.getElementById('play-screen').style.display = 'flex';
 }
 
-// Hàm quay lại sảnh (Thoát khỏi rừng)
 function backToLobby() {
     playClick();
     document.getElementById('play-screen').style.display = 'none';
-    document.getElementById('game-dashboard').style.display = 'block';
+    document.getElementById('game-dashboard').style.display = 'flex';
 }
 </script>
-</body>
-</html>

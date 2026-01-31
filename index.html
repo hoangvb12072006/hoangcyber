@@ -491,27 +491,6 @@
     </div>
 </section>
 
-    <section id="contact" style="padding: 80px 0; background: #0a0a0a;">
-    <div class="container">
-        <h2 style="text-align: center; margin-bottom: 40px; color: #fff; font-size: 2.5rem; text-transform: uppercase;">Kết Nối Với Chúng Tôi</h2>
-        
-        <div style="max-width: 600px; margin: 0 auto; background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333;">
-            <div class="form-group" style="margin-bottom: 20px;">
-                <input type="text" id="cus_name" placeholder="Tên của bạn" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <input type="email" id="cus_email" placeholder="Email liên lạc" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <textarea id="cus_msg" placeholder="Tin nhắn của bạn..." rows="5" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;"></textarea>
-            </div>
-            <button type="button" onclick="sendToMess()" class="main-btn" style="width: 100%; padding: 15px; border: none; cursor: pointer; background: linear-gradient(45deg, #0084ff, #00c6ff); color: #fff; font-weight: bold; border-radius: 5px; text-transform: uppercase;">
-                Gửi Qua Messenger
-            </button>
-        </div>
-    </div>
-</section>
-
     <section id="about-intro" style="background: rgba(255,255,255,0.02); padding: 100px 10%;">
     <h2 class="section-title">Chào Mừng Đến Với Thế Giới Số</h2>
     <div style="text-align: center; max-width: 800px; margin: 0 auto;">
@@ -541,22 +520,46 @@
         </div>
     </div>
 </section>
-
-       <section id="contact">
+    
+<section id="contact" style="padding: 80px 0; background: #0a0a0a;">
         <h2 class="section-title">Kết Nối Với Chúng Tôi</h2>
-        <div class="contact-form">
-            <div class="form-group">
-                <input type="text" placeholder="Tên của bạn">
+        <div class="contact-form" style="max-width: 600px; margin: 0 auto; background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333;">
+            <div class="form-group" style="margin-bottom: 20px;">
+                <input type="text" id="cus_name" placeholder="Tên của bạn" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;">
             </div>
-            <div class="form-group">
-                <input type="email" placeholder="Email liên lạc">
+            <div class="form-group" style="margin-bottom: 20px;">
+                <input type="email" id="cus_email" placeholder="Email liên lạc" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;">
             </div>
-            <div class="form-group">
-                <textarea rows="5" placeholder="Tin nhắn của bạn..."></textarea>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <textarea id="cus_msg" rows="5" placeholder="Tin nhắn của bạn..." style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;"></textarea>
             </div>
-            <button class="main-btn" style="width: 100%;">GỬI TIN NHẮN</button>
+            <button class="main-btn" onclick="sendToMess()" style="width: 100%; padding: 15px; background: linear-gradient(45deg, #0084ff, #00c6ff); border: none; color: #fff; font-weight: bold; cursor: pointer; border-radius: 5px;">GỬI TIN NHẮN</button>
         </div>
     </section>
+    
+    <script>
+    function sendToMess() {
+        const name = document.getElementById('cus_name').value;
+        const email = document.getElementById('cus_email').value;
+        const msg = document.getElementById('cus_msg').value;
+
+        if (!name || !msg) {
+            alert("Vui lòng nhập tên và tin nhắn nhé!");
+            return;
+        }
+
+        // Hiện thông báo cảm ơn có nút ĐÓNG
+        const notice = document.createElement('div');
+        notice.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#1a1a1a; color:white; padding:15px 25px; border-radius:10px; z-index:10000; box-shadow: 0 0 20px #00f2fe; border: 1px solid #00f2fe; display:flex; align-items:center; gap:20px; min-width:320px;";
+        notice.innerHTML = `<span style="flex-grow:1;">🚀 Đã ghi nhận! Cảm ơn ${name} nhé!</span>
+                            <button onclick="this.parentElement.remove()" style="background:#00f2fe; border:none; color:#000; cursor:pointer; font-weight:bold; padding:5px 15px; border-radius:5px; text-transform:uppercase;">Đóng</button>`;
+        document.body.appendChild(notice);
+
+        // Mở Messenger (Đã sửa lỗi link)
+        const encodedMsg = encodeURIComponent("Chào Hoang Kun, mình là " + name + ". Email: " + email + ". Nội dung: " + msg);
+        window.open("https://m.me/nvh12072006?text=" + encodedMsg, "_blank");
+    }
+    </script>
 
       <footer>
         <div class="logo" style="margin-bottom: 20px;">CYBER.VIBE</div>

@@ -491,6 +491,49 @@
     </div>
 </section>
 
+    <section id="contact" style="padding: 80px 0; background: #0a0a0a;">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 40px; color: #fff; font-size: 2.5rem; text-transform: uppercase;">Kết Nối Với Chúng Tôi</h2>
+        
+        <div style="max-width: 600px; margin: 0 auto; background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333;">
+            <div class="form-group" style="margin-bottom: 20px;">
+                <input type="text" id="cus_name" placeholder="Tên của bạn" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <input type="email" id="cus_email" placeholder="Email liên lạc" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <textarea id="cus_msg" placeholder="Tin nhắn của bạn..." rows="5" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px;"></textarea>
+            </div>
+            <button type="button" onclick="sendToMess()" class="main-btn" style="width: 100%; padding: 15px; border: none; cursor: pointer; background: linear-gradient(45deg, #0084ff, #00c6ff); color: #fff; font-weight: bold; border-radius: 5px; text-transform: uppercase;">
+                Gửi Qua Messenger
+            </button>
+        </div>
+    </div>
+</section>
+
+<footer style="text-align: center; padding: 40px 0; border-top: 1px solid #333;">
+    <p>&copy; 2026 Design by HOANG KUN. All rights reserved.</p>
+</footer>
+
+<script>
+function sendToMess() {
+    const name = document.getElementById('cus_name').value;
+    const email = document.getElementById('cus_email').value;
+    const msg = document.getElementById('cus_msg').value;
+    
+    if(!name || !msg) {
+        alert("Vui lòng nhập tên và tin nhắn nhé!");
+        return;
+    }
+
+    const fullMsg = `Chào Hoang Kun, mình là ${name}. Email: ${email}. Nội dung: ${msg}`;
+    const encodedMsg = encodeURIComponent(fullMsg);
+    
+    // Mở Messenger của bạn
+    window.open('https://m.me/nvh12072006?text=' + encodedMsg, '_blank');
+</script>
+
     <section id="contact">
         <h2 class="section-title">Kết Nối Với Chúng Tôi</h2>
         <div class="contact-form">

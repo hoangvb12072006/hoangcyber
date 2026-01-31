@@ -549,16 +549,27 @@
         }
 
         // Hiện thông báo cảm ơn có nút ĐÓNG
-        const notice = document.createElement('div');
-        notice.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#1a1a1a; color:white; padding:15px 25px; border-radius:10px; z-index:10000; box-shadow: 0 0 20px #00f2fe; border: 1px solid #00f2fe; display:flex; align-items:center; gap:20px; min-width:320px;";
-        notice.innerHTML = `<span style="flex-grow:1;">🚀 Đã ghi nhận! Cảm ơn ${name} nhé!</span>
-                            <button onclick="this.parentElement.remove()" style="background:#00f2fe; border:none; color:#000; cursor:pointer; font-weight:bold; padding:5px 15px; border-radius:5px; text-transform:uppercase;">Đóng</button>`;
-        document.body.appendChild(notice);
+// Tạo hộp thông báo với hiệu ứng Slide Down
+    const notice = document.createElement('div');
+    notice.style.cssText = "position:fixed; top:-100px; left:50%; transform:translateX(-50%); background:#1a1a1a; color:white; padding:15px 25px; border-radius:10px; z-index:10000; box-shadow: 0 0 20px #00f2fe; border: 1px solid #00f2fe; display:flex; align-items:center; gap:20px; min-width:320px; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity:0;";
+    
+    notice.innerHTML = `<span style="flex-grow:1;">🚀 Đã ghi nhận! Cảm ơn ${name} nhé!</span>
+                        <button onclick="closeNotice(this)" style="background:#00f2fe; border:none; color:#000; cursor:pointer; font-weight:bold; padding:5px 15px; border-radius:5px; text-transform:uppercase;">Đóng</button>`;
+    
+    document.body.appendChild(notice);
 
+    // Kích hoạt hiệu ứng bay xuống sau 10ms
+  setTimeout(() => { notice.style.top = "20px"; notice.style.opacity = "1"; }, 10);
         // Mở Messenger (Đã sửa lỗi link)
         const encodedMsg = encodeURIComponent("Chào Hoang Kun, mình là " + name + ". Email: " + email + ". Nội dung: " + msg);
         window.open("https://m.me/nvh12072006?text=" + encodedMsg, "_blank");
-    }
+  }
+        // Hàm đóng bảng có hiệu ứng bay ngược lên
+window.closeNotice = function(btn) {
+    const el = btn.parentElement;
+    el.style.top = "-100px"; el.style.opacity = "0";
+    setTimeout(() => { el.remove(); }, 500);
+};
     </script>
 
       <footer>

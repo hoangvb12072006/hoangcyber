@@ -3,184 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trường Cao đẳng Kỹ thuật Công nghệ Cao</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>AnimeGlass - Premium Mirrors</title>
     <style>
         :root {
-            --primary: #004a99; /* Xanh đậm kỹ thuật */
-            --secondary: #ff6600; /* Cam năng động */
-            --text-dark: #333;
-            --text-light: #fff;
-            --bg-gray: #f4f7f6;
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --accent-color: #ffffff;
+            --text-dim: #a0a0a0;
+            --transition: all 0.3s ease;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: var(--bg-gray);
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- Navigation --- */
         nav {
-            position: fixed; width: 100%; top: 0; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 8%; transition: 0.5s;
-            background: transparent;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 5%;
+            align-items: center;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 90%;
+            z-index: 100;
         }
-        nav.sticky {
-            background: var(--primary);
-            padding: 10px 8%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .logo {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700; color: white; font-size: 1.5rem;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .nav-links { display: flex; list-style: none; gap: 30px; }
-        .nav-links a {
-            color: white; text-decoration: none; font-weight: 500;
-            font-size: 0.9rem; transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--secondary); }
 
-        /* --- HERO SECTION --- */
+        .logo { font-size: 24px; font-weight: bold; cursor: pointer; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; margin: 0 15px; transition: var(--transition); }
+        .nav-links a:hover { color: white; }
+        .btn-login { background: white; color: black; padding: 8px 20px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer; }
+
+        /* --- Hero Section --- */
         .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0, 74, 153, 0.7), rgba(0, 0, 0, 0.5)), 
-                        url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; text-align: center; color: white; padding: 0 20px;
-        }
-        .hero h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 3.5rem; margin-bottom: 20px;
-            animation: fadeInUp 1s ease;
-        }
-        .hero p {
-            font-size: 1.2rem; margin-bottom: 30px; max-width: 800px;
-            animation: fadeInUp 1.2s ease;
-        }
-        .btn-cta {
-            padding: 15px 40px; background: var(--secondary);
-            color: white; text-decoration: none; border-radius: 50px;
-            font-weight: bold; text-transform: uppercase;
-            transition: 0.3s; animation: fadeInUp 1.4s ease;
-        }
-        .btn-cta:hover { transform: scale(1.05); background: #e65c00; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-
-        /* --- STATS SECTION --- */
-        .stats {
-            display: flex; justify-content: space-around;
-            padding: 50px 8%; background: white; margin-top: -50px;
-            border-radius: 10px; width: 84%; margin-left: auto; margin-right: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; z-index: 10;
-        }
-        .stat-item { text-align: center; }
-        .stat-item h2 { font-size: 2.5rem; color: var(--primary); }
-        .stat-item p { font-weight: 500; color: #777; }
-
-        /* --- MAJORS (CHUYÊN NGÀNH) --- */
-        .majors { padding: 100px 8%; text-align: center; }
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5rem; margin-bottom: 50px; color: var(--primary);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .card {
-            background: white; padding: 40px; border-radius: 15px;
-            transition: 0.4s; border-bottom: 5px solid transparent;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            border-bottom: 5px solid var(--secondary);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-        .card i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
-        .card h3 { margin-bottom: 15px; }
-
-        /* --- FOOTER --- */
-        footer {
-            background: #111; color: white; padding: 50px 8% 20px;
-        }
-        .footer-content {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px; margin-bottom: 40px;
-        }
-        .footer-content h4 { margin-bottom: 20px; color: var(--secondary); }
-        .copy { text-align: center; border-top: 1px solid #333; padding-top: 20px; font-size: 0.8rem; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 120px 10% 60px;
+            min-height: 80vh;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .nav-links { display: none; }
-            .stats { flex-direction: column; gap: 30px; }
+        .hero-content { max-width: 500px; }
+        .hero-content h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero-content p { color: var(--text-dim); line-height: 1.6; margin-bottom: 30px; }
+
+        .stats { display: flex; gap: 30px; margin-bottom: 30px; }
+        .stat-item h3 { margin: 0; font-size: 1.5rem; }
+        .stat-item p { margin: 5px 0; font-size: 0.8rem; }
+
+        .btn-explore {
+            padding: 15px 30px;
+            background: white;
+            color: black;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .btn-explore:hover { transform: scale(1.05); }
+
+        /* --- Mirror Card Effect --- */
+        .mirror-card {
+            width: 350px;
+            height: 450px;
+            background: #222;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+        .mirror-card:hover { box-shadow: 0 0 50px rgba(255,255,255,0.2); transform: translateY(-10px); }
+        .mirror-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+
+        /* --- Modal (Cửa sổ Order/Login) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none; /* Ẩn mặc định */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .modal h2 { margin-bottom: 25px; }
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <nav id="navbar">
-        <div class="logo">CAO DANG KI THUAT</div>
-        <ul class="nav-links">
-            <li><a href="#">Trang Chủ</a></li>
-            <li><a href="#">Tuyển Sinh</a></li>
-            <li><a href="#">Chuyên Ngành</a></li>
-            <li><a href="#">Tin Tức</a></li>
-            <li><a href="#">Liên Hệ</a></li>
-        </ul>
+    <nav>
+        <div class="logo">AnimeGlass</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Products</a>
+            <a href="#">About</a>
+        </div>
+        <button class="btn-login" onclick="toggleModal('loginModal')">Login</button>
     </nav>
 
-    <header class="hero">
-        <h1>CAO DANG KI THUAT</h1>
-        <p>Trường Cao đẳng Kỹ thuật hàng đầu với chương trình đào tạo chuẩn quốc tế, trang thiết bị hiện đại và cam kết việc làm 100% cho sinh viên.</p>
-        <a href="#" class="btn-cta">Đăng ký xét tuyển ngay</a>
-    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Premium Anime Mirrors</h1>
+            <p>Biến không gian của bạn trở nên đẳng cấp với bộ sưu tập gương nhân vật anime cao cấp. Mỗi tấm gương là một tác phẩm nghệ thuật.</p>
+            
+            <div class="stats">
+                <div class="stat-item"><h3>500+</h3><p>Khách hàng</p></div>
+                <div class="stat-item"><h3>50+</h3><p>Mẫu thiết kế</p></div>
+                <div class="stat-item"><h3>24h</h3><p>Giao hàng nhanh</p></div>
+            </div>
 
-    <section class="stats">
-        <div class="stat-item">
-            <h2>15+</h2>
-            <p>Năm Kinh Nghiệm</p>
+            <a href="#" class="btn-explore" onclick="toggleModal('orderModal')">Explore Collection</a>
         </div>
-        <div class="stat-item">
-            <h2>5000+</h2>
-            <p>Sinh Viên Đang Theo Học</p>
-        </div>
-        <div class="stat-item">
-            <h2>98%</h2>
-            <p>Sinh Viên Có Việc Làm</p>
-        </div>
-        <div class="stat-item">
-            <h2>20+</h2>
-            <p>Đối Tác Doanh Nghiệp</p>
+
+        <div class="mirror-card">
+            <img src="https://via.placeholder.com/350x450/000000/FFFFFF?text=Berserk+Mirror" alt="Anime Mirror">
         </div>
     </section>
 
-    <section class="majors">
-        <h2 class="section-title">Chương Trình Đào Tạo</h2>
-        <div class="grid">
-            <div class="card">
-                <i class="fas fa-microchip"></i>
-                <h3>Điện tử Công nghiệp</h3>
-                <p>Nghiên cứu về vi mạch, hệ thống điều khiển tự động và robot thông minh.</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-car"></i>
-                <h3>Công nghệ Ô tô</h3>
-                <p>Làm chủ kỹ thuật sửa chữa, bảo trì và lắp ráp các dòng ô tô hiện đại nhất.</p>
-            </div>
-            <div class="
+    <div class="modal-overlay" id="loginModal" onclick="closeModal(event)">
+        <div class="modal">
+            <h2>Login / Sign Up</h2>
+            <input type="email" placeholder="Email Address">
+            <input type="password" placeholder="Password">
+            <button class="btn-submit">Login</button>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 15px;">Don't have an account? Sign up</p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="orderModal" onclick="closeModal(event)">
+        <div class="modal">
+            <h2>Order Your Mirror</h2>
+            <input type="text" placeholder="Full Name">
+            <input type="text" placeholder="Phone Number">
+            <input type="text" placeholder="City">
+            <textarea placeholder="Full Address" style="width:100%; height:80px; background:#2a2a2a; border-radius:8px; border:1px solid #444; color:white; padding:10px; box-sizing:border-box; margin-top:10px;"></textarea>
+            <button class="btn-submit">Confirm Order</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(event) {
+            if (event.target.className === 'modal-overlay') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

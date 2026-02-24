@@ -3,192 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoangkun Creative Hub</title>
+    <title>Website Đa Năng | Giải Pháp Toàn Diện</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* Reset & Nền */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        /* CSS Cơ Bản & Reset */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #ff9800;
+            --text-color: #333;
+            --bg-light: #f4f4f4;
+            --white: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+        }
         body {
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            color: white;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        ul {
+            list-style: none;
         }
 
-        /* Hiệu ứng hạt bay (Canvas) */
-        #bg-canvas {
-            position: absolute;
-            top: 0; left: 0; z-index: 0;
-        }
-
-        /* Container chính - Glassmorphism */
-        .glass-card {
-            position: relative;
-            z-index: 1;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            text-align: center;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Đồng hồ */
-        #clock {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
-        /* To-do List */
-        .todo-section {
-            margin-top: 30px;
-            text-align: left;
-        }
-        input {
-            width: 75%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            outline: none;
-        }
-        button {
-            padding: 10px 15px;
-            border-radius: 5px;
-            border: none;
-            background: #00d2ff;
-            color: white;
-            cursor: pointer;
+        /* Header & Navigation */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
             transition: 0.3s;
         }
-        button:hover { background: #3a7bd5; transform: scale(1.05); }
-
-        ul { list-style: none; margin-top: 15px; max-height: 150px; overflow-y: auto; }
-        li {
-            background: rgba(255, 255, 255, 0.1);
-            margin-bottom: 5px;
-            padding: 8px;
-            border-radius: 5px;
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
             display: flex;
             justify-content: space-between;
-            animation: slideIn 0.3s ease;
+            align-items: center;
+            padding: 15px 0;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        .menu-btn {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; translateX: -10px; }
-            to { opacity: 1; translateX: 0; }
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(rgba(0, 86, 179, 0.8), rgba(0, 86, 179, 0.8)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+            margin-top: 60px;
+        }
+        #hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        #hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #e68a00;
+        }
+
+        /* Sections Chung */
+        section {
+            padding: 80px 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+        }
+
+        /* About Section */
+        #about {
+            background: var(--bg-light);
+            text-align: center;
+        }
+        .about-content {
+            max-width: 800px;
+            margin: auto;
+            font-size: 1.1rem;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .service-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        .service-card h3 {
+            margin: 15px 0;
+            color: var(--primary-color);
+        }
+
+        /* Contact Section */
+        #contact {
+            background: var(--bg-light);
+        }
+        .contact-form {
+            max-width: 600px;
+            margin: auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: var(--white);
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                text-align: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                padding: 15px 0;
+                border-bottom: 1px solid #eee;
+            }
+            .menu-btn {
+                display: block;
+            }
+            #hero h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
-
-    <div class="glass-card">
-        <h2 style="margin-bottom: 10px;">XIN CHÀO!</h2>
-        <div id="clock">00:00:00</div>
-        <p id="date">Thứ Ba, 24 Tháng 2, 2026</p>
-
-        <div class="todo-section">
-            <h4>Nhiệm vụ hôm nay:</h4>
-            <div style="display:flex; gap: 5px; margin-top: 10px;">
-                <input type="text" id="todo-input" placeholder="Nhập việc cần làm...">
-                <button onclick="addTodo()">Thêm</button>
-            </div>
-            <ul id="todo-list">
-                </ul>
+    <header id="header">
+        <div class="container">
+            <a href="#" class="logo">WebPro</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero">Trang chủ</a></li>
+                <li><a href="#about">Giới thiệu</a></li>
+                <li><a href="#services">Dịch vụ</a></li>
+                <li><a href="#contact">Liên hệ</a></li>
+            </ul>
+            <div class="menu-btn" id="menuBtn">☰</div>
         </div>
-    </div>
+    </header>
+
+    <section id="hero">
+        <h1>Xây Dựng Tương Lai Số Cùng Bạn</h1>
+        <p>Chúng tôi cung cấp các giải pháp công nghệ toàn diện giúp doanh nghiệp của bạn phát triển mạnh mẽ trên nền tảng trực tuyến.</p>
+        <a href="#services" class="btn">Khám phá ngay</a>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">Về Chúng Tôi</h2>
+            <div class="about-content">
+                <p>WebPro là một đội ngũ đam mê công nghệ và sáng tạo. Chúng tôi tin rằng một trang web không chỉ là bộ mặt của doanh nghiệp mà còn là công cụ mạnh mẽ để thu hút khách hàng và tăng cường doanh thu. Với hơn 10 năm kinh nghiệm, chúng tôi cam kết mang lại những sản phẩm chất lượng nhất.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <h2 class="section-title">Dịch Vụ Nổi Bật</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Thiết Kế Website</h3>
+                    <p>Giao diện hiện đại, chuẩn UI/UX, tương thích trên mọi thiết bị di động và tốc độ tải trang cực nhanh.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Marketing Online</h3>
+                    <p>Chiến lược SEO, quảng cáo Google, Facebook hiệu quả giúp tiếp cận đúng khách hàng mục tiêu.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Phát Triển Ứng Dụng</h3>
+                    <p>Xây dựng các ứng dụng web và mobile phức tạp, đáp ứng nhu cầu quản trị và kinh doanh đặc thù.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Liên Hệ Với Chúng Tôi</h2>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Họ và tên của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Email của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" placeholder="Tin nhắn của bạn..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Gửi Tin Nhắn</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 WebPro. All rights reserved.</p>
+    </footer>
 
     <script>
-        // 1. Xử lý Đồng hồ
-        function updateClock() {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${h}:${m}:${s}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        // Toggle Mobile Menu
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
 
-        // 2. Xử lý To-do List
-        function addTodo() {
-            const input = document.getElementById('todo-input');
-            const val = input.value;
-            if (val === '') return;
-
-            const li = document.createElement('li');
-            li.innerHTML = `${val} <span style="cursor:pointer; color:#ff4b2b" onclick="this.parentElement.remove()">✕</span>`;
-            document.getElementById('todo-list').appendChild(li);
-            input.value = '';
-        }
-
-        // 3. Hiệu ứng Hạt (Particles) Nền
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            if (navLinks.classList.contains('active')) {
+                menuBtn.innerHTML = '✖'; // Đổi icon thành dấu X khi mở
+            } else {
+                menuBtn.innerHTML = '☰';
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+        });
 
-        function createParticles() {
-            for (let i = 0; i < 100; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+        // Đóng menu trên mobile khi click vào link
+        document.querySelectorAll('.nav-links li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuBtn.innerHTML = '☰';
             });
-            requestAnimationFrame(animate);
-        }
+        });
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        createParticles();
-        animate();
+        // Xử lý Form Liên Hệ (Mô phỏng)
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Ngăn trang reload
+            const name = document.getElementById('name').value;
+            alert('Cảm ơn ' + name + '! Tin nhắn của bạn đã được gửi. Chúng tôi sẽ liên hệ lại sớm.');
+            this.reset(); // Xóa trắng form sau khi gửi
+        });
     </script>
 </body>
 </html>

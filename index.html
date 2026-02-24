@@ -3,326 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Đa Năng | Giải Pháp Toàn Diện</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>HOANGKUN | Đa tính năng</title>
     <style>
-        /* CSS Cơ Bản & Reset */
+        /* --- CSS BIẾN MÀU SẮC (CHO DARK/LIGHT MODE) --- */
         :root {
-            --primary-color: #0056b3;
-            --secondary-color: #ff9800;
+            --bg-color: #f4f4f9;
             --text-color: #333;
-            --bg-light: #f4f4f4;
-            --white: #ffffff;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-            scroll-behavior: smooth;
-        }
-        body {
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        a {
-            text-decoration: none;
-            color: var(--text-color);
-        }
-        ul {
-            list-style: none;
+            --primary-color: #2563eb;
+            --card-bg: #fff;
+            --nav-bg: #ffffff;
+            --border-color: #ddd;
         }
 
-        /* Header & Navigation */
-        header {
-            background-color: var(--white);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            transition: 0.3s;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            overflow: hidden;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-        .nav-links a {
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-        .menu-btn {
-            display: none;
-            font-size: 24px;
-            cursor: pointer;
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #f4f4f9;
+            --primary-color: #3b82f6;
+            --card-bg: #1e1e1e;
+            --nav-bg: #1e1e1e;
+            --border-color: #333;
         }
 
-        /* Hero Section */
-        #hero {
-            background: linear-gradient(rgba(0, 86, 179, 0.8), rgba(0, 86, 179, 0.8)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: var(--white);
-            padding: 0 20px;
-            margin-top: 60px;
-        }
-        #hero h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        #hero p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            max-width: 600px;
-        }
-        .btn {
-            display: inline-block;
-            background: var(--secondary-color);
-            color: var(--white);
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #e68a00;
-        }
+        /* --- CSS CƠ BẢN --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- HEADER & NAVBAR --- */
+        header { background-color: var(--nav-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary-color); }
+        .nav-links a { margin: 0 15px; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary-color); }
+        
+        /* Nút Dark Mode */
+        #theme-toggle { background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
-        /* Sections Chung */
-        section {
-            padding: 80px 0;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            color: var(--primary-color);
-        }
+        /* --- HERO SECTION --- */
+        .hero { text-align: center; padding: 100px 20px; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 20px; opacity: 0.8; }
+        
+        /* --- BỘ LỌC (FILTER) & GRID --- */
+        .section-title { text-align: center; margin: 40px 0 20px; font-size: 2rem; }
+        .filter-btns { text-align: center; margin-bottom: 30px; }
+        .filter-btn { background: transparent; border: 2px solid var(--primary-color); color: var(--text-color); padding: 8px 20px; margin: 0 5px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: white; }
 
-        /* About Section */
-        #about {
-            background: var(--bg-light);
-            text-align: center;
-        }
-        .about-content {
-            max-width: 800px;
-            margin: auto;
-            font-size: 1.1rem;
-        }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 0 5%; max-width: 1200px; margin: auto; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card h3 { margin-bottom: 10px; color: var(--primary-color); }
 
-        /* Services Section */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            text-align: center;
-        }
-        .service-card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        .service-card:hover {
-            transform: translateY(-10px);
-        }
-        .service-card h3 {
-            margin: 15px 0;
-            color: var(--primary-color);
-        }
+        /* --- FORM LIÊN HỆ --- */
+        .contact-section { max-width: 600px; margin: 50px auto; padding: 0 20px; }
+        .contact-form { display: flex; flex-direction: column; gap: 15px; background: var(--card-bg); padding: 30px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .contact-form input, .contact-form textarea { padding: 12px; border: 1px solid var(--border-color); border-radius: 5px; background: var(--bg-color); color: var(--text-color); }
+        .contact-form button { padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold; }
+        .contact-form button:hover { opacity: 0.9; }
 
-        /* Contact Section */
-        #contact {
-            background: var(--bg-light);
-        }
-        .contact-form {
-            max-width: 600px;
-            margin: auto;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        .form-group textarea {
-            height: 150px;
-            resize: vertical;
-        }
-
+        /* --- NÚT BACK TO TOP --- */
+        #backToTop { position: fixed; bottom: 30px; right: 30px; display: none; background: var(--primary-color); color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 16px; z-index: 1000; }
+        
         /* Footer */
-        footer {
-            background: #222;
-            color: var(--white);
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                text-align: center;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .nav-links li {
-                padding: 15px 0;
-                border-bottom: 1px solid #eee;
-            }
-            .menu-btn {
-                display: block;
-            }
-            #hero h1 {
-                font-size: 2rem;
-            }
-        }
+        footer { text-align: center; padding: 20px; margin-top: 50px; border-top: 1px solid var(--border-color); background: var(--nav-bg); }
     </style>
 </head>
 <body>
 
-    <header id="header">
-        <div class="container">
-            <a href="#" class="logo">WebPro</a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#hero">Trang chủ</a></li>
-                <li><a href="#about">Giới thiệu</a></li>
-                <li><a href="#services">Dịch vụ</a></li>
-                <li><a href="#contact">Liên hệ</a></li>
-            </ul>
-            <div class="menu-btn" id="menuBtn">☰</div>
-        </div>
+    <header>
+        <div class="logo">HOANGKUN</div>
+        <nav class="nav-links">
+            <a href="#home">Trang chủ</a>
+            <a href="#projects">Sản phẩm</a>
+            <a href="#contact">Liên hệ</a>
+        </nav>
+        <button id="theme-toggle">🌙 Dark Mode</button>
     </header>
 
-    <section id="hero">
-        <h1>Xây Dựng Tương Lai Số Cùng Bạn</h1>
-        <p>Chúng tôi cung cấp các giải pháp công nghệ toàn diện giúp doanh nghiệp của bạn phát triển mạnh mẽ trên nền tảng trực tuyến.</p>
-        <a href="#services" class="btn">Khám phá ngay</a>
+    <section id="home" class="hero">
+        <h1>Chào mừng đến với Website Đa Tính Năng</h1>
+        <p>Tích hợp HTML, CSS và JavaScript để tạo ra trải nghiệm người dùng tối ưu nhất.</p>
     </section>
 
-    <section id="about">
-        <div class="container">
-            <h2 class="section-title">Về Chúng Tôi</h2>
-            <div class="about-content">
-                <p>WebPro là một đội ngũ đam mê công nghệ và sáng tạo. Chúng tôi tin rằng một trang web không chỉ là bộ mặt của doanh nghiệp mà còn là công cụ mạnh mẽ để thu hút khách hàng và tăng cường doanh thu. Với hơn 10 năm kinh nghiệm, chúng tôi cam kết mang lại những sản phẩm chất lượng nhất.</p>
+    <section id="projects">
+        <h2 class="section-title">Danh sách Sản phẩm</h2>
+        
+        <div class="filter-btns">
+            <button class="filter-btn active" onclick="filterItems('all')">Tất cả</button>
+            <button class="filter-btn" onclick="filterItems('code')">Mã nguồn (Code)</button>
+            <button class="filter-btn" onclick="filterItems('design')">Thiết kế</button>
+        </div>
+
+        <div class="grid-container">
+            <div class="card item code">
+                <h3>Template Bán Hàng</h3>
+                <p>Mã nguồn website cửa hàng chuẩn SEO.</p>
+            </div>
+            <div class="card item design">
+                <h3>Logo Độc Quyền</h3>
+                <p>Bộ thiết kế nhận diện thương hiệu.</p>
+            </div>
+            <div class="card item code">
+                <h3>Hệ Thống Quản Lý</h3>
+                <p>Code quản lý học sinh / sinh viên.</p>
+            </div>
+            <div class="card item design">
+                <h3>Pixel Art</h3>
+                <p>Thiết kế nhân vật phong cách retro.</p>
             </div>
         </div>
     </section>
 
-    <section id="services">
-        <div class="container">
-            <h2 class="section-title">Dịch Vụ Nổi Bật</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Thiết Kế Website</h3>
-                    <p>Giao diện hiện đại, chuẩn UI/UX, tương thích trên mọi thiết bị di động và tốc độ tải trang cực nhanh.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Marketing Online</h3>
-                    <p>Chiến lược SEO, quảng cáo Google, Facebook hiệu quả giúp tiếp cận đúng khách hàng mục tiêu.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Phát Triển Ứng Dụng</h3>
-                    <p>Xây dựng các ứng dụng web và mobile phức tạp, đáp ứng nhu cầu quản trị và kinh doanh đặc thù.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact">
-        <div class="container">
-            <h2 class="section-title">Liên Hệ Với Chúng Tôi</h2>
-            <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <input type="text" id="name" placeholder="Họ và tên của bạn" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" placeholder="Email của bạn" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" placeholder="Tin nhắn của bạn..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%;">Gửi Tin Nhắn</button>
-                </form>
-            </div>
-        </div>
+    <section id="contact" class="contact-section">
+        <h2 class="section-title">Gửi tin nhắn</h2>
+        <form class="contact-form" id="myForm">
+            <input type="text" id="name" placeholder="Tên của bạn..." required>
+            <input type="email" id="email" placeholder="Email của bạn..." required>
+            <textarea id="message" rows="5" placeholder="Nội dung tin nhắn..." required></textarea>
+            <button type="submit">Gửi thông tin</button>
+        </form>
     </section>
 
     <footer>
-        <p>&copy; 2026 WebPro. All rights reserved.</p>
+        <p>&copy; 2026 HOANGKUN. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Toggle Mobile Menu
-        const menuBtn = document.getElementById('menuBtn');
-        const navLinks = document.getElementById('navLinks');
+    <button id="backToTop" onclick="scrollToTop()">⬆</button>
 
-        menuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            if (navLinks.classList.contains('active')) {
-                menuBtn.innerHTML = '✖'; // Đổi icon thành dấu X khi mở
+    <script>
+        // 1. CHẾ ĐỘ TỐI / SÁNG (Dark/Light Mode)
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Kiểm tra xem người dùng đã lưu chế độ nào chưa
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerText = '☀️ Light Mode';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggleBtn.innerText = '☀️ Light Mode';
             } else {
-                menuBtn.innerHTML = '☰';
+                localStorage.setItem('theme', 'light');
+                themeToggleBtn.innerText = '🌙 Dark Mode';
             }
         });
 
-        // Đóng menu trên mobile khi click vào link
-        document.querySelectorAll('.nav-links li a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuBtn.innerHTML = '☰';
-            });
-        });
+        // 2. TÍNH NĂNG LỌC SẢN PHẨM (Filter)
+        function filterItems(category) {
+            const items = document.querySelectorAll('.item');
+            const btns = document.querySelectorAll('.filter-btn');
+            
+            // Xóa class active ở tất cả nút và thêm vào nút vừa bấm
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-        // Xử lý Form Liên Hệ (Mô phỏng)
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Ngăn trang reload
+            items.forEach(item => {
+                if (category === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    if (item.classList.contains(category)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // 3. XỬ LÝ FORM LIÊN HỆ
+        document.getElementById('myForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Ngăn trang bị reload khi bấm Gửi
             const name = document.getElementById('name').value;
-            alert('Cảm ơn ' + name + '! Tin nhắn của bạn đã được gửi. Chúng tôi sẽ liên hệ lại sớm.');
+            alert('Cảm ơn ' + name + '! Tin nhắn của bạn đã được gửi thành công.');
             this.reset(); // Xóa trắng form sau khi gửi
         });
+
+        // 4. NÚT BACK TO TOP
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Cuộn mượt mà
+            });
+        }
     </script>
 </body>
 </html>

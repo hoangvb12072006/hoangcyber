@@ -3,71 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOANGKUN | Đa tính năng</title>
+    <title>HOANGKUN | Đa tính năng & Hiệu ứng</title>
     <style>
-        /* --- CSS BIẾN MÀU SẮC (CHO DARK/LIGHT MODE) --- */
+        /* --- CSS BIẾN MÀU SẮC --- */
         :root {
             --bg-color: #f4f4f9;
             --text-color: #333;
             --primary-color: #2563eb;
+            --secondary-color: #1e40af;
             --card-bg: #fff;
             --nav-bg: #ffffff;
             --border-color: #ddd;
+            --hover-bg: #e2e8f0;
         }
-
         .dark-mode {
             --bg-color: #121212;
             --text-color: #f4f4f9;
             --primary-color: #3b82f6;
+            --secondary-color: #60a5fa;
             --card-bg: #1e1e1e;
-            --nav-bg: #1e1e1e;
+            --nav-bg: #1a1a1a;
             --border-color: #333;
+            --hover-bg: #2d3748;
         }
 
         /* --- CSS CƠ BẢN --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.4s ease, color 0.4s ease; scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
-        
+
+        /* --- PRELOADER (MÀN HÌNH CHỜ) --- */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
+        .spinner { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
         /* --- HEADER & NAVBAR --- */
-        header { background-color: var(--nav-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-bottom: 1px solid var(--border-color); }
-        .logo { font-size: 24px; font-weight: bold; color: var(--primary-color); }
-        .nav-links a { margin: 0 15px; font-weight: 500; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--primary-color); }
+        header { background-color: var(--nav-bg); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(10px); background-color: rgba(var(--nav-bg), 0.9); }
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary-color); letter-spacing: 1px; animation: fadeInDown 0.8s ease; }
+        .nav-links { animation: fadeInDown 0.8s ease 0.2s both; }
+        .nav-links a { margin: 0 15px; font-weight: 500; position: relative; padding-bottom: 5px; }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--primary-color); transition: width 0.3s ease; }
+        .nav-links a:hover::after { width: 100%; }
         
-        /* Nút Dark Mode */
-        #theme-toggle { background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #theme-toggle { background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; animation: fadeInDown 0.8s ease 0.4s both; }
+        #theme-toggle:hover { background-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
         /* --- HERO SECTION --- */
-        .hero { text-align: center; padding: 100px 20px; }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
-        .hero p { font-size: 1.2rem; margin-bottom: 20px; opacity: 0.8; }
-        
-        /* --- BỘ LỌC (FILTER) & GRID --- */
-        .section-title { text-align: center; margin: 40px 0 20px; font-size: 2rem; }
-        .filter-btns { text-align: center; margin-bottom: 30px; }
-        .filter-btn { background: transparent; border: 2px solid var(--primary-color); color: var(--text-color); padding: 8px 20px; margin: 0 5px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: white; }
+        .hero { text-align: center; padding: 120px 20px; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hero h1 { font-size: 3rem; margin-bottom: 15px; background: linear-gradient(45deg, var(--primary-color), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; min-height: 60px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 20px; opacity: 0; animation: fadeInUp 1s ease 1s forwards; }
+        .hero-cursor { display: inline-block; width: 3px; background-color: var(--primary-color); margin-left: 5px; animation: blink 0.7s infinite; }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 0 5%; max-width: 1200px; margin: auto; }
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card h3 { margin-bottom: 10px; color: var(--primary-color); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* --- BỘ LỌC (FILTER) & GRID --- */
+        .section-title { text-align: center; margin: 40px 0 30px; font-size: 2.2rem; position: relative; display: inline-block; left: 50%; transform: translateX(-50%); }
+        .section-title::after { content: ''; position: absolute; width: 50%; height: 3px; background: var(--primary-color); bottom: -10px; left: 25%; border-radius: 5px; }
+
+        .filter-btns { text-align: center; margin-bottom: 40px; }
+        .filter-btn { background: transparent; border: 2px solid var(--primary-color); color: var(--text-color); padding: 8px 25px; margin: 0 5px; border-radius: 30px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .filter-btn:hover { background: var(--hover-bg); transform: translateY(-3px); }
+        .filter-btn.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4); animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 0 5%; max-width: 1200px; margin: auto; }
+        
+        /* HIỆU ỨNG THẺ SẢN PHẨM */
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.4s ease; position: relative; overflow: hidden; z-index: 1; }
+        .card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary-color); }
+        
+        /* Hiệu ứng tia sáng lướt qua */
+        .card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); transition: all 0.7s ease; z-index: -1; }
+        .dark-mode .card::before { background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%); }
+        .card:hover::before { left: 125%; }
+
+        .card h3 { margin-bottom: 15px; color: var(--primary-color); font-size: 1.5rem; transition: color 0.3s; }
+        .card p { opacity: 0.8; }
 
         /* --- FORM LIÊN HỆ --- */
-        .contact-section { max-width: 600px; margin: 50px auto; padding: 0 20px; }
-        .contact-form { display: flex; flex-direction: column; gap: 15px; background: var(--card-bg); padding: 30px; border-radius: 10px; border: 1px solid var(--border-color); }
-        .contact-form input, .contact-form textarea { padding: 12px; border: 1px solid var(--border-color); border-radius: 5px; background: var(--bg-color); color: var(--text-color); }
-        .contact-form button { padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold; }
-        .contact-form button:hover { opacity: 0.9; }
+        .contact-section { max-width: 600px; margin: 80px auto; padding: 0 20px; }
+        .contact-form { display: flex; flex-direction: column; gap: 20px; background: var(--card-bg); padding: 40px; border-radius: 15px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: transform 0.3s ease; }
+        .contact-form:hover { transform: translateY(-5px); }
+        .contact-form input, .contact-form textarea { padding: 15px; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-color); font-size: 1rem; transition: all 0.3s ease; }
+        .contact-form input:focus, .contact-form textarea:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
+        
+        .btn-submit { padding: 15px; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .btn-submit:hover { background: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
+        
+        /* --- HIỆU ỨNG SCROLL REVEAL (JS sẽ kích hoạt class này) --- */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* --- NÚT BACK TO TOP --- */
-        #backToTop { position: fixed; bottom: 30px; right: 30px; display: none; background: var(--primary-color); color: white; border: none; padding: 15px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 16px; z-index: 1000; }
+        #backToTop { position: fixed; bottom: -50px; right: 30px; background: var(--primary-color); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 20px; z-index: 1000; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); opacity: 0; display: flex; justify-content: center; align-items: center; }
+        #backToTop.show { bottom: 30px; opacity: 1; }
+        #backToTop:hover { background-color: var(--secondary-color); transform: scale(1.1) translateY(-5px); }
         
         /* Footer */
-        footer { text-align: center; padding: 20px; margin-top: 50px; border-top: 1px solid var(--border-color); background: var(--nav-bg); }
+        footer { text-align: center; padding: 25px; margin-top: 80px; border-top: 1px solid var(--border-color); background: var(--nav-bg); font-weight: 500; }
+
+        /* Keyframes cơ bản */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
 
     <header>
         <div class="logo">HOANGKUN</div>
@@ -80,61 +129,83 @@
     </header>
 
     <section id="home" class="hero">
-        <h1>Chào mừng đến với Website Đa Tính Năng</h1>
+        <h1><span id="typewriter"></span><span class="hero-cursor"></span></h1>
         <p>Tích hợp HTML, CSS và JavaScript để tạo ra trải nghiệm người dùng tối ưu nhất.</p>
     </section>
 
     <section id="projects">
-        <h2 class="section-title">Danh sách Sản phẩm</h2>
+        <h2 class="section-title reveal">Danh sách Sản phẩm</h2>
         
-        <div class="filter-btns">
-            <button class="filter-btn active" onclick="filterItems('all')">Tất cả</button>
-            <button class="filter-btn" onclick="filterItems('code')">Mã nguồn (Code)</button>
-            <button class="filter-btn" onclick="filterItems('design')">Thiết kế</button>
+        <div class="filter-btns reveal">
+            <button class="filter-btn active" onclick="filterItems('all', this)">Tất cả</button>
+            <button class="filter-btn" onclick="filterItems('code', this)">Mã nguồn (Code)</button>
+            <button class="filter-btn" onclick="filterItems('design', this)">Thiết kế</button>
         </div>
 
         <div class="grid-container">
-            <div class="card item code">
+            <div class="card item code reveal">
                 <h3>Template Bán Hàng</h3>
-                <p>Mã nguồn website cửa hàng chuẩn SEO.</p>
+                <p>Mã nguồn website cửa hàng chuẩn SEO, giao diện hiện đại.</p>
             </div>
-            <div class="card item design">
+            <div class="card item design reveal" style="transition-delay: 0.1s;">
                 <h3>Logo Độc Quyền</h3>
-                <p>Bộ thiết kế nhận diện thương hiệu.</p>
+                <p>Bộ thiết kế nhận diện thương hiệu chuyên nghiệp, sáng tạo.</p>
             </div>
-            <div class="card item code">
+            <div class="card item code reveal" style="transition-delay: 0.2s;">
                 <h3>Hệ Thống Quản Lý</h3>
-                <p>Code quản lý học sinh / sinh viên.</p>
+                <p>Code quản lý học sinh / sinh viên với đầy đủ tính năng.</p>
             </div>
-            <div class="card item design">
-                <h3>Pixel Art</h3>
-                <p>Thiết kế nhân vật phong cách retro.</p>
+            <div class="card item design reveal" style="transition-delay: 0.3s;">
+                <h3>Pixel Art Retro</h3>
+                <p>Thiết kế nhân vật và bối cảnh phong cách game retro 8-bit.</p>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact-section">
+    <section id="contact" class="contact-section reveal">
         <h2 class="section-title">Gửi tin nhắn</h2>
         <form class="contact-form" id="myForm">
             <input type="text" id="name" placeholder="Tên của bạn..." required>
             <input type="email" id="email" placeholder="Email của bạn..." required>
             <textarea id="message" rows="5" placeholder="Nội dung tin nhắn..." required></textarea>
-            <button type="submit">Gửi thông tin</button>
+            <button type="submit" class="btn-submit">Gửi thông tin</button>
         </form>
     </section>
 
     <footer>
-        <p>&copy; 2026 HOANGKUN. All rights reserved.</p>
+        <p>&copy; 2026 HOANGKUN. Xây dựng bằng đam mê.</p>
     </footer>
 
-    <button id="backToTop" onclick="scrollToTop()">⬆</button>
+    <button id="backToTop" onclick="scrollToTop()">↑</button>
 
     <script>
-        // 1. CHẾ ĐỘ TỐI / SÁNG (Dark/Light Mode)
+        // 1. TẮT MÀN HÌNH CHỜ & BẬT HIỆU ỨNG GÕ CHỮ
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                startTypewriter(); // Bắt đầu gõ chữ sau khi load xong
+            }, 500);
+        });
+
+        // 2. HIỆU ỨNG GÕ CHỮ (Typewriter)
+        const textToType = "Chào mừng đến với hệ sinh thái HOANGKUN";
+        const typeWriterElement = document.getElementById('typewriter');
+        let textIndex = 0;
+
+        function startTypewriter() {
+            if (textIndex < textToType.length) {
+                typeWriterElement.innerHTML += textToType.charAt(textIndex);
+                textIndex++;
+                setTimeout(startTypewriter, 70); // Tốc độ gõ chữ (ms)
+            }
+        }
+
+        // 3. CHẾ ĐỘ TỐI / SÁNG (Có lưu trạng thái mượt mà hơn)
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
         
-        // Kiểm tra xem người dùng đã lưu chế độ nào chưa
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             themeToggleBtn.innerText = '☀️ Light Mode';
@@ -151,52 +222,79 @@
             }
         });
 
-        // 2. TÍNH NĂNG LỌC SẢN PHẨM (Filter)
-        function filterItems(category) {
+        // 4. HIỆU ỨNG SCROLL REVEAL (Hiển thị phần tử khi cuộn tới)
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // Khoảng cách từ dưới lên để kích hoạt
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Chạy lần đầu để hiển thị các phần tử ở khung nhìn ban đầu
+
+        // 5. LỌC SẢN PHẨM (Animation mượt hơn)
+        function filterItems(category, btnElement) {
             const items = document.querySelectorAll('.item');
             const btns = document.querySelectorAll('.filter-btn');
             
-            // Xóa class active ở tất cả nút và thêm vào nút vừa bấm
             btns.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            btnElement.classList.add('active');
 
             items.forEach(item => {
-                if (category === 'all') {
-                    item.style.display = 'block';
-                } else {
-                    if (item.classList.contains(category)) {
+                item.style.transform = 'scale(0.8)';
+                item.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (category === 'all' || item.classList.contains(category)) {
                         item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.transform = 'scale(1)';
+                            item.style.opacity = '1';
+                        }, 50);
                     } else {
                         item.style.display = 'none';
                     }
-                }
+                }, 300); // Đợi animation ẩn hoàn tất rồi mới đổi display
             });
         }
 
-        // 3. XỬ LÝ FORM LIÊN HỆ
+        // 6. XỬ LÝ FORM 
         document.getElementById('myForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Ngăn trang bị reload khi bấm Gửi
+            e.preventDefault();
             const name = document.getElementById('name').value;
-            alert('Cảm ơn ' + name + '! Tin nhắn của bạn đã được gửi thành công.');
-            this.reset(); // Xóa trắng form sau khi gửi
+            const btn = document.querySelector('.btn-submit');
+            
+            // Hiệu ứng nút khi bấm gửi
+            const originalText = btn.innerText;
+            btn.innerText = 'Đang gửi...';
+            btn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                alert('Tuyệt vời ' + name + '! Tin nhắn đã bay vào không gian thành công.');
+                this.reset();
+                btn.innerText = originalText;
+                btn.style.opacity = '1';
+            }, 1000);
         });
 
-        // 4. NÚT BACK TO TOP
+        // 7. NÚT BACK TO TOP (Animation trồi lên/thụt xuống)
         const backToTopBtn = document.getElementById('backToTop');
-        
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                backToTopBtn.style.display = "block";
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.add('show');
             } else {
-                backToTopBtn.style.display = "none";
+                backToTopBtn.classList.remove('show');
             }
-        };
+        });
 
         function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth' // Cuộn mượt mà
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
